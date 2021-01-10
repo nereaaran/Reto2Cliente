@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="856.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prueba.VistaPruebaTablaController">
+   <children>
+      <SplitPane dividerPositions="0.47742290748898675" orientation="VERTICAL" prefHeight="607.0" prefWidth="855.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Button fx:id="btnAnadir" layoutX="711.0" layoutY="106.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
+                  <Button fx:id="btnModificar" layoutX="711.0" layoutY="141.0" mnemonicParsing="false" onAction="#modificarLibro" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
+                  <Button fx:id="btnEliminar" layoutX="711.0" layoutY="177.0" mnemonicParsing="false" onAction="#eliminarLibro" prefHeight="25.0" prefWidth="102.0" text="Eliminar" />
+                  <Button fx:id="btnLimpiar" layoutX="711.0" layoutY="214.0" mnemonicParsing="false" onAction="#limpiarDatos" prefHeight="25.0" prefWidth="102.0" text="Limpiar" />
+                  <Label fx:id="lbIsbn" layoutX="519.0" layoutY="144.0" text="ISBN" />
+                  <Label fx:id="lblTitulo" layoutX="34.0" layoutY="97.0" prefHeight="17.0" prefWidth="44.0" text="Título" />
+                  <Label fx:id="lblAutor" layoutX="362.0" layoutY="97.0" text="Autor" />
+                  <Label fx:id="lblEditorial" layoutX="189.0" layoutY="144.0" text="Editorial" />
+                  <Label fx:id="lblGenero" layoutX="34.0" layoutY="145.0" prefHeight="17.0" prefWidth="44.0" text="Género" />
+                  <Label fx:id="lblCantidadTotal" layoutX="387.0" layoutY="143.0" text="Cantidad Total" />
+                  <Label fx:id="lblDescargable" layoutX="34.0" layoutY="192.0" text="Descargable" />
+                  <TextField fx:id="txtIsbn" layoutX="552.0" layoutY="141.0" prefHeight="25.0" prefWidth="112.0" />
+                  <TextField fx:id="txtTitulo" layoutX="78.0" layoutY="93.0" prefHeight="25.0" prefWidth="261.0" />
+                  <TextField fx:id="txtAutor" layoutX="404.0" layoutY="93.0" prefHeight="25.0" prefWidth="261.0" />
+                  <TextField fx:id="txtEditorial" layoutX="243.0" layoutY="140.0" prefHeight="25.0" prefWidth="125.0" />
+                  <TextField fx:id="txtGenero" layoutX="78.0" layoutY="141.0" prefHeight="25.0" prefWidth="97.0" />
+                  <TextField fx:id="txtCantidadTotal" layoutX="472.0" layoutY="140.0" prefHeight="25.0" prefWidth="30.0" />
+                  <TextField fx:id="txtLinkDescarga" layoutX="285.0" layoutY="188.0" prefHeight="25.0" prefWidth="379.0" />
+                  <Label fx:id="lblLinkDescarga" layoutX="156.0" layoutY="192.0" text="Link de descarga" />
+                  <CheckBox fx:id="cbxDescargable" layoutX="111.0" layoutY="192.0" mnemonicParsing="false" />
+                  <Label fx:id="lblGestionLibros" layoutX="47.0" layoutY="34.0" text="GESTIÓN DE LIBROS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Separator layoutX="23.0" layoutY="236.0" prefHeight="0.0" prefWidth="613.0" />
+                  <MenuButton fx:id="btnMenu" layoutX="711.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Ajustes">
+                    <items>
+                      <MenuItem fx:id="btnCerrarSesion" mnemonicParsing="false" text="Cerrar sesión">
+                           <graphic>
+                              <Label fx:id="lbCerrarSesion" />
+                           </graphic></MenuItem>
+                    </items>
+                  </MenuButton>
+                  <TextField fx:id="txtBuscarLibro" layoutX="27.0" layoutY="251.0" prefHeight="25.0" prefWidth="168.0" promptText="Buscar libro" />
+                  <Separator layoutX="685.0" layoutY="72.0" orientation="VERTICAL" prefHeight="200.0" />
+                  <Button fx:id="btnBuscar" layoutX="204.0" layoutY="251.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="299.0" prefWidth="801.0">
+               <children>
+                  <TableView fx:id="tablaLibro" prefHeight="314.0" prefWidth="853.0">
+                    <columns>
+                      <TableColumn fx:id="tituloCL" prefWidth="127.0" text="Título" />
+                        <TableColumn fx:id="autorCL" prefWidth="102.0" text="Autor" />
+                        <TableColumn fx:id="editorialCL" prefWidth="89.0" text="Editorial" />
+                        <TableColumn fx:id="isbnCL" prefWidth="59.0" text="ISBN" />
+                        <TableColumn fx:id="generoCL" prefWidth="86.0" text="Género" />
+                        <TableColumn fx:id="cantidadTotalCL" prefWidth="103.0" text="Cantidad total" />
+                        <TableColumn fx:id="cantidadDisponibleCL" prefWidth="112.0" text="Disponible" />
+                        <TableColumn fx:id="descargableCL" prefWidth="87.0" text="Descargable" />
+                        <TableColumn fx:id="linkdescargaCL" prefWidth="82.0" text="Link descarga" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

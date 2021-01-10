@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prueba.VistaPruebaTablaController">
+   <children>
+      <SplitPane dividerPositions="0.46255506607929514" orientation="VERTICAL" prefHeight="607.0" prefWidth="803.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
+               <children>
+                  <Button fx:id="btnAnadir" layoutX="677.0" layoutY="94.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
+                  <Button fx:id="btnModificar" layoutX="677.0" layoutY="123.0" mnemonicParsing="false" onAction="#modificarLibro" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
+                  <Button fx:id="btnEliminar" layoutX="677.0" layoutY="156.0" mnemonicParsing="false" onAction="#eliminarLibro" prefHeight="25.0" prefWidth="102.0" text="Eliminar" />
+                  <Button fx:id="btnLimpiar" layoutX="677.0" layoutY="190.0" mnemonicParsing="false" onAction="#limpiarDatos" prefHeight="25.0" prefWidth="102.0" text="Limpiar" />
+                  <Label fx:id="lblDni" layoutX="491.0" layoutY="98.0" text="DNI" />
+                  <Label fx:id="lblUsuario" layoutX="30.0" layoutY="147.0" text="Usuario" />
+                  <Label fx:id="lblNombreCompleto" layoutX="27.0" layoutY="98.0" text="Nombre completo" />
+                  <Label fx:id="lblEmail" layoutX="297.0" layoutY="147.0" text="Email" />
+                  <TextField fx:id="txtDni" layoutX="523.0" layoutY="94.0" prefHeight="25.0" prefWidth="109.0" />
+                  <TextField fx:id="txtUsuario" layoutX="74.0" layoutY="143.0" prefHeight="25.0" prefWidth="211.0" />
+                  <TextField fx:id="txtNombreCompleto" layoutX="139.0" layoutY="94.0" prefHeight="25.0" prefWidth="334.0" />
+                  <TextField fx:id="txtEmail" layoutX="340.0" layoutY="143.0" prefHeight="25.0" prefWidth="289.0" />
+                  <Label layoutX="33.0" layoutY="34.0" text="GESTIÓN DE ALUMNOS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Separator layoutX="11.0" layoutY="232.0" prefHeight="0.0" prefWidth="638.0" />
+                  <MenuButton fx:id="btnMenu" layoutX="677.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Ajustes">
+                    <items>
+                      <MenuItem fx:id="btnMiPerfil" mnemonicParsing="false" text="Mi perfil" />
+                      <MenuItem fx:id="btnCerrarSesion" mnemonicParsing="false" text="Cerrar sesión" />
+                    </items>
+                  </MenuButton>
+                  <TextField fx:id="txtBuscarAlumno" layoutX="18.0" layoutY="245.0" prefHeight="25.0" prefWidth="264.0" promptText="Buscar alumno" />
+                  <Label fx:id="lblFechaNacimiento" layoutX="363.0" layoutY="194.0" text="Fecha de nacimiento" />
+                  <Separator layoutX="649.0" layoutY="87.0" orientation="VERTICAL" prefHeight="200.0" />
+                  <DatePicker fx:id="datePickerFechaNacimiento" layoutX="491.0" layoutY="190.0" prefHeight="25.0" prefWidth="138.0" />
+                  <MenuButton fx:id="menuGrupos" layoutX="76.0" layoutY="190.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="211.0" text="Grupos">
+                     <items>
+                        <MenuItem fx:id="lbNombreGrupo" mnemonicParsing="false">
+                           <graphic>
+                              <CheckBox fx:id="cbxNomberGrupo" mnemonicParsing="false" />
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false">
+                           <graphic>
+                              <CheckBox mnemonicParsing="false" />
+                           </graphic>
+                        </MenuItem>
+                     </items>
+                  </MenuButton>
+                  <Button fx:id="btnVolver" layoutX="677.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
+                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="245.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="699.0">
+               <children>
+                  <TableView fx:id="tablaAlumno" layoutX="255.0" layoutY="23.0" prefHeight="300.0" prefWidth="547.0">
+                    <columns>
+                      <TableColumn fx:id="dniCL" prefWidth="75.99999487400055" text="DNI" />
+                        <TableColumn fx:id="nombreCompletoCL" prefWidth="170.66668701171875" text="Nombre completo" />
+                        <TableColumn fx:id="fechaNacimientoCL" prefWidth="147.3333740234375" text="Fecha de nacimiento" />
+                        <TableColumn fx:id="emailCL" prefWidth="170.66668701171875" text="Email" />
+                    </columns>
+                  </TableView>
+                  <TableView fx:id="tablaGrupo" layoutY="23.0" prefHeight="300.0" prefWidth="238.0">
+                     <columns>
+                        <TableColumn fx:id="nombreGrupoCL" prefWidth="117.33333837985992" text="Grupo" />
+                        <TableColumn fx:id="numeroAlumnosCL" prefWidth="118.66668701171875" text="Nº alumnos" />
+                     </columns>
+                  </TableView>
+                  <Label fx:id="lblListaGrupos" layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="LISTA DE LOS GRUPOS" />
+                  <Label fx:id="lblAlumnosAsignados" layoutX="264.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="ALUMNOS ASIGNADOS" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
