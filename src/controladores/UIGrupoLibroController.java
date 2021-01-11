@@ -99,9 +99,4 @@ public class UIGrupoLibroController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-
-    @FXML
-    private void anadirLibro(ActionEvent event) {
-    }
-    
 }

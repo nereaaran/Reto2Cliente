@@ -22,10 +22,10 @@
         <items>
           <AnchorPane fx:id="paneSuperiorAlumno" minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
                <children>
-                  <Button fx:id="btnAnadir" layoutX="677.0" layoutY="94.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
-                  <Button fx:id="btnModificar" layoutX="677.0" layoutY="123.0" mnemonicParsing="false" onAction="#modificarLibro" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
-                  <Button fx:id="btnEliminar" layoutX="677.0" layoutY="156.0" mnemonicParsing="false" onAction="#eliminarLibro" prefHeight="25.0" prefWidth="102.0" text="Eliminar" />
-                  <Button fx:id="btnLimpiar" layoutX="677.0" layoutY="190.0" mnemonicParsing="false" onAction="#limpiarDatos" prefHeight="25.0" prefWidth="102.0" text="Limpiar" />
+                  <Button fx:id="btnAnadir" layoutX="677.0" layoutY="94.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
+                  <Button fx:id="btnModificar" layoutX="677.0" layoutY="123.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
+                  <Button fx:id="btnEliminar" layoutX="677.0" layoutY="156.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Eliminar" />
+                  <Button fx:id="btnLimpiar" layoutX="677.0" layoutY="190.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Limpiar" />
                   <Label fx:id="lblDni" layoutX="491.0" layoutY="98.0" text="DNI" />
                   <Label fx:id="lblUsuario" layoutX="30.0" layoutY="147.0" text="Usuario" />
                   <Label fx:id="lblNombreCompleto" layoutX="27.0" layoutY="98.0" text="Nombre completo" />
@@ -59,7 +59,7 @@
                      </items>
                   </MenuButton>
                   <Button fx:id="btnVolver" layoutX="677.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
-                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="245.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <MenuBar fx:id="munuBar" layoutX="-10.0" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="818.0">
                      <menus>
                         <Menu mnemonicParsing="false" text="Ajustes">

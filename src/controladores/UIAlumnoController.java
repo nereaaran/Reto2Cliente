@@ -120,22 +120,5 @@ public class UIAlumnoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    @FXML
-    private void anadirLibro(ActionEvent event) {
-    }
-
-    @FXML
-    private void modificarLibro(ActionEvent event) {
-    }
-
-    @FXML
-    private void eliminarLibro(ActionEvent event) {
-    }
-
-    @FXML
-    private void limpiarDatos(ActionEvent event) {
-    }
-    
+    }        
 }

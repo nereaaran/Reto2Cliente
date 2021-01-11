@@ -101,22 +101,5 @@ public class UIGrupoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    @FXML
-    private void modificarLibro(ActionEvent event) {
-    }
-
-    @FXML
-    private void eliminarLibro(ActionEvent event) {
-    }
-
-    @FXML
-    private void limpiarDatos(ActionEvent event) {
-    }
-
-    @FXML
-    private void anadirLibro(ActionEvent event) {
-    }
-    
+    }        
 }

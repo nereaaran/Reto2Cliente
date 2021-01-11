@@ -20,7 +20,7 @@
         <items>
           <AnchorPane fx:id="paneSuperiorGrupoLibro" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <Button fx:id="btnBuscar" layoutX="232.0" layoutY="222.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+                  <Button fx:id="btnBuscar" layoutX="232.0" layoutY="222.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <Label fx:id="lblTitulo" layoutX="24.0" layoutY="98.0" text="Título" />
                   <Label fx:id="lblFechaInicio" layoutX="330.0" layoutY="98.0" text="Fecha inicio" />
                   <TextField fx:id="txtTitulo" layoutX="62.0" layoutY="94.0" prefHeight="25.0" prefWidth="241.0" />
@@ -33,8 +33,8 @@
                   <Separator layoutY="208.0" prefHeight="6.0" prefWidth="541.0" />
                   <TextField fx:id="txtBuscarLibro" layoutX="16.0" layoutY="222.0" prefHeight="25.0" prefWidth="210.0" promptText="Buscar libro" />
                   <Separator layoutX="543.0" layoutY="77.0" orientation="VERTICAL" prefHeight="200.0" />
-                  <Button fx:id="btnVolver" layoutX="562.0" layoutY="166.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Volver" />
-                  <Button fx:id="btnAnadir" layoutX="562.0" layoutY="115.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Añadir" />
+                  <Button fx:id="btnVolver" layoutX="562.0" layoutY="166.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Volver" />
+                  <Button fx:id="btnAnadir" layoutX="562.0" layoutY="115.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Añadir" />
                   <Label fx:id="lblAutor" layoutX="24.0" layoutY="151.0" text="Autor" />
                   <Label fx:id="lblFechaLimite" layoutX="329.0" layoutY="153.0" text="Fecha límite" />
                   <DatePicker fx:id="datePickerFechaInico" layoutX="405.0" layoutY="96.0" prefHeight="25.0" prefWidth="123.0" />
