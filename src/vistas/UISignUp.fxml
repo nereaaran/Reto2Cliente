@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane id="idPaneSignUp" fx:id="idPaneSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comicSans.Controller.UISignUpController">
+<Pane id="idPaneSignUp" fx:id="paneSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="662.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UISignUpController">
    <children>
       <Label fx:id="lblTitulo" alignment="CENTER" contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" prefHeight="51.0" prefWidth="241.0" text="REGISTRO">
          <font>
