@@ -56,22 +56,5 @@ public class UISignInController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    @FXML
-    private void hayAlgoUser(KeyEvent event) {
     }
-
-    @FXML
-    private void hayAlgoPasswd(KeyEvent event) {
-    }
-
-    @FXML
-    private void click(ActionEvent event) {
-    }
-
-    @FXML
-    private void clickSU(ActionEvent event) {
-    }
-    
 }

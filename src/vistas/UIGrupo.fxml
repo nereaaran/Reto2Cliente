@@ -19,9 +19,9 @@
         <items>
           <AnchorPane fx:id="paneSuperiorGrupo" minHeight="0.0" minWidth="0.0" prefHeight="189.0" prefWidth="619.0">
                <children>
-                  <Button fx:id="btnModificar" layoutX="735.0" layoutY="82.0" mnemonicParsing="false" onAction="#modificarLibro" prefHeight="25.0" prefWidth="70.0" text="Modificar" />
-                  <Button fx:id="btnEliminar" layoutX="735.0" layoutY="113.0" mnemonicParsing="false" onAction="#eliminarLibro" prefHeight="25.0" prefWidth="70.0" text="Eliminar" />
-                  <Button fx:id="btnLimpiar" layoutX="735.0" layoutY="148.0" mnemonicParsing="false" onAction="#limpiarDatos" prefHeight="25.0" prefWidth="70.0" text="Limpiar" />
+                  <Button fx:id="btnModificar" layoutX="735.0" layoutY="82.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Modificar" />
+                  <Button fx:id="btnEliminar" layoutX="735.0" layoutY="113.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Eliminar" />
+                  <Button fx:id="btnLimpiar" layoutX="735.0" layoutY="148.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Limpiar" />
                   <Label fx:id="lblNombreGrupo" layoutX="27.0" layoutY="106.0" text="Nombre del grupo" />
                   <Label fx:id="lblDescripcion" layoutX="333.0" layoutY="106.0" text="Descripción" />
                   <TextField fx:id="txtNombreGrupo" layoutX="136.0" layoutY="102.0" prefHeight="25.0" prefWidth="180.0" />
@@ -34,9 +34,9 @@
                   <TextField fx:id="txtBuscarGrupo" layoutX="31.0" layoutY="176.0" prefHeight="25.0" prefWidth="261.0" promptText="Buscar grupo" />
                   <Separator layoutX="14.0" layoutY="154.0" prefHeight="3.0" prefWidth="640.0" />
                   <Separator layoutX="691.0" layoutY="49.0" orientation="VERTICAL" prefHeight="157.0" prefWidth="4.0" />
-                  <Button fx:id="btnAnadir" layoutX="734.0" layoutY="50.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="72.0" text="Añadir" />
+                  <Button fx:id="btnAnadir" layoutX="734.0" layoutY="50.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="72.0" text="Añadir" />
                   <Button fx:id="btnGestionarAlumno" layoutX="712.0" layoutY="188.0" mnemonicParsing="false" text="Gestionar alumnos" />
-                  <Button fx:id="btnBuscar" layoutX="319.0" layoutY="177.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+                  <Button fx:id="btnBuscar" layoutX="319.0" layoutY="177.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <MenuBar fx:id="munuBar" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="845.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="Ajustes">
@@ -71,8 +71,8 @@
                   </TableView>
                   <Label fx:id="lblListaGrupos" layoutX="14.0" layoutY="7.0" prefHeight="17.0" prefWidth="129.0" text="LISTA DE GRUPOS" />
                   <Label fx:id="lblLibrosAsignados" layoutX="478.0" layoutY="7.0" text="LIBROS ASIGNADOS" />
-                  <Button fx:id="btnAnadirLibro" layoutX="629.0" layoutY="3.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="93.0" text="Añadir Libro" />
-                  <Button fx:id="btnEliminarLibro" layoutX="732.0" layoutY="3.0" mnemonicParsing="false" onAction="#anadirLibro" prefHeight="25.0" prefWidth="93.0" text="Eliminar Libro" />
+                  <Button fx:id="btnAnadirLibro" layoutX="629.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="Añadir Libro" />
+                  <Button fx:id="btnEliminarLibro" layoutX="732.0" layoutY="3.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="93.0" text="Eliminar Libro" />
                </children>
             </AnchorPane>
         </items>
