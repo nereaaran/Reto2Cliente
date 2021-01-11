@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -21,13 +23,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
  *
  * @author nerea
  */
-public class UIAlumnoController implements Initializable {
+public class UIAlumnoController {
 
     @FXML
     private AnchorPane paneGeneralAlumno;
@@ -114,11 +117,19 @@ public class UIAlumnoController implements Initializable {
     @FXML
     private Label lblAlumnosAsignados;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }        
+    private Stage stage;
+
+    public void setStage(Stage primaryStage) {
+        stage = primaryStage;
+    }
+
+    public void initStage(Parent ventana) {
+        Scene scene = new Scene(ventana);
+        stage.setScene(scene);
+
+        stage.setTitle("Gestion de alumnos");
+        stage.setResizable(false);
+        stage.show();
+
+    }
 }
