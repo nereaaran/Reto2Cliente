@@ -124,7 +124,7 @@ public class UIAlumnoController {
         stage.setScene(scene);
 
         stage.setTitle("Gestion de alumnos");
-        stage.setResizable(false);
+        //stage.setResizable(false);
         stage.show();
 
     }

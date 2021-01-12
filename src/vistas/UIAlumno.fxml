@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="paneGeneralAlumno" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIAlumnoController">
+<AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIAlumnoController">
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="607.0" prefWidth="803.0">
         <items>
-          <AnchorPane fx:id="paneSuperiorAlumno" minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
                <children>
                   <Button fx:id="btnAnadir" layoutX="677.0" layoutY="94.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
                   <Button fx:id="btnModificar" layoutX="677.0" layoutY="123.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
@@ -78,7 +78,7 @@
                   <Label fx:id="lblBuscarAlumnoError" layoutX="23.0" layoutY="271.0" prefHeight="18.0" prefWidth="253.0" />
                </children>
             </AnchorPane>
-          <AnchorPane fx:id="paneInferiorAlumno" minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="699.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="699.0">
                <children>
                   <TableView fx:id="tablaAlumno" layoutX="251.0" layoutY="23.0" prefHeight="277.0" prefWidth="550.0">
                     <columns>
