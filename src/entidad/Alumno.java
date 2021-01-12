@@ -120,10 +120,10 @@ public class Alumno extends Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.dni);
-        hash = 59 * hash + Objects.hashCode(this.fechaNacimiento);
-        hash = 59 * hash + Objects.hashCode(this.alumnoLibros);
-        hash = 59 * hash + Objects.hashCode(this.grupos);
+        hash = 97 * hash + Objects.hashCode(this.dni);
+        hash = 97 * hash + Objects.hashCode(this.fechaNacimiento);
+        hash = 97 * hash + Objects.hashCode(this.alumnoLibros);
+        hash = 97 * hash + Objects.hashCode(this.grupos);
         return hash;
     }
 

@@ -8,6 +8,22 @@ package entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -20,6 +36,10 @@ public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Id del usuario. Es la clave primaria de la tabla "usuario".
+     */
+    private Integer idUsuario;
     /**
      * Login del usuario.
      */
@@ -57,6 +77,24 @@ public class Usuario implements Serializable {
      * usuario.
      */
     private Date lastPasswordChange;
+
+    /**
+     * Método que obtiene el id del usuario.
+     *
+     * @return el id que se va a mostrar.
+     */
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    /**
+     * Método que establece el id del usuario.
+     *
+     * @param idUsuario el id que se va a guardar.
+     */
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     /**
      * Método que obtiene el login del usuario.
@@ -228,16 +266,17 @@ public class Usuario implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.login);
-        hash = 89 * hash + Objects.hashCode(this.email);
-        hash = 89 * hash + Objects.hashCode(this.fullName);
-        hash = 89 * hash + Objects.hashCode(this.status);
-        hash = 89 * hash + Objects.hashCode(this.privilege);
-        hash = 89 * hash + Objects.hashCode(this.tipoUsuario);
-        hash = 89 * hash + Objects.hashCode(this.password);
-        hash = 89 * hash + Objects.hashCode(this.lastAccess);
-        hash = 89 * hash + Objects.hashCode(this.lastPasswordChange);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.idUsuario);
+        hash = 23 * hash + Objects.hashCode(this.login);
+        hash = 23 * hash + Objects.hashCode(this.email);
+        hash = 23 * hash + Objects.hashCode(this.fullName);
+        hash = 23 * hash + Objects.hashCode(this.status);
+        hash = 23 * hash + Objects.hashCode(this.privilege);
+        hash = 23 * hash + Objects.hashCode(this.tipoUsuario);
+        hash = 23 * hash + Objects.hashCode(this.password);
+        hash = 23 * hash + Objects.hashCode(this.lastAccess);
+        hash = 23 * hash + Objects.hashCode(this.lastPasswordChange);
         return hash;
     }
 
@@ -271,6 +310,9 @@ public class Usuario implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
+        if (!Objects.equals(this.idUsuario, other.idUsuario)) {
+            return false;
+        }
         if (this.status != other.status) {
             return false;
         }
@@ -296,7 +338,6 @@ public class Usuario implements Serializable {
      */
     @Override
     public String toString() {
-        return "Usuario{" + "login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", tipoUsuario=" + tipoUsuario + ", password=" + password + ", lastAccess=" + lastAccess + ", lastPasswordChange=" + lastPasswordChange + '}';
+        return "Usuario{" + "idUsuario=" + idUsuario + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", tipoUsuario=" + tipoUsuario + ", password=" + password + ", lastAccess=" + lastAccess + ", lastPasswordChange=" + lastPasswordChange + '}';
     }
-
 }

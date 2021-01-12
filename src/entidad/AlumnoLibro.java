@@ -20,42 +20,28 @@ public class AlumnoLibro implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * El alumno perteneciente a la relacion de alumnoLibro.
-     */
-    private Alumno alumno;
-
-    /**
-     * El libro perteneciente a la relacion de alumnoLibro.
-     */
+    private AlumnoLibroId idAlumnoLibro;
     private Libro libro;
 
-    /**
-     * Fecha en la que se asigna el libro.
-     */
     private Date fechaAsignado;
-
-    /**
-     * Fecha maxima asignada para el libro.
-     */
     private Date fechaLimite;
 
     /**
-     * Obtiene el alumno.
+     * Obtiene el idAlumnoLibro de AlumnoLibro.
      *
-     * @return El alumno.
+     * @return El idAlumnoLibro de AlumnoLibro.
      */
-    public Alumno getAlumno() {
-        return alumno;
+    public AlumnoLibroId getIdAlumnoLibro() {
+        return idAlumnoLibro;
     }
 
     /**
-     * Establece el alumno.
+     * Establece el idAlumnoLibro de AlumnoLibro.
      *
-     * @param alumno El alumno.
+     * @param idAlumnoLibro El idAlumnoLibro de AlumnoLibro.
      */
-    public void setAlumno(Alumno alumno) {
-        this.alumno = alumno;
+    public void setIdAlumnoLibro(AlumnoLibroId idAlumnoLibro) {
+        this.idAlumnoLibro = idAlumnoLibro;
     }
 
     /**
@@ -119,11 +105,11 @@ public class AlumnoLibro implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.alumno);
-        hash = 89 * hash + Objects.hashCode(this.libro);
-        hash = 89 * hash + Objects.hashCode(this.fechaAsignado);
-        hash = 89 * hash + Objects.hashCode(this.fechaLimite);
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.idAlumnoLibro);
+        hash = 59 * hash + Objects.hashCode(this.libro);
+        hash = 59 * hash + Objects.hashCode(this.fechaAsignado);
+        hash = 59 * hash + Objects.hashCode(this.fechaLimite);
         return hash;
     }
 
@@ -145,7 +131,7 @@ public class AlumnoLibro implements Serializable {
             return false;
         }
         final AlumnoLibro other = (AlumnoLibro) obj;
-        if (!Objects.equals(this.alumno, other.alumno)) {
+        if (!Objects.equals(this.idAlumnoLibro, other.idAlumnoLibro)) {
             return false;
         }
         if (!Objects.equals(this.libro, other.libro)) {
@@ -167,7 +153,6 @@ public class AlumnoLibro implements Serializable {
      */
     @Override
     public String toString() {
-        return "AlumnoLibro{" + "alumno=" + alumno + ", libro=" + libro + ", fechaAsignado=" + fechaAsignado + ", fechaLimite=" + fechaLimite + '}';
+        return "AlumnoLibro{" + "idAlumnoLibro=" + idAlumnoLibro + ", libro=" + libro + ", fechaAsignado=" + fechaAsignado + ", fechaLimite=" + fechaLimite + '}';
     }
-
 }

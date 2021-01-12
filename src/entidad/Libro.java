@@ -18,7 +18,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Libro implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * Id para el libro.
+     */
+    private Integer idLibro;
     /**
      * Titulo del libro.
      */
@@ -60,6 +63,24 @@ public class Libro implements Serializable {
      * Relacion 1:N de la entidad Libro con Bibliotecario.
      */
     private Bibliotecario bibliotecario;
+
+    /**
+     * Obtiene el id del libro.
+     *
+     * @return El valor del id del Libro.
+     */
+    public Integer getIdLibro() {
+        return idLibro;
+    }
+
+    /**
+     * Establece el id para el Libro.
+     *
+     * @param idLibro El valor del id del libro.
+     */
+    public void setIdLibro(Integer idLibro) {
+        this.idLibro = idLibro;
+    }
 
     /**
      * Obtiene el titulo del libro.
@@ -248,17 +269,8 @@ public class Libro implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.titulo);
-        hash = 29 * hash + Objects.hashCode(this.autor);
-        hash = 29 * hash + Objects.hashCode(this.editorial);
-        hash = 29 * hash + Objects.hashCode(this.isbn);
-        hash = 29 * hash + Objects.hashCode(this.genero);
-        hash = 29 * hash + Objects.hashCode(this.cantidadTotal);
-        hash = 29 * hash + Objects.hashCode(this.cantidadDisponible);
-        hash = 29 * hash + (this.descargable ? 1 : 0);
-        hash = 29 * hash + Objects.hashCode(this.linkDescarga);
-        hash = 29 * hash + Objects.hashCode(this.bibliotecario);
+        int hash = 0;
+        hash += (idLibro != null ? idLibro.hashCode() : 0);
         return hash;
     }
 
@@ -298,6 +310,9 @@ public class Libro implements Serializable {
         if (!Objects.equals(this.linkDescarga, other.linkDescarga)) {
             return false;
         }
+        if (!Objects.equals(this.idLibro, other.idLibro)) {
+            return false;
+        }
         if (!Objects.equals(this.isbn, other.isbn)) {
             return false;
         }
@@ -320,6 +335,7 @@ public class Libro implements Serializable {
      */
     @Override
     public String toString() {
-        return "Libro{" + "titulo=" + titulo + ", autor=" + autor + ", editorial=" + editorial + ", isbn=" + isbn + ", genero=" + genero + ", cantidadTotal=" + cantidadTotal + ", cantidadDisponible=" + cantidadDisponible + ", descargable=" + descargable + ", linkDescarga=" + linkDescarga + ", bibliotecario=" + bibliotecario + '}';
+        return "Libro{" + "idLibro=" + idLibro + ", titulo=" + titulo + ", autor=" + autor + ", editorial=" + editorial + ", isbn=" + isbn + ", genero=" + genero + ", cantidadTotal=" + cantidadTotal + ", cantidadDisponible=" + cantidadDisponible + ", descargable=" + descargable + ", linkDescarga=" + linkDescarga + ", bibliotecario=" + bibliotecario + '}';
     }
+
 }

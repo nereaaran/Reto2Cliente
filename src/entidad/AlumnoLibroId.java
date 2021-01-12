@@ -7,7 +7,6 @@ package entidad;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Embeddable;
 
 /**
  * Clase para asignar id a la entidad AlumnoLibro.
