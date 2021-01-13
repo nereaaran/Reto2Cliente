@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author JonY
  */
 @XmlRootElement(name = "grupo_libro")
-class GrupoLibro implements Serializable{
+public class GrupoLibro implements Serializable{
     
     
     /**
@@ -40,21 +40,7 @@ class GrupoLibro implements Serializable{
     private Date fechaFin;
     
 
-    /**
-     * Obtiene el grupo
-     * @return el grupo
-     */
-    @XmlTransient
-    public Grupo getGrupo() {
-        return grupo;
-    }
-    /**
-     * Establece el grupo
-     * @param grupo
-     */
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
+    
     /**
      * Estable el Libro
      * @return el libro
