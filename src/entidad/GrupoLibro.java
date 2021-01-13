@@ -9,21 +9,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author JonY
+ * @author Jonathan Viñan
  */
 @XmlRootElement(name = "grupo_libro")
 public class GrupoLibro implements Serializable{
     
-    
-    /**
-     * El grupo perteneciente a la relacion de grupoLibro.
-     */
-    private Grupo grupo;
-    
+    private static final long serialVersionUID = 1L;
+
     /**
      * El libro perteneciente a la relacion de grupoLibro.
      */
@@ -94,19 +89,20 @@ public class GrupoLibro implements Serializable{
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.grupo);
         hash = 31 * hash + Objects.hashCode(this.libro);
         hash = 31 * hash + Objects.hashCode(this.fechaInicio);
         hash = 31 * hash + Objects.hashCode(this.fechaFin);
         return hash;
     }
+
+    
     
     /**
      * Metodo que comprara si un objeto es igual al objeto GrupoLibro
      * @param obj cualquier tipo de objeto
      * @return un 'false' si los objetos no son iguales y un 'true' si lo sons
      */
-    @Override
+   @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -118,9 +114,6 @@ public class GrupoLibro implements Serializable{
             return false;
         }
         final GrupoLibro other = (GrupoLibro) obj;
-        if (!Objects.equals(this.grupo, other.grupo)) {
-            return false;
-        }
         if (!Objects.equals(this.libro, other.libro)) {
             return false;
         }
@@ -131,5 +124,5 @@ public class GrupoLibro implements Serializable{
             return false;
         }
         return true;
-    }    
+    }
 }

@@ -6,6 +6,7 @@
 package entidad;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -46,5 +47,46 @@ public class GrupoLibroId  implements Serializable{
    public void setIdLibro(Integer idLibro) {
         this.idLibro = idLibro;
     }
-       
+    
+    /**
+     * Método que compara el código hash de dos objetos.
+     * @return el código hash del objeto.
+     */
+    @Override    
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.idGrupo);
+        hash = 29 * hash + Objects.hashCode(this.idLibro);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GrupoLibroId other = (GrupoLibroId) obj;
+        if (!Objects.equals(this.idGrupo, other.idGrupo)) {
+            return false;
+        }
+        if (!Objects.equals(this.idLibro, other.idLibro)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Método que compara si un objeto es igual al objeto "GrupoLibroId".
+     * @param obj cualquier tipo de objeto.
+     * @return un "false" si los objetos noson iguales y un "true" si lo son.
+     */
+   
+    
+   
 }
