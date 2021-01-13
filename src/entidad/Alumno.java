@@ -117,13 +117,13 @@ public class Alumno extends Usuario implements Serializable {
      *
      * @return el código hash del objeto.
      */
-    @Override
+    @Override    
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.dni);
-        hash = 97 * hash + Objects.hashCode(this.fechaNacimiento);
-        hash = 97 * hash + Objects.hashCode(this.alumnoLibros);
-        hash = 97 * hash + Objects.hashCode(this.grupos);
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.dni);
+        hash = 83 * hash + Objects.hashCode(this.fechaNacimiento);
+        hash = 83 * hash + Objects.hashCode(this.alumnoLibros);
+        hash = 83 * hash + Objects.hashCode(this.grupos);
         return hash;
     }
 
@@ -133,7 +133,7 @@ public class Alumno extends Usuario implements Serializable {
      * @param obj cualquier tipo de objeto.
      * @return un "false" si los objetos noson iguales y un "true" si lo son.
      */
-    @Override
+    @Override    
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -167,6 +167,6 @@ public class Alumno extends Usuario implements Serializable {
      */
     @Override
     public String toString() {
-        return "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", AlumnoLibro=" + alumnoLibros + ", grupos=" + grupos + '}';
-    }
+        return "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
+    }    
 }
