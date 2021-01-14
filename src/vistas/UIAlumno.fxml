@@ -39,8 +39,8 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Separator layoutX="11.0" layoutY="232.0" prefHeight="0.0" prefWidth="638.0" />
-                  <TextField fx:id="txtBuscarAlumno" layoutX="18.0" layoutY="245.0" prefHeight="25.0" prefWidth="264.0" promptText="Buscar alumno" />
+                  <Separator layoutX="7.0" layoutY="244.0" prefHeight="0.0" prefWidth="638.0" />
+                  <TextField fx:id="txtBuscarAlumno" layoutX="18.0" layoutY="259.0" prefHeight="25.0" prefWidth="264.0" promptText="Buscar alumno" />
                   <Label fx:id="lblFechaNacimiento" layoutX="363.0" layoutY="194.0" text="Fecha de nacimiento" />
                   <Separator layoutX="649.0" layoutY="87.0" orientation="VERTICAL" prefHeight="200.0" />
                   <DatePicker fx:id="datePickerFechaNacimiento" layoutX="491.0" layoutY="190.0" prefHeight="25.0" prefWidth="138.0" />
@@ -59,7 +59,7 @@
                      </items>
                   </MenuButton>
                   <Button fx:id="btnVolver" layoutX="677.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
-                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
+                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="259.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <MenuBar fx:id="munuBar" layoutX="-10.0" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="818.0">
                      <menus>
                         <Menu mnemonicParsing="false" text="Ajustes">
@@ -74,7 +74,7 @@
                   <Label fx:id="lblDniError" layoutX="473.0" layoutY="122.0" prefHeight="18.0" prefWidth="160.0" />
                   <Label fx:id="lblUsuarioError" layoutX="50.0" layoutY="170.0" prefHeight="18.0" prefWidth="253.0" />
                   <Label fx:id="lblEmailError" layoutX="346.0" layoutY="170.0" prefHeight="18.0" prefWidth="253.0" />
-                  <Label fx:id="lblFechaNacimientoError" layoutX="396.0" layoutY="216.0" prefHeight="18.0" prefWidth="253.0" />
+                  <Label fx:id="lblFechaNacimientoError" layoutX="362.0" layoutY="215.0" prefHeight="18.0" prefWidth="272.0" />
                   <Label fx:id="lblBuscarAlumnoError" layoutX="23.0" layoutY="271.0" prefHeight="18.0" prefWidth="253.0" />
                </children>
             </AnchorPane>
