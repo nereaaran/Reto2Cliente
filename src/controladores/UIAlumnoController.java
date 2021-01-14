@@ -5,7 +5,6 @@
  */
 package controladores;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,9 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -204,7 +201,6 @@ public class UIAlumnoController {
             lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
         } else if (!error) {
             lblFechaNacimientoError.setText("OK"); //quitar mas tarde
-            lblFechaNacimientoError.setText("");
         } else {
             lblFechaNacimientoError.setText("NO"); //quitar mas tarde
         }
