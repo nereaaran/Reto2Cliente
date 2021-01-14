@@ -5,6 +5,8 @@
  */
 package controladores;
 
+import implementaciones.UsuarioGestionImplementacion;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,9 +94,9 @@ public class UISignInController {
         
         
         txtUsuario.requestFocus();
-        btnIniciarSesion.setDisable(true);
-        linkContraseñaOlvidada.setOnAction(this::handleContraseñaOlvidada);
-        
+        //btnIniciarSesion.setDisable(true);
+        //linkContraseñaOlvidada.setOnAction(this::handleContraseñaOlvidada);
+        btnIniciarSesion.setOnAction(this::handleIniciarSesion);
         
         
         
@@ -109,7 +111,18 @@ public class UISignInController {
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException ex) {
-            Logger.getLogger(UILogOutController.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(UILogOutController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    
+    
+    private void handleIniciarSesion(ActionEvent event) {
+        
+        UsuarioGestion usuarioGestion= new UsuarioGestionImplementacion();
+        
+        usuarioGestion.find(4);
+        
+        
     }
 }
