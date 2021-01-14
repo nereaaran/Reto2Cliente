@@ -150,6 +150,7 @@ public class UIAlumnoController {
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
         btnLimpiar.setDisable(true);
+        btnBuscar.setDisable(true);
 
         txtNombreCompleto.textProperty().addListener(this::comprobarLongitud);
         txtDni.textProperty().addListener(this::comprobarLongitud);
@@ -186,6 +187,12 @@ public class UIAlumnoController {
             btnModificar.setDisable(false);
             btnEliminar.setDisable(false);
             btnLimpiar.setDisable(false);
+        }
+
+        if (txtBuscarAlumno.getText().isEmpty()) {
+            btnBuscar.setDisable(true);
+        } else {
+            btnBuscar.setDisable(false);
         }
     }
 
