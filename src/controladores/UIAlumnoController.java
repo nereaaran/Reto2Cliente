@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -40,7 +41,7 @@ public class UIAlumnoController {
     private static final int MAX_LENGHT_DNI = 9;
 
     public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
-    public static final Pattern VALID_DNI = Pattern.compile("^[XYZ][0-9]{7}[A-Z]", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_DNI = Pattern.compile("^[XYZ]{0,1}[0-9]{7,8}[A-Z]", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -141,142 +142,127 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
+        txtNombreCompleto.requestFocus();
 
-        /*btnAnadir.setDisable(true);
+        btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
         btnLimpiar.setDisable(true);
-        btnBuscar.setDisable(true);*/
-        txtNombreCompleto.textProperty().addListener(this::manejoCamposTexto);
-        txtDni.textProperty().addListener(this::longitudMaximaDni);
-        txtUsuario.textProperty().addListener(this::manejoCamposTexto);
-        txtEmail.textProperty().addListener(this::manejoCamposTexto);
+
+        txtNombreCompleto.textProperty().addListener(this::comprobarLongitud);
+        txtDni.textProperty().addListener(this::comprobarLongitud);
+        txtUsuario.textProperty().addListener(this::comprobarLongitud);
+        txtEmail.textProperty().addListener(this::comprobarLongitud);
+        txtBuscarAlumno.textProperty().addListener(this::comprobarLongitud);
+
+        btnAnadir.setOnAction(this::botonAnadirPulsado);
+        btnModificar.setOnAction(this::botonModificarPulsado);
+        btnEliminar.setOnAction(this::botonEliminarPulsado);
+        btnLimpiar.setOnAction(this::botonLimpiarPulsado);
 
         stage.show();
     }
 
-    public void manejoCamposTexto(ObservableValue observable, String oldValue, String newValue) {
-        StringProperty textProperty = (StringProperty) observable;
-        TextField textField = (TextField) textProperty.getBean();
-        String idTextField = textField.getId();
-
-        boolean mayorDe50Caracteres = longitudMaximaGeneral(idTextField, textField);
-        
-        if (!mayorDe50Caracteres) {
-            //habilitarBotones();
-        }
-    }
-
-    private boolean camposTextoVacios() {
+    private boolean camposVacios() {
         boolean vacios = false;
+
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
             vacios = true;
         }
+
         return vacios;
     }
 
-    /*private void habilitarBotones() {
-        if (!camposTextoVacios() && nombreBien) {
-            idButtonSignUp.setDisable(false);
+    private void habilitarBotones() {
+        if (camposVacios()) {
+            btnAnadir.setDisable(true);
+            btnModificar.setDisable(true);
+            btnEliminar.setDisable(true);
+            btnLimpiar.setDisable(true);
         } else {
-            idButtonSignUp.setDisable(true);
+            btnAnadir.setDisable(false);
+            btnModificar.setDisable(false);
+            btnEliminar.setDisable(false);
+            btnLimpiar.setDisable(false);
         }
-    }*/
-
-    private boolean longitudMaximaGeneral(String idTextField, TextField textField) {
-        boolean error = false;
-        boolean masDe50 = false;
-
-        if (textField.getText().length() > MAX_LENGHT) {
-            String texto = textField.getText().substring(0, MAX_LENGHT);
-            textField.setText(texto);
-
-            masDe50 = true;
-
-            switch (idTextField) {
-                case ("txtNombreCompleto"):
-                    error = true;
-                    lblNombreCompletoError.setText("El nombre debe ser menor de 50 caracteres");
-                    lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
-                case ("txUsuario"):
-                    error = true;
-                    lblUsuarioError.setText("El usuario debe ser menor de 50 caracteres");
-                    lblUsuarioError.setTextFill(Color.web("#FF0000"));
-                case ("txtEmail"):
-                    error = true;
-                    lblEmailError.setText("El email debe ser menor de 50 caracteres");
-                    lblEmailError.setTextFill(Color.web("#FF0000"));
-            }
-        } else {
-            switch (idTextField) {
-                case ("lblNombreCompletoError"):
-                    lblNombreCompletoError.setText("");
-                case ("lblUsuarioError"):
-                    lblUsuarioError.setText("");
-                case ("lblEmailError"):
-                    lblEmailError.setText("");
-            }
-        }
-
-        return masDe50;
     }
 
-    private void longitudMaximaDni(ObservableValue observable, String oldValue, String newValue) {
+    private void botonAnadirPulsado(ActionEvent event) {
+        boolean error = comprobarPatrones();
+
+        if (!error) {
+            lblUsuario.setText("OK");
+        } else {
+            lblUsuario.setText("NO");
+        }
+    }
+
+    private void botonModificarPulsado(ActionEvent event) {
+        boolean error = comprobarPatrones();
+
+        if (!error) {
+            //Hace cosas con el servidor
+        }
+    }
+
+    private void botonEliminarPulsado(ActionEvent event) {
+        //Hacer cosas con el servidor
+    }
+
+    private void botonLimpiarPulsado(ActionEvent event) {
+        lblNombreCompletoError.setText("");
+        lblDniError.setText("");
+        lblUsuarioError.setText("");
+        lblEmailError.setText("");
+        txtNombreCompleto.setText("");
+        txtDni.setText("");
+        txtUsuario.setText("");
+        txtEmail.setText("");
+        
+        txtNombreCompleto.requestFocus();
+    }
+
+    private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
+        if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
+            String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
+            txtNombreCompleto.setText(nombreCompleto);
+        } else {
+            lblNombreCompletoError.setText("");
+        }
+
         if (txtDni.getText().length() > MAX_LENGHT_DNI) {
             String dni = txtDni.getText().substring(0, MAX_LENGHT_DNI);
             txtDni.setText(dni);
         } else {
             lblDniError.setText("");
         }
-    }
 
-    /*private boolean comprobarPatrones(String idTextField) {
-        boolean patronCorrecto = true;
-
-        switch (idTextField) {
-            case ("txtNombreCompleto"):
-                Matcher matcher = VALID_NOMBRE.matcher(txtDni.getText());
-                if (!matcher.find()) {
-                    patronCorrecto = false;
-                    lblDniError.setText("DNI inválido");
-                    lblDniError.setTextFill(Color.web("#FF0000"));
-                }
-            case ("txtDni"):
-                Matcher matcher = VALID_DNI.matcher(txtDni.getText());
-                if (!matcher.find()) {
-                    patronCorrecto = false;
-                    lblDniError.setText("DNI inválido");
-                    lblDniError.setTextFill(Color.web("#FF0000"));
-                }
-
-        }
-
-        if (idTextField.equals("idTextName")) {
-            Matcher matcher = VALID_NOMBRE.matcher(idTextName.getText());
-            if (!matcher.find()) {
-                nombreBien = false;
-                correctPattern = false;
-                idLabelNameError.setText("Name must only contain letters");
-                idLabelNameError.setTextFill(Color.web("#FF0000"));
-            } else {
-                nombreBien = true;
-            }
-        }
-        return correctPattern;
-    }*/
-    private void longitudMaximaNombreCompleto(ObservableValue observable, String oldValue, String newValue) {
-        if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
-            String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
-            txtNombreCompleto.setText(nombreCompleto);
-
-            lblNombreCompletoError.setText("Nombre debe ser menor de 50 caracteres");
-            lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
+        if (txtUsuario.getText().length() > MAX_LENGHT) {
+            String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
+            txtUsuario.setText(usuario);
         } else {
-            lblNombreCompletoError.setText("");
+            lblUsuarioError.setText("");
         }
+
+        if (txtEmail.getText().length() > MAX_LENGHT) {
+            String email = txtEmail.getText().substring(0, MAX_LENGHT);
+            txtEmail.setText(email);
+        } else {
+            lblEmailError.setText("");
+        }
+
+        if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
+            String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
+            txtBuscarAlumno.setText(buscar);
+        }
+
+        habilitarBotones();
     }
 
-    private void comprobarPatronNombre() {
+//--------------------------------------------------------------------------------------------------
+    private boolean comprobarPatronNombreCompleto() {
+        boolean error = false;
+
         if (txtNombreCompleto.getText().isEmpty()) {
             lblNombreCompletoError.setText("");
         } else {
@@ -284,11 +270,17 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblNombreCompletoError.setText("El nombre solo debe contener letras");
                 lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
             }
         }
+
+        return error;
     }
 
-    private void comprobarPatronDNI() {
+    private boolean comprobarPatronDni() {
+        boolean error = false;
+
         if (txtDni.getText().isEmpty()) {
             lblDniError.setText("");
         } else {
@@ -296,23 +288,17 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblDniError.setText("DNI inválido");
                 lblDniError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
             }
         }
+
+        return error;
     }
 
-    private void longitudMaximaUsuario(ObservableValue observable, String oldValue, String newValue) {
-        if (txtUsuario.getText().length() == MAX_LENGHT) {
-            String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
-            txtUsuario.setText(usuario);
+    private boolean comprobarPatronUsuario() {
+        boolean error = false;
 
-            lblUsuarioError.setText("Usuario debe ser menor de 50 caracteres");
-            lblUsuarioError.setTextFill(Color.web("#FF0000"));
-        } else {
-            lblUsuarioError.setText("");
-        }
-    }
-
-    private void comprobarPatronUsuario() {
         if (txtUsuario.getText().isEmpty()) {
             lblUsuarioError.setText("");
         } else {
@@ -320,31 +306,87 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblUsuarioError.setText("El usuario no debe contener espacios");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
             }
         }
+
+        return error;
     }
 
-    private void longitudMaximaEmail(ObservableValue observable, String oldValue, String newValue) {
-        if (txtEmail.getText().length() == MAX_LENGHT) {
-            String email = txtEmail.getText().substring(0, MAX_LENGHT);
-            txtEmail.setText(email);
+    private boolean comprobarPatronEmail() {
+        boolean error = false;
 
-            lblEmailError.setText("El email debe ser menor de 50 caracteres");
-            lblEmailError.setTextFill(Color.web("#FF0000"));
-        } else {
-            lblEmailError.setText("");
-        }
-    }
-
-    private void comprobarPatronEmail() {
         if (txtEmail.getText().isEmpty()) {
             lblEmailError.setText("");
         } else {
             Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
             if (!matcher.find()) {
-                lblEmailError.setText("Direccion de email inválido");
+                lblEmailError.setText("Email inválido");
                 lblEmailError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
             }
         }
+
+        return error;
+    }
+//--------------------------------------------------------------------------------------------------
+
+    private boolean comprobarPatrones() {
+        boolean error = false;
+
+        /*if (comprobarPatronNombreCompleto() || comprobarPatronDni() || comprobarPatronUsuario() || comprobarPatronEmail()) {
+            error = true;
+        }*/
+
+        if (txtNombreCompleto.getText().isEmpty()) {
+            lblNombreCompletoError.setText("");
+        } else {
+            Matcher matcher = VALID_NOMBRE.matcher(txtNombreCompleto.getText());
+            if (!matcher.find()) {
+                lblNombreCompletoError.setText("El nombre solo debe contener letras");
+                lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            }
+        }
+
+        if (txtDni.getText().isEmpty()) {
+            lblDniError.setText("");
+        } else {
+            Matcher matcher = VALID_DNI.matcher(txtDni.getText());
+            if (!matcher.find()) {
+                lblDniError.setText("DNI inválido");
+                lblDniError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            }
+        }
+
+        if (txtUsuario.getText().isEmpty()) {
+            lblUsuarioError.setText("");
+        } else {
+            Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
+            if (!matcher.find()) {
+                lblUsuarioError.setText("El usuario no debe contener espacios");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            }
+        }
+
+        if (txtEmail.getText().isEmpty()) {
+            lblEmailError.setText("");
+        } else {
+            Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
+            if (!matcher.find()) {
+                lblEmailError.setText("Email inválido");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            }
+        }
+        return error;
     }
 }
