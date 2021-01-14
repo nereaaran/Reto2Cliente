@@ -83,7 +83,7 @@ public class UIRestaurarContraseniaController {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Sign Up");
+        stage.setTitle("Restauracion de contraseña");
         stage.setResizable(false);
 
         txtEmail.requestFocus();
@@ -93,15 +93,16 @@ public class UIRestaurarContraseniaController {
         stage.show();
     }
 
-    private void handleContraseñaOlvidada(ActionEvent event) {
+
+    private void handleVolver(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIRestaurarContrasenia.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
             Parent root = (Parent) loader.load();
-            UIRestaurarContraseniaController controller = ((UIRestaurarContraseniaController) loader.getController());
+            UISignInController controller = ((UISignInController) loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(UILogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
         }
     }
 }

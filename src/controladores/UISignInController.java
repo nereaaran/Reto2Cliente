@@ -83,33 +83,69 @@ public class UISignInController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("SignIn Controlador: Iniciando stage");
+        LOGGER.info("SignIn Controlador: Iniciando stage principal");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Sign In");
         stage.setResizable(false);
-        
-        
+
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
-        linkContraseñaOlvidada.setOnAction(this::handleContraseñaOlvidada);
-        
-        
-        
-        
+
+        btnIniciarSesion.setOnAction(this::handleBotonLogin);
+        btnRegistrate.setOnAction(this::handleBotonRegistro);
+        linkContraseñaOlvidada.setOnAction(this::handleBotonContraseñaOlvidada);
+
         stage.show();
     }
+
     
-    private void handleContraseñaOlvidada(ActionEvent event) {
+      private void handleBotonLogin(ActionEvent event) {
+        //LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+        
+      
+    }
+      
+      
+      
+      
+    /**
+     * Método que carga y abre la venta UIRestaurarContrasenia.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonContraseñaOlvidada(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIRestaurarContrasenia.fxml"));
             Parent root = (Parent) loader.load();
             UIRestaurarContraseniaController controller = ((UIRestaurarContraseniaController) loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(UILogOutController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Método que carga y abre la venta UISignUp.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonRegistro(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista Sign Up");
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignUp.fxml"));
+            Parent root = (Parent) loader.load();
+            UISignUpController controller = ((UISignUpController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
         }
     }
 }
