@@ -146,7 +146,6 @@ public class UIAlumnoController {
         btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
-        btnLimpiar.setDisable(true);
         btnBuscar.setDisable(true);
 
         txtNombreCompleto.textProperty().addListener(this::comprobarLongitud);
@@ -159,31 +158,44 @@ public class UIAlumnoController {
         btnModificar.setOnAction(this::botonModificarPulsado);
         btnEliminar.setOnAction(this::botonEliminarPulsado);
         btnLimpiar.setOnAction(this::botonLimpiarPulsado);
+        btnBuscar.setOnAction(this::botonBuscarPulsado);
 
         stage.show();
     }
 
     private boolean camposVacios() {
-        boolean vacios = false;
+        boolean vacio = false;
 
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
-            vacios = true;
+
+            vacio = true;
         }
 
-        return vacios;
+        return vacio;
+    }
+
+    private boolean datePickerVacio() {
+        boolean vacio = false;
+
+        if (datePickerFechaNacimiento.getValue() == null) { //esta mierda no funciona-----------------------------------
+            lblFechaNacimientoError.setText("Vacio");
+            vacio = true;
+        } else {
+            lblFechaNacimientoError.setText("No vacio");
+        }
+
+        return vacio;
     }
 
     private void habilitarBotones() {
-        if (camposVacios()) {
+        if (camposVacios() || datePickerVacio()) {
             btnAnadir.setDisable(true);
             btnModificar.setDisable(true);
             btnEliminar.setDisable(true);
-            btnLimpiar.setDisable(true);
         } else {
             btnAnadir.setDisable(false);
             btnModificar.setDisable(false);
             btnEliminar.setDisable(false);
-            btnLimpiar.setDisable(false);
         }
 
         if (txtBuscarAlumno.getText().isEmpty()) {
@@ -196,13 +208,10 @@ public class UIAlumnoController {
     private void botonAnadirPulsado(ActionEvent event) {
         boolean error = comprobarPatrones();
 
-        if (datePickerFechaNacimiento.getValue() == null) {
-            lblFechaNacimientoError.setText("Hay que introducir una fecha");
-            lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
-        } else if (!error) {
-            lblFechaNacimientoError.setText("OK"); //quitar mas tarde
+        if (!error) {
+            lblBuscarAlumnoError.setText("OK"); //quitar mas tarde
         } else {
-            lblFechaNacimientoError.setText("NO"); //quitar mas tarde
+            lblBuscarAlumnoError.setText("NO"); //quitar mas tarde
         }
     }
 
@@ -219,45 +228,46 @@ public class UIAlumnoController {
     }
 
     private void botonLimpiarPulsado(ActionEvent event) {
-        lblNombreCompletoError.setText("");
-        lblDniError.setText("");
-        lblUsuarioError.setText("");
-        lblEmailError.setText("");
         txtNombreCompleto.setText("");
         txtDni.setText("");
         txtUsuario.setText("");
         txtEmail.setText("");
+        datePickerFechaNacimiento.getEditor().clear();
+        txtBuscarAlumno.setText("");
+
+        lblNombreCompletoError.setText("");
+        lblDniError.setText("");
+        lblUsuarioError.setText("");
+        lblEmailError.setText("");
+        lblFechaNacimientoError.setText("");
+        lblBuscarAlumnoError.setText("");
 
         txtNombreCompleto.requestFocus();
+    }
+    
+    
+    private void botonBuscarPulsado(ActionEvent event) {
     }
 
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
             String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
             txtNombreCompleto.setText(nombreCompleto);
-        } else {
-            lblNombreCompletoError.setText("");
         }
 
         if (txtDni.getText().length() > MAX_LENGHT_DNI) {
             String dni = txtDni.getText().substring(0, MAX_LENGHT_DNI);
             txtDni.setText(dni);
-        } else {
-            lblDniError.setText("");
         }
 
         if (txtUsuario.getText().length() > MAX_LENGHT) {
             String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
             txtUsuario.setText(usuario);
-        } else {
-            lblUsuarioError.setText("");
         }
 
         if (txtEmail.getText().length() > MAX_LENGHT) {
             String email = txtEmail.getText().substring(0, MAX_LENGHT);
             txtEmail.setText(email);
-        } else {
-            lblEmailError.setText("");
         }
 
         if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
@@ -268,8 +278,7 @@ public class UIAlumnoController {
         habilitarBotones();
     }
 
-//--------------------------------------------------------------------------------------------------
-    private boolean comprobarPatronNombreCompleto() {
+    private boolean comprobarPatrones() {
         boolean error = false;
 
         if (txtNombreCompleto.getText().isEmpty()) {
@@ -281,83 +290,8 @@ public class UIAlumnoController {
                 lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
-            }
-        }
-
-        return error;
-    }
-
-    private boolean comprobarPatronDni() {
-        boolean error = false;
-
-        if (txtDni.getText().isEmpty()) {
-            lblDniError.setText("");
-        } else {
-            Matcher matcher = VALID_DNI.matcher(txtDni.getText());
-            if (!matcher.find()) {
-                lblDniError.setText("DNI inválido");
-                lblDniError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            }
-        }
-
-        return error;
-    }
-
-    private boolean comprobarPatronUsuario() {
-        boolean error = false;
-
-        if (txtUsuario.getText().isEmpty()) {
-            lblUsuarioError.setText("");
-        } else {
-            Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
-            if (!matcher.find()) {
-                lblUsuarioError.setText("El usuario no debe contener espacios");
-                lblUsuarioError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            }
-        }
-
-        return error;
-    }
-
-    private boolean comprobarPatronEmail() {
-        boolean error = false;
-
-        if (txtEmail.getText().isEmpty()) {
-            lblEmailError.setText("");
-        } else {
-            Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
-            if (!matcher.find()) {
-                lblEmailError.setText("Email inválido");
-                lblEmailError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            }
-        }
-
-        return error;
-    }
-//--------------------------------------------------------------------------------------------------
-
-    private boolean comprobarPatrones() {
-        boolean error = false;
-
-        if (comprobarPatronNombreCompleto() || comprobarPatronDni() || comprobarPatronUsuario() || comprobarPatronEmail()) {
-            error = true;
-        }
-
-        /*if (txtNombreCompleto.getText().isEmpty()) {
-            lblNombreCompletoError.setText("");
-        } else {
-            Matcher matcher = VALID_NOMBRE.matcher(txtNombreCompleto.getText());
-            if (!matcher.find()) {
-                lblNombreCompletoError.setText("El nombre solo debe contener letras");
-                lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
+            } else {
+                lblNombreCompletoError.setText("");
             }
         }
 
@@ -370,6 +304,8 @@ public class UIAlumnoController {
                 lblDniError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblDniError.setText("");
             }
         }
 
@@ -382,6 +318,8 @@ public class UIAlumnoController {
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblUsuarioError.setText("");
             }
         }
 
@@ -394,9 +332,11 @@ public class UIAlumnoController {
                 lblEmailError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblEmailError.setText("");
             }
-        }*/
+        }
+        
         return error;
     }
-
 }
