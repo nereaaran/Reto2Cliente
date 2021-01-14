@@ -7,6 +7,7 @@ package controladores;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -101,47 +102,62 @@ public class UIRestaurarContraseniaController {
 
         txtEmail.textProperty().addListener(this::handleTextoCambiado);
 
-        habilitarBotonRestaurarContrasena();
-
         stage.show();
     }
 
-    private void habilitarBotonRestaurarContrasena() {
-        if (txtEmail.getText().isEmpty() ||) {
-
-            btnRestaurarContraseña.setDisable(true);
-        } else {
-
-            btnRestaurarContraseña.setDisable(false);
-        }
-
-    }
-
     private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
-
-        if (!textFieldOver50()) {
-
-        }
-
+        habilitarBotonRestaurarContrasena();
     }
 
-    private boolean textFieldOver50() {
-        boolean over50 = false;
-        // Si la longitud del texto es superior 50
-        if (txtEmail.getText().length() > MAX_LENGHT) {
-            // Guarda en un String los caracteres escritos en el campo de textodesde el 1 hasta el ultimo.
-            String text = txtEmail.getText().substring(0, MAX_LENGHT);
-            // Sustituye el texto por el String.
-            txtEmail.setText(text);
+    private void habilitarBotonRestaurarContrasena() {
+        boolean textoCorrecto = false;
 
-            over50 = true;
+        if (!txtEmail.getText().isEmpty()) {
+            if (!EmailIsOver50()) {
+                if (emailPatternIsCorrect()) {
+                    textoCorrecto = true;
+                }
+            }
+        }
 
-            lblEmailError.setText("Name must be less than 50 characters");
+        if (textoCorrecto) {
+            btnRestaurarContraseña.setDisable(false);
+        } else {
+            btnRestaurarContraseña.setDisable(true);
+        }
+    }
+
+    private boolean emailPatternIsCorrect() {
+        boolean correct = true;
+
+        Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
+        // Si el texto y el patrón no coinciden
+        if (!matcher.find()) {
+            lblEmailError.setText("Dirección de email invalida");
             lblEmailError.setTextFill(Color.web("#FF0000"));
+
+            correct = false;
         } else {
             lblEmailError.setText("");
         }
-        return over50;
+
+        return correct;
+    }
+
+    private boolean EmailIsOver50() {
+        boolean textOver50 = false;
+
+        if (txtEmail.getText().length() > MAX_LENGHT) {
+            String text = txtEmail.getText().substring(0, MAX_LENGHT);
+            txtEmail.setText(text);
+            lblEmailError.setText("Email debe ser menor de 50 caracteres");
+            lblEmailError.setTextFill(Color.web("#FF0000"));
+            textOver50 = true;
+        } else {
+            lblEmailError.setText("");
+        }
+
+        return textOver50;
     }
 
     /**
