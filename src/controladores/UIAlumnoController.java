@@ -33,19 +33,19 @@ import javafx.stage.Stage;
  * @author Cristina Milea
  */
 public class UIAlumnoController {
-
+    
     public static final Logger LOGGER = Logger.getLogger("controladores.UIAlumnoController");
-
+    
     private static final int MAX_LENGHT = 50;
     private static final int MAX_LENGHT_DNI = 9;
-
+    
     public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_DNI = Pattern.compile("^[XYZ]{0,1}[0-9]{7,8}[A-Z]", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
+    
     private Stage stage;
-
+    
     @FXML
     private AnchorPane paneGeneralAlumno;
     @FXML
@@ -111,7 +111,7 @@ public class UIAlumnoController {
     @FXML
     private AnchorPane paneInferiorAlumno;
     @FXML
-    private TableView<?> tablaAlumno;
+    private TableView<?> tablaAlumnos;
     @FXML
     private TableColumn<?, ?> dniCL;
     @FXML
@@ -121,7 +121,7 @@ public class UIAlumnoController {
     @FXML
     private TableColumn<?, ?> emailCL;
     @FXML
-    private TableView<?> tablaGrupo;
+    private TableView<?> tablaGrupos;
     @FXML
     private TableColumn<?, ?> nombreGrupoCL;
     @FXML
@@ -130,65 +130,66 @@ public class UIAlumnoController {
     private Label lblListaGrupos;
     @FXML
     private Label lblAlumnosAsignados;
-
+    
     public void setStage(Stage primaryStage) {
         stage = primaryStage;
     }
-
+    
     public void initStage(Parent ventana) {
         Scene scene = new Scene(ventana);
         stage.setScene(scene);
-
+        
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
         txtNombreCompleto.requestFocus();
-
+        
         btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
         btnBuscar.setDisable(true);
-
+        btnLimpiar.setDisable(true);
+        
         txtNombreCompleto.textProperty().addListener(this::comprobarLongitud);
         txtDni.textProperty().addListener(this::comprobarLongitud);
         txtUsuario.textProperty().addListener(this::comprobarLongitud);
         txtEmail.textProperty().addListener(this::comprobarLongitud);
         txtBuscarAlumno.textProperty().addListener(this::comprobarLongitud);
-
+        
         btnAnadir.setOnAction(this::botonAnadirPulsado);
         btnModificar.setOnAction(this::botonModificarPulsado);
         btnEliminar.setOnAction(this::botonEliminarPulsado);
         btnLimpiar.setOnAction(this::botonLimpiarPulsado);
         btnBuscar.setOnAction(this::botonBuscarPulsado);
-
+        
         stage.show();
     }
-
+    
     private boolean camposVacios() {
         boolean vacio = false;
-
+        
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
-
+            btnLimpiar.setDisable(false);
             vacio = true;
         }
-
+        
         return vacio;
     }
-
+    
     private boolean datePickerVacio() {
         boolean vacio = false;
-
+        
         if (datePickerFechaNacimiento.getValue() == null) { //esta mierda no funciona-----------------------------------
             lblFechaNacimientoError.setText("Vacio");
             vacio = true;
         } else {
             lblFechaNacimientoError.setText("No vacio");
         }
-
+        
         return vacio;
     }
-
+    
     private void habilitarBotones() {
-        if (camposVacios() || datePickerVacio()) {
+        if (camposVacios() /*|| datePickerVacio()*/) {
             btnAnadir.setDisable(true);
             btnModificar.setDisable(true);
             btnEliminar.setDisable(true);
@@ -197,36 +198,36 @@ public class UIAlumnoController {
             btnModificar.setDisable(false);
             btnEliminar.setDisable(false);
         }
-
+        
         if (txtBuscarAlumno.getText().isEmpty()) {
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
         }
     }
-
+    
     private void botonAnadirPulsado(ActionEvent event) {
         boolean error = comprobarPatrones();
-
+        
         if (!error) {
             lblBuscarAlumnoError.setText("OK"); //quitar mas tarde
         } else {
             lblBuscarAlumnoError.setText("NO"); //quitar mas tarde
         }
     }
-
+    
     private void botonModificarPulsado(ActionEvent event) {
         boolean error = comprobarPatrones();
-
+        
         if (!error) {
             //Hace cosas con el servidor
         }
     }
-
+    
     private void botonEliminarPulsado(ActionEvent event) {
         //Hacer cosas con el servidor
     }
-
+    
     private void botonLimpiarPulsado(ActionEvent event) {
         txtNombreCompleto.setText("");
         txtDni.setText("");
@@ -234,53 +235,54 @@ public class UIAlumnoController {
         txtEmail.setText("");
         datePickerFechaNacimiento.getEditor().clear();
         txtBuscarAlumno.setText("");
-
+        
         lblNombreCompletoError.setText("");
         lblDniError.setText("");
         lblUsuarioError.setText("");
         lblEmailError.setText("");
         lblFechaNacimientoError.setText("");
         lblBuscarAlumnoError.setText("");
-
+        
         txtNombreCompleto.requestFocus();
+        
+        btnLimpiar.setDisable(true);
     }
-    
     
     private void botonBuscarPulsado(ActionEvent event) {
     }
-
+    
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
             String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
             txtNombreCompleto.setText(nombreCompleto);
         }
-
+        
         if (txtDni.getText().length() > MAX_LENGHT_DNI) {
             String dni = txtDni.getText().substring(0, MAX_LENGHT_DNI);
             txtDni.setText(dni);
         }
-
+        
         if (txtUsuario.getText().length() > MAX_LENGHT) {
             String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
             txtUsuario.setText(usuario);
         }
-
+        
         if (txtEmail.getText().length() > MAX_LENGHT) {
             String email = txtEmail.getText().substring(0, MAX_LENGHT);
             txtEmail.setText(email);
         }
-
+        
         if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
             String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
             txtBuscarAlumno.setText(buscar);
         }
-
+        
         habilitarBotones();
     }
-
+    
     private boolean comprobarPatrones() {
         boolean error = false;
-
+        
         if (txtNombreCompleto.getText().isEmpty()) {
             lblNombreCompletoError.setText("");
         } else {
@@ -288,13 +290,13 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblNombreCompletoError.setText("El nombre solo debe contener letras");
                 lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
-
+                
                 error = true;
             } else {
                 lblNombreCompletoError.setText("");
             }
         }
-
+        
         if (txtDni.getText().isEmpty()) {
             lblDniError.setText("");
         } else {
@@ -302,13 +304,13 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblDniError.setText("DNI inválido");
                 lblDniError.setTextFill(Color.web("#FF0000"));
-
+                
                 error = true;
             } else {
                 lblDniError.setText("");
             }
         }
-
+        
         if (txtUsuario.getText().isEmpty()) {
             lblUsuarioError.setText("");
         } else {
@@ -316,13 +318,13 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblUsuarioError.setText("El usuario no debe contener espacios");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
-
+                
                 error = true;
             } else {
                 lblUsuarioError.setText("");
             }
         }
-
+        
         if (txtEmail.getText().isEmpty()) {
             lblEmailError.setText("");
         } else {
@@ -330,7 +332,7 @@ public class UIAlumnoController {
             if (!matcher.find()) {
                 lblEmailError.setText("Email inválido");
                 lblEmailError.setTextFill(Color.web("#FF0000"));
-
+                
                 error = true;
             } else {
                 lblEmailError.setText("");

@@ -19,9 +19,9 @@ import javafx.scene.shape.Rectangle;
 /**
  * FXML Controller class
  *
- * @author nerea
+ * @author 2dam
  */
-public class UIEditarProfesorController implements Initializable {
+public class UIMiPerfilController implements Initializable {
 
     @FXML
     private Pane paneMiPerfil;
@@ -32,41 +32,23 @@ public class UIEditarProfesorController implements Initializable {
     @FXML
     private Label lblNombre;
     @FXML
-    private TextField txtNombre;
-    @FXML
     private Label lblEmail;
-    @FXML
-    private TextField txtEmail;
     @FXML
     private Label lblUsuario;
     @FXML
-    private TextField txtUsuario;
-    @FXML
     private Button btnVolver;
-    @FXML
-    private Label lblUsuarioError;
-    @FXML
-    private Label lblEmailError;
-    @FXML
-    private Label lblNombreError;
     @FXML
     private Label lblTelefono;
     @FXML
-    private PasswordField txtTelefono;
-    @FXML
-    private Label lblTelefonoError;
-    @FXML
     private Label lblContraseñaActual;
-    @FXML
-    private TextField txtContraseñaActual;
     @FXML
     private Label lblContraseñaNueva;
     @FXML
-    private PasswordField txtContraseñaNueva;
+    private PasswordField txtContrasenaNueva;
     @FXML
     private Label lblRepetirNuevaContraseña;
     @FXML
-    private PasswordField txtRepetirNuevaContraseña;
+    private PasswordField txtRepiteNuevaContrasena;
     @FXML
     private Button btnCambiarContraseña;
     @FXML
@@ -76,13 +58,19 @@ public class UIEditarProfesorController implements Initializable {
     @FXML
     private Label lblContraseñaActualError;
     @FXML
-    private Label lblContraseñaCambiada;
+    private Label lblContrasenaCambiada;
     @FXML
     private Label lblCambioContraseña;
     @FXML
-    private Button btnGuardarCambios;
+    private TextField txtNombreProfesor;
     @FXML
-    private Label lblCambiosGuardados;
+    private PasswordField txtContrasenaActual;
+    @FXML
+    private TextField txtEmailProfesor;
+    @FXML
+    private TextField txtUsuarioProfesor;
+    @FXML
+    private TextField txtTelefonoProfesor;
 
     /**
      * Initializes the controller class.
