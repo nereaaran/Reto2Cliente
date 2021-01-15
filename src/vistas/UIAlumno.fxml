@@ -18,6 +18,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIAlumnoController">
    <children>
+      <fx:include source="UIMenuBar.fxml"/>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="607.0" prefWidth="803.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
@@ -60,16 +61,6 @@
                   </MenuButton>
                   <Button fx:id="btnVolver" layoutX="677.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
                   <Button fx:id="btnBuscar" layoutX="287.0" layoutY="259.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
-                  <MenuBar fx:id="munuBar" layoutX="-10.0" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="818.0">
-                     <menus>
-                        <Menu mnemonicParsing="false" text="Ajustes">
-                           <items>
-                              <MenuItem fx:id="mnMiPerfil" mnemonicParsing="false" text="Mi perfil" />
-                              <MenuItem fx:id="mnCerrarSesion" mnemonicParsing="false" text="Cerrar sesion" />
-                           </items>
-                        </Menu>
-                     </menus>
-                  </MenuBar>
                   <Label fx:id="lblNombreCompletoError" layoutX="139.0" layoutY="118.0" prefHeight="18.0" prefWidth="253.0" />
                   <Label fx:id="lblDniError" layoutX="473.0" layoutY="122.0" prefHeight="18.0" prefWidth="160.0" />
                   <Label fx:id="lblUsuarioError" layoutX="50.0" layoutY="170.0" prefHeight="18.0" prefWidth="253.0" />
