@@ -7,7 +7,6 @@ package controladores;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.beans.property.StringProperty;
@@ -25,7 +24,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -109,7 +107,7 @@ public class UISignInController {
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
 
-        btnIniciarSesion.setOnAction(this::handleBotonLogin);
+        btnIniciarSesion.setOnAction(this::handleBotonIniciarSesion);
         btnRegistrate.setOnAction(this::handleBotonRegistro);
         linkContraseñaOlvidada.setOnAction(this::handleBotonContraseñaOlvidada);
 
@@ -119,49 +117,61 @@ public class UISignInController {
         stage.show();
     }
 
+    private void handleBotonIniciarSesion(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
+        
+        
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
+            Parent root = (Parent) loader.load();
+            UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Se llama cuando se modifica cualquier campo de texto. Comprueba que los
+     * campos de texto no estan vacios y no superan los 50 caracteres. Si se
+     * cumplen los requisitos se habilita el boton de Iniciar Sesion, si no se
+     * cumplen lo deshabilita.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
         // Identifica el TextField que lo ha llamado
         StringProperty textProperty = (StringProperty) observable;
         // Guarda el textField
         TextField changedTextField = (TextField) textProperty.getBean();
-        // Guarda el nombre del TextField
-        String NameTextField = changedTextField.getId();
 
-        if (!textFieldOver50(NameTextField, changedTextField)) {
-
-        }
-
-    }
-
-    private boolean textFieldOver50(String NameTextField, TextField changedTextField) {
-        boolean over50 = false;
-        // Si la longitud del texto es superior 50
-        if (changedTextField.getText().length() > MAX_LENGHT) {
-            // Guarda en un String los caracteres escritos en el campo de textodesde el 1 hasta el ultimo.
-            String text = changedTextField.getText().substring(0, MAX_LENGHT);
-            // Sustituye el texto por el String.
-            changedTextField.setText(text);
-
-            over50 = true;
-
-            if (idTextField.equals("idTextName")) {
-                nombreBien = false;
-                idLabelNameError.setText("Name must be less than 50 characters");
-                idLabelNameError.setTextFill(Color.web("#FF0000"));
-            }
-
+        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContraseña.getText().isEmpty()) {
+            btnIniciarSesion.setDisable(false);
         } else {
-            if (idTextField.equals("idTextName")) {
-                idLabelNameError.setText("");
-            }
+            btnIniciarSesion.setDisable(true);
         }
-
-        return over50;
     }
 
-    private void handleBotonLogin(ActionEvent event) {
-        //LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+    /**
+     * Comprueba que el texto introducido no supera los 50 caracteres. Si se
+     * supera no muestra ni recoge los nuevos caracteres introducidos.
+     *
+     * @param changedTextField El campo de texto modificado.
+     * @return Variable indicando si supera los 50 caracteres o no.
+     */
+    private boolean textFieldOver50(TextField changedTextField) {
+        boolean over50 = false;
 
+        if (changedTextField.getText().length() > MAX_LENGHT) {
+            String text = changedTextField.getText().substring(0, MAX_LENGHT);
+            changedTextField.setText(text);
+            over50 = true;
+        }
+        return over50;
     }
 
     /**

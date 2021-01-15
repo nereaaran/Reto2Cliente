@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -49,12 +47,6 @@ public class UIRestaurarContraseniaController {
      * Lista de elementos importados de la vista FXML que representan objetos.
      */
     @FXML
-    private Pane paneRestaurarContrasenia;
-    @FXML
-    private Label lblTitulo;
-    @FXML
-    private Label lblEmail;
-    @FXML
     private TextField txtEmail;
     @FXML
     private Button btnRestaurarContraseña;
@@ -62,8 +54,6 @@ public class UIRestaurarContraseniaController {
     private Button btnVolver;
     @FXML
     private Label lblEmailError;
-    @FXML
-    private Label lblInformativo;
     @FXML
     private Label lblContraseñaRestaurada;
     /**
@@ -105,11 +95,17 @@ public class UIRestaurarContraseniaController {
         stage.show();
     }
 
+    /**
+     * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
+     * campo de texto no esta vacio, no supera los 50 caracteres y sigue el
+     * patron establecido de correo. Si cumple los requisitos habilita el boton
+     * de RestaurarContraseña, y si no los cumple lo hace lo deshabilita.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
-        habilitarBotonRestaurarContrasena();
-    }
-
-    private void habilitarBotonRestaurarContrasena() {
         boolean textoCorrecto = false;
 
         if (!txtEmail.getText().isEmpty()) {
@@ -127,6 +123,12 @@ public class UIRestaurarContraseniaController {
         }
     }
 
+    /**
+     * Comprueba que el correo introducido sigue un patron aceptable de
+     * direccion de correo.
+     *
+     * @return Variable indicando si el patron es correcto o no.
+     */
     private boolean emailPatternIsCorrect() {
         boolean correct = true;
 
@@ -144,6 +146,12 @@ public class UIRestaurarContraseniaController {
         return correct;
     }
 
+    /**
+     * Comprueba que el texto introducido no supera los 50 caracteres. Si se
+     * supera no muestra ni recoge los nuevos caracteres introducidos.
+     *
+     * @return Variable indicando si supera los 50 caracteres o no.
+     */
     private boolean EmailIsOver50() {
         boolean textOver50 = false;
 
