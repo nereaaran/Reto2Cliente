@@ -96,12 +96,14 @@ public class UIRestaurarContraseniaController {
         stage.show();
     }
 
+    
     private void handleBotonRestaurarContrasena(ActionEvent event) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         lblContraseñaRestaurada.setText("Contraseña restaurada. Revisa tu email");
         lblContraseñaRestaurada.setTextFill(Color.web("#008000"));
     }
 
+    
     /**
      * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
      * campo de texto no esta vacio, no supera los 50 caracteres y sigue el

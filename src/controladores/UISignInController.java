@@ -126,7 +126,7 @@ public class UISignInController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
             Parent root = (Parent) loader.load();
             UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
-            controller.setStage(stage);
+            controller.setStage();
             controller.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());

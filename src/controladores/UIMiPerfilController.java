@@ -155,12 +155,13 @@ public class UIMiPerfilController {
         stage.close();
     }
 
+    
     private void handleBotonCambiarContrasena(ActionEvent event) {
         LOGGER.info("MiPerfil Controlador: Pulsado boton Cambiar Contraseña");
 
         if (txtContrasenaNueva.getText().equals(txtRepiteNuevaContrasena.getText())) {
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             lblContrasenaCambiada.setText("La contraseña se ha cambiado");
             lblContrasenaCambiada.setTextFill(Color.web("#008000"));
 
@@ -175,6 +176,8 @@ public class UIMiPerfilController {
         }
     }
 
+    
+    
     /**
      * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
      * campo de texto no esta vacio, no supera los 50 caracteres y sigue el
