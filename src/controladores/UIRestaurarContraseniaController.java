@@ -91,8 +91,15 @@ public class UIRestaurarContraseniaController {
         btnVolver.setOnAction(this::handleBotonVolver);
 
         txtEmail.textProperty().addListener(this::handleTextoCambiado);
+        btnRestaurarContraseña.setOnAction(this::handleBotonRestaurarContrasena);
 
         stage.show();
+    }
+
+    private void handleBotonRestaurarContrasena(ActionEvent event) {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        lblContraseñaRestaurada.setText("Contraseña restaurada. Revisa tu email");
+        lblContraseñaRestaurada.setTextFill(Color.web("#008000"));
     }
 
     /**
@@ -115,7 +122,6 @@ public class UIRestaurarContraseniaController {
                 }
             }
         }
-
         if (textoCorrecto) {
             btnRestaurarContraseña.setDisable(false);
         } else {

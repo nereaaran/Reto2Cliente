@@ -5,10 +5,6 @@
  */
 package controladores;
 
-import static controladores.UIRestaurarContraseniaController.VALID_EMAIL;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +12,6 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -103,19 +97,20 @@ public class UIMiPerfilController {
     @FXML
     private TextField txtTelefonoProfesor;
     /**
-     * Variable de tipo stage que se usa para visualizar la ventana
+     * Variable de tipo stage que se usa para visualizar la ventana.
      */
     private Stage stage;
 
     /**
-     * Método que establece al escenario Mi Perfil como escenario principal.
      *
-     * @param primaryStage El escenario principal.
+     * Crea un nuevo escenario para que cuando se vuelva de Mi Perfil no se
+     * cierre la aplicacion.
+     *
      */
-    public void setStage(Stage primaryStage) {
+    public void setStage() {
         LOGGER.info("MiPerfil Controlador: Estableciendo stage");
 
-        stage = primaryStage;
+        stage = new Stage();
     }
 
     /**
@@ -150,6 +145,37 @@ public class UIMiPerfilController {
     }
 
     /**
+     * Cierra la ventana MiPerfil.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonVolver(ActionEvent event) {
+        LOGGER.info("MiPerfil Controlador: Cerrando MiPerfil");
+
+        stage.close();
+    }
+
+    private void handleBotonCambiarContrasena(ActionEvent event) {
+        LOGGER.info("MiPerfil Controlador: Pulsado boton Cambiar Contraseña");
+
+        if (txtContrasenaNueva.getText().equals(txtRepiteNuevaContrasena.getText())) {
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            lblContrasenaCambiada.setText("La contraseña se ha cambiado");
+            lblContrasenaCambiada.setTextFill(Color.web("#008000"));
+
+            txtContrasenaActual.clear();
+            txtContrasenaNueva.clear();
+            txtRepiteNuevaContrasena.clear();
+            lblContraseñaNuevaRepetirError.setText("");
+        } else {
+            lblContrasenaCambiada.setText("");
+            lblContraseñaNuevaRepetirError.setText("Las contraseñas no coinciden");
+            lblContraseñaNuevaRepetirError.setTextFill(Color.web("#FF0000"));
+        }
+    }
+
+    /**
      * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
      * campo de texto no esta vacio, no supera los 50 caracteres y sigue el
      * patron establecido de correo. Si cumple los requisitos habilita el boton
@@ -160,7 +186,7 @@ public class UIMiPerfilController {
      * @param newValue El valor nuevo del observable.
      */
     private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
-        boolean textoCorrecto = false;
+        lblContraseñaNuevaRepetirError.setText("");
 
         // Identifica el TextField que lo ha llamado
         StringProperty textProperty = (StringProperty) observable;
@@ -168,20 +194,18 @@ public class UIMiPerfilController {
         TextField changedTextField = (TextField) textProperty.getBean();
 
         if (!camposTextoVacios() && !textFieldOver50(changedTextField) && patronContrasenaCorrecta()) {
-            textoCorrecto = true;
-        }
-
-        if (textoCorrecto) {
             btnCambiarContraseña.setDisable(false);
         } else {
             btnCambiarContraseña.setDisable(true);
         }
     }
 
-    private void handleBotonCambiarContrasena(ActionEvent event) {
-        LOGGER.info("MiPerfil Controlador: Pulsado boton Cambiar Contraseña");
-    }
-
+    /**
+     * Compara la contraseña con el patron establecido para indicar si lo cumple
+     * o no.
+     *
+     * @return Variable que indica si cumple el patron o no.
+     */
     private boolean patronContrasenaCorrecta() {
         Matcher matcher = VALID_CONTRASENA.matcher(txtContrasenaNueva.getText());
         if (!matcher.find()) {
@@ -223,24 +247,5 @@ public class UIMiPerfilController {
             over50 = true;
         }
         return over50;
-    }
-
-    /**
-     * Método que carga y abre la venta UISignIn.
-     *
-     * @param event El evento de acción.
-     */
-    private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("MiPerfil Controlador: Iniciando vista SignIn");
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
-            Parent root = (Parent) loader.load();
-            UISignInController controller = ((UISignInController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
-        }
     }
 }
