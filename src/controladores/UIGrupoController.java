@@ -6,6 +6,7 @@
 package controladores;
 
 import entidad.Grupo;
+import entidad.Libro;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
