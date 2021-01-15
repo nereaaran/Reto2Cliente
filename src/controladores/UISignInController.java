@@ -14,6 +14,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -121,12 +122,12 @@ public class UISignInController {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
         
         
-        
+        // Cambio a la pantalla MiPerfil////////////////////////////////////////////////////////////////////////////////////
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
             Parent root = (Parent) loader.load();
             UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
-            controller.setStage(stage);
+            controller.setStage();
             controller.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
