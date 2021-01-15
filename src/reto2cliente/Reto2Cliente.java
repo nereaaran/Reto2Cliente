@@ -5,12 +5,12 @@
  */
 package reto2cliente;
 
+import controladores.*;
+import java.io.IOException;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 /**
@@ -18,27 +18,22 @@ import javafx.stage.Stage;
  * @author nerea
  */
 public class Reto2Cliente extends Application {
-    
+
+    public static final Logger LOGGER = Logger.getLogger("reto2cliente.Reto2Cliente");
+
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        try {
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignUp.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
+            Parent ventana = (Parent) loader.load();
+            UIAlumnoController controlador = (UIAlumnoController) loader.getController();
+            //UISignUpController controlador = (UISignUpController) loader.getController();
+            controlador.setStage(primaryStage);
+            controlador.initStage(ventana);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     /**
@@ -47,5 +42,5 @@ public class Reto2Cliente extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
