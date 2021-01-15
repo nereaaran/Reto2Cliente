@@ -229,12 +229,12 @@ public class UIAlumnoController {
     }
     
     private void botonLimpiarPulsado(ActionEvent event) {
-        txtNombreCompleto.setText("");
-        txtDni.setText("");
-        txtUsuario.setText("");
-        txtEmail.setText("");
+        txtNombreCompleto.clear();
+        txtDni.clear();
+        txtUsuario.clear();
+        txtEmail.clear();
         datePickerFechaNacimiento.getEditor().clear();
-        txtBuscarAlumno.setText("");
+        txtBuscarAlumno.clear();
         
         lblNombreCompletoError.setText("");
         lblDniError.setText("");
