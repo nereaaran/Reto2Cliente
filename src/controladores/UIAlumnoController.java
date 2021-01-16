@@ -5,15 +5,20 @@
  */
 package controladores;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -141,7 +146,7 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
-        
+
         btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
@@ -159,9 +164,11 @@ public class UIAlumnoController {
         btnEliminar.setOnAction(this::botonEliminarPulsado);
         btnLimpiar.setOnAction(this::botonLimpiarPulsado);
         btnBuscar.setOnAction(this::botonBuscarPulsado);
+        
+        btnVolver.setOnAction(this::botonVolverPulsado);
 
         stage.show();
-        
+
         txtNombreCompleto.requestFocus();
     }
 
@@ -169,10 +176,23 @@ public class UIAlumnoController {
         boolean vacio = false;
 
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
-            btnLimpiar.setDisable(false);
+            btnLimpiar.setDisable(false); //---------------------------- Esto no funciona ----------------------------
+            vacio = true;
+        }
+
+        return vacio;
+    }
+
+    private boolean datePickerVacio() {
+        boolean vacio = false;
+
+        if (datePickerFechaNacimiento.getValue() == null) {
+            lblFechaNacimientoError.setText("Tienes que introducir una fecha");
+            lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
+
             vacio = true;
         } else {
-            btnLimpiar.setDisable(true); //esto no funciona.-----------------------------------------
+            lblFechaNacimientoError.setText("");
         }
 
         return vacio;
@@ -197,59 +217,60 @@ public class UIAlumnoController {
     }
 
     private void botonAnadirPulsado(ActionEvent event) {
-        boolean error = comprobarPatrones();
+        boolean errorPatrones = comprobarPatrones();
+        boolean errorDatePicker = datePickerVacio();
 
-        if (datePickerFechaNacimiento.getValue() == null) {
-            lblFechaNacimientoError.setText("Tienes que introducir una fecha");
-            lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
-            
-            error = true;
-        } else {
-            lblFechaNacimientoError.setText("");
-        }
-
-        if (!error) {
-            lblBuscarAlumnoError.setText("OK"); //quitar mas tarde
-        } else {
-            lblBuscarAlumnoError.setText("NO"); //quitar mas tarde
+        if (!errorPatrones || !errorDatePicker) {
+            lblBuscarAlumnoError.setText("OK"); //Quitar mas tarde
         }
     }
 
     private void botonModificarPulsado(ActionEvent event) {
-        boolean error = comprobarPatrones();
+        boolean errorPatrones = comprobarPatrones();
+        boolean errorDatePicker = datePickerVacio();
 
-        if (!error) {
-            //Hace cosas con el servidor
+        if (!errorPatrones || !errorDatePicker) {
+            lblBuscarAlumnoError.setText("OK"); //Quitar mas tarde
         }
     }
 
     private void botonEliminarPulsado(ActionEvent event) {
-        //Hacer cosas con el servidor
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Eliminar");
+        alert.setHeaderText(null);
+        alert.setResizable(false);
+        alert.setContentText("¿Seguro que quieres eliminar el alumno?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType button = result.orElse(ButtonType.CANCEL);
+
+        if (button == ButtonType.OK) {
+            //Eliminar alumno
+            limpiarCampos();
+        }
     }
 
     private void botonLimpiarPulsado(ActionEvent event) {
-        txtNombreCompleto.clear();
-        txtDni.clear();
-        txtUsuario.clear();
-        txtEmail.clear();
-        datePickerFechaNacimiento.getEditor().clear();
-        txtBuscarAlumno.clear();
-
-        lblNombreCompletoError.setText("");
-        lblDniError.setText("");
-        lblUsuarioError.setText("");
-        lblEmailError.setText("");
-        lblFechaNacimientoError.setText("");
-        lblBuscarAlumnoError.setText("");
-
-        txtNombreCompleto.requestFocus();
-
-        btnLimpiar.setDisable(true);
+        limpiarCampos();
     }
 
     private void botonBuscarPulsado(ActionEvent event) {
     }
 
+    private void botonVolverPulsado(ActionEvent event) {
+        /*try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+            Parent ventana = (Parent) loader.load();
+            UIGrupoController controlador = (UIGrupoController) loader.getController();
+            //UISignUpController controlador = (UISignUpController) loader.getController();
+            controlador.setStage(primaryStage);
+            controlador.initStage(ventana);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }*/
+    }
+    
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
             String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
@@ -339,5 +360,25 @@ public class UIAlumnoController {
         }
 
         return error;
+    }
+
+    private void limpiarCampos() {
+        txtNombreCompleto.clear();
+        txtDni.clear();
+        txtUsuario.clear();
+        txtEmail.clear();
+        datePickerFechaNacimiento.getEditor().clear();
+        txtBuscarAlumno.clear();
+
+        lblNombreCompletoError.setText("");
+        lblDniError.setText("");
+        lblUsuarioError.setText("");
+        lblEmailError.setText("");
+        lblFechaNacimientoError.setText("");
+        lblBuscarAlumnoError.setText("");
+
+        btnLimpiar.setDisable(true);
+
+        txtNombreCompleto.requestFocus();
     }
 }
