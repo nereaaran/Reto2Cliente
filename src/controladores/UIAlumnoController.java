@@ -176,7 +176,7 @@ public class UIAlumnoController {
         boolean vacio = false;
 
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
-            btnLimpiar.setDisable(false); //---------------------------- Esto no funciona ----------------------------
+            btnLimpiar.setDisable(false); //---------------------------- Esta linea si funciona, pero no se deshabilita ----------------------------
             vacio = true;
         }
 
