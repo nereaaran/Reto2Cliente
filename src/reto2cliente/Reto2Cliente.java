@@ -5,40 +5,51 @@
  */
 package reto2cliente;
 
+import controladores.UISignInController;
+import java.io.IOException;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import static javafx.application.Application.launch;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 /**
+ * Clase principal del lado Cliente que inicia la Aplicacion JavaFX.
  *
- * @author nerea
+ * @author Nerea Aranguren
  */
 public class Reto2Cliente extends Application {
-    
+
+    /**
+     * Atributo estático y constante que guarda los loggers de la clase.
+     */
+    private static final Logger LOGGER = Logger.getLogger("reto2Cliente.Reto2Cliente");
+
+    /**
+     * Método que inicia la Aplicación JavaFX. Carga y muestra la pantalla
+     * inicial.
+     *
+     * @param primaryStage La pantalla principal de la aplicación.
+     */
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        try {
+            LOGGER.info("Reto2Cliente: Iniciando pantalla principal");
+
+            // Carga el archivo fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
+            Parent ventana = (Parent) loader.load();
+            // Enlaza el controlador con el archivo fxml
+            UISignInController controlador = (UISignInController) loader.getController();
+            // Prepara el escenario principal donde se ejecutara la ventana 
+            controlador.setStage(primaryStage);
+            // Inicializa la ventana de SignIn
+            controlador.initStage(ventana);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
     }
 
     /**
@@ -47,5 +58,5 @@ public class Reto2Cliente extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
