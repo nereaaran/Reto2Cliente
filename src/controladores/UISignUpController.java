@@ -5,10 +5,6 @@
  */
 package controladores;
 
-import static controladores.UIAlumnoController.VALID_DNI;
-import static controladores.UIAlumnoController.VALID_EMAIL;
-import static controladores.UIAlumnoController.VALID_NOMBRE;
-import static controladores.UIAlumnoController.VALID_USUARIO;
 import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -320,7 +316,7 @@ public class UISignUpController {
         boolean errorPatrones = comprobarPatrones();
 
         if (!errorPatrones) {
-            LOGGER.info("UISignUpController: Iniciando vista Sign Up");
+            LOGGER.info("UISignUpController: Iniciando vista Sign In");
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
                 Parent root = (Parent) loader.load();
