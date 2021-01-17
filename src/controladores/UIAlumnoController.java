@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -166,6 +168,8 @@ public class UIAlumnoController {
         btnBuscar.setOnAction(this::botonBuscarPulsado);
 
         btnVolver.setOnAction(this::botonVolverPulsado);
+
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
 
         stage.show();
 
@@ -379,5 +383,24 @@ public class UIAlumnoController {
         btnLimpiar.setDisable(true);
 
         txtNombreCompleto.requestFocus();
+    }
+
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
+        }
     }
 }

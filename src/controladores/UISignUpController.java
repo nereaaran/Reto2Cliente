@@ -6,22 +6,27 @@
 package controladores;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UISignUp que contiene los metodos para definir y
@@ -135,6 +140,8 @@ public class UISignUpController {
         btnRegistrarse.setOnAction(this::botonRegistroPulsado);
 
         btnVolver.setOnAction(this::botonVolverPulsado);
+
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
 
         stage.show();
 
@@ -269,10 +276,10 @@ public class UISignUpController {
 
         return error;
     }
-    
+
     private boolean comprobarContrasenas() {
-        boolean error=false;
-        
+        boolean error = false;
+
         if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
             lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
             lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
@@ -281,7 +288,7 @@ public class UISignUpController {
         } else {
             lblRepiteContrasenaError.setText("");
         }
-        
+
         return error;
     }
 
@@ -309,7 +316,7 @@ public class UISignUpController {
             }
         }
     }
-    
+
     private void botonVolverPulsado(ActionEvent event) {
         LOGGER.info("UISignUpController: Comprobando errores");
 
@@ -326,6 +333,25 @@ public class UISignUpController {
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
             }
+        }
+    }
+
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
     }
 }
