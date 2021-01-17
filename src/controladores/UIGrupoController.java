@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
@@ -18,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -95,6 +98,19 @@ public class UIGrupoController implements Initializable {
     @FXML
     private Button btnEliminarLibro;
 
+    private Stage stage;
+    
+    public void setStage(Stage primaryStage) {
+        stage = primaryStage;
+    }
+    
+    public void initStage(Parent root) {
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+    
     /**
      * Initializes the controller class.
      */

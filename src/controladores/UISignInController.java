@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -17,6 +19,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -49,6 +52,22 @@ public class UISignInController implements Initializable {
     private Label lblUsuarioError;
     @FXML
     private Hyperlink linkContraseñaOlvidada;
+    
+    private Stage stage;
+
+    public void setStage(Stage primaryStage) {
+        stage = primaryStage;
+    }
+
+    public void initStage(Parent root) {
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.setTitle("Sign In");
+        stage.setResizable(false);
+
+        stage.show();
+    }
 
     /**
      * Initializes the controller class.
