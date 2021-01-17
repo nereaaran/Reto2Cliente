@@ -49,8 +49,6 @@ public class UIAlumnoController {
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    private Stage stage;
-
     @FXML
     private AnchorPane paneGeneralAlumno;
     @FXML
@@ -135,7 +133,9 @@ public class UIAlumnoController {
     private Label lblListaGrupos;
     @FXML
     private Label lblAlumnosAsignados;
-
+    
+    private Stage stage;
+    
     public void setStage(Stage stageAlumno) {
         stage = stageAlumno;
     }
