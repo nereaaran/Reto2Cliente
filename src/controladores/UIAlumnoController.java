@@ -136,8 +136,8 @@ public class UIAlumnoController {
     @FXML
     private Label lblAlumnosAsignados;
 
-    public void setStage(Stage primaryStage) {
-        stage = primaryStage;
+    public void setStage(Stage stageAlumno) {
+        stage = stageAlumno;
     }
 
     public void initStage(Parent ventana) {
@@ -259,16 +259,15 @@ public class UIAlumnoController {
     }
 
     private void botonVolverPulsado(ActionEvent event) {
-        /*try {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
             Parent ventana = (Parent) loader.load();
             UIGrupoController controlador = (UIGrupoController) loader.getController();
-            //UISignUpController controlador = (UISignUpController) loader.getController();
-            controlador.setStage(primaryStage);
+            controlador.setStage(stage);
             controlador.initStage(ventana);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
-        }*/
+        }
     }
     
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
