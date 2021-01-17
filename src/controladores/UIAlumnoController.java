@@ -133,15 +133,15 @@ public class UIAlumnoController {
     private Label lblListaGrupos;
     @FXML
     private Label lblAlumnosAsignados;
-    
+
     private Stage stage;
-    
+
     public void setStage(Stage stageAlumno) {
         stage = stageAlumno;
     }
 
-    public void initStage(Parent ventana) {
-        Scene scene = new Scene(ventana);
+    public void initStage(Parent root) {
+        Scene scene = new Scene(root);
         stage.setScene(scene);
 
         stage.setTitle("Gestion de alumnos");
@@ -164,7 +164,7 @@ public class UIAlumnoController {
         btnEliminar.setOnAction(this::botonEliminarPulsado);
         btnLimpiar.setOnAction(this::botonLimpiarPulsado);
         btnBuscar.setOnAction(this::botonBuscarPulsado);
-        
+
         btnVolver.setOnAction(this::botonVolverPulsado);
 
         stage.show();
@@ -216,6 +216,97 @@ public class UIAlumnoController {
         }
     }
 
+    private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
+        if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
+            String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
+            txtNombreCompleto.setText(nombreCompleto);
+        }
+
+        if (txtDni.getText().length() > MAX_LENGHT_DNI) {
+            String dni = txtDni.getText().substring(0, MAX_LENGHT_DNI);
+            txtDni.setText(dni);
+        }
+
+        if (txtUsuario.getText().length() > MAX_LENGHT) {
+            String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
+            txtUsuario.setText(usuario);
+        }
+
+        if (txtEmail.getText().length() > MAX_LENGHT) {
+            String email = txtEmail.getText().substring(0, MAX_LENGHT);
+            txtEmail.setText(email);
+        }
+
+        if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
+            String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
+            txtBuscarAlumno.setText(buscar);
+        }
+
+        habilitarBotones();
+    }
+
+    private boolean comprobarPatrones() {
+        boolean error = false;
+
+        if (txtNombreCompleto.getText().isEmpty()) {
+            lblNombreCompletoError.setText("");
+        } else {
+            Matcher matcher = VALID_NOMBRE.matcher(txtNombreCompleto.getText());
+            if (!matcher.find()) {
+                lblNombreCompletoError.setText("El nombre sólo debe contener letras");
+                lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblNombreCompletoError.setText("");
+            }
+        }
+
+        if (txtDni.getText().isEmpty()) {
+            lblDniError.setText("");
+        } else {
+            Matcher matcher = VALID_DNI.matcher(txtDni.getText());
+            if (!matcher.find()) {
+                lblDniError.setText("DNI inválido");
+                lblDniError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblDniError.setText("");
+            }
+        }
+
+        if (txtUsuario.getText().isEmpty()) {
+            lblUsuarioError.setText("");
+        } else {
+            Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
+            if (!matcher.find()) {
+                lblUsuarioError.setText("El usuario sólo debe contener letras y números");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblUsuarioError.setText("");
+            }
+        }
+
+        if (txtEmail.getText().isEmpty()) {
+            lblEmailError.setText("");
+        } else {
+            Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
+            if (!matcher.find()) {
+                lblEmailError.setText("Email inválido");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblEmailError.setText("");
+            }
+        }
+
+        return error;
+    }
+
     private void botonAnadirPulsado(ActionEvent event) {
         boolean errorPatrones = comprobarPatrones();
         boolean errorDatePicker = datePickerVacio();
@@ -261,104 +352,13 @@ public class UIAlumnoController {
     private void botonVolverPulsado(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-            Parent ventana = (Parent) loader.load();
+            Parent root = (Parent) loader.load();
             UIGrupoController controlador = (UIGrupoController) loader.getController();
             controlador.setStage(stage);
-            controlador.initStage(ventana);
+            controlador.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-    }
-    
-    private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
-        if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
-            String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
-            txtNombreCompleto.setText(nombreCompleto);
-        }
-
-        if (txtDni.getText().length() > MAX_LENGHT_DNI) {
-            String dni = txtDni.getText().substring(0, MAX_LENGHT_DNI);
-            txtDni.setText(dni);
-        }
-
-        if (txtUsuario.getText().length() > MAX_LENGHT) {
-            String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
-            txtUsuario.setText(usuario);
-        }
-
-        if (txtEmail.getText().length() > MAX_LENGHT) {
-            String email = txtEmail.getText().substring(0, MAX_LENGHT);
-            txtEmail.setText(email);
-        }
-
-        if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
-            String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
-            txtBuscarAlumno.setText(buscar);
-        }
-
-        habilitarBotones();
-    }
-
-    private boolean comprobarPatrones() {
-        boolean error = false;
-
-        if (txtNombreCompleto.getText().isEmpty()) {
-            lblNombreCompletoError.setText("");
-        } else {
-            Matcher matcher = VALID_NOMBRE.matcher(txtNombreCompleto.getText());
-            if (!matcher.find()) {
-                lblNombreCompletoError.setText("El nombre solo debe contener letras");
-                lblNombreCompletoError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            } else {
-                lblNombreCompletoError.setText("");
-            }
-        }
-
-        if (txtDni.getText().isEmpty()) {
-            lblDniError.setText("");
-        } else {
-            Matcher matcher = VALID_DNI.matcher(txtDni.getText());
-            if (!matcher.find()) {
-                lblDniError.setText("DNI inválido");
-                lblDniError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            } else {
-                lblDniError.setText("");
-            }
-        }
-
-        if (txtUsuario.getText().isEmpty()) {
-            lblUsuarioError.setText("");
-        } else {
-            Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
-            if (!matcher.find()) {
-                lblUsuarioError.setText("El usuario solo debe contener letras y números");
-                lblUsuarioError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            } else {
-                lblUsuarioError.setText("");
-            }
-        }
-
-        if (txtEmail.getText().isEmpty()) {
-            lblEmailError.setText("");
-        } else {
-            Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
-            if (!matcher.find()) {
-                lblEmailError.setText("Email inválido");
-                lblEmailError.setTextFill(Color.web("#FF0000"));
-
-                error = true;
-            } else {
-                lblEmailError.setText("");
-            }
-        }
-
-        return error;
     }
 
     private void limpiarCampos() {
