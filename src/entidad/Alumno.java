@@ -6,7 +6,6 @@
 package entidad;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Collection;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +27,7 @@ public class Alumno extends Usuario implements Serializable {
     /**
      * Fecha de nacimiento del alumno.
      */
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
 
     /**
      * Relación 1:N de la entidad "Alumno" con "AlumnoLibro".
@@ -63,7 +62,7 @@ public class Alumno extends Usuario implements Serializable {
      *
      * @return la fecha de nacimiento que va a mostrar.
      */
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -72,7 +71,7 @@ public class Alumno extends Usuario implements Serializable {
      *
      * @param fechaNacimiento la fecha de nacimineto que se va a guardar.
      */
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

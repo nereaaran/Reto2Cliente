@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  * Controlador de la vista UISignUp que contiene los metodos para definir y
  * controlar su comportamiento.
  *
- * @author Nerea Aranguren
+ * @author Cristina Milea y Nerea Aranguren
  */
 public class UISignUpController {
 
@@ -44,6 +44,11 @@ public class UISignUpController {
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_CONTRASENA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_TELEFONO = Pattern.compile("^[0-9]{9}", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Variable de tipo stage que se usa para visualizar la ventana
+     */
+    private Stage stage;
 
     /**
      * Lista de elementos importados de la vista FXML que representan objetos.
@@ -94,19 +99,14 @@ public class UISignUpController {
     private Label lblNumeroTelefonoError;
 
     /**
-     * Variable de tipo stage que se usa para visualizar la ventana
-     */
-    private Stage stage;
-
-    /**
      * Método que establece al escenario del login como escenario principal.
      *
-     * @param primaryStage El escenario principal.
+     * @param stageSignUp El escenario de Sign Up.
      */
-    public void setStage(Stage primaryStage) {
-        LOGGER.info("SignUp Controlador: Estableciendo stage");
+    public void setStage(Stage stageSignUp) {
+        LOGGER.info("UISignUpController: Estableciendo stage");
 
-        stage = primaryStage;
+        stage = stageSignUp;
     }
 
     /**
@@ -115,14 +115,14 @@ public class UISignUpController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("SignUp Controlador: Iniciando stage principal");
+        LOGGER.info("UISignUpController: Iniciando stage principal");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Sign Up");
+
+        stage.setTitle("Sign up");
         stage.setResizable(false);
 
-        txtNombre.requestFocus();
         btnRegistrarse.setDisable(true);
 
         txtNombre.textProperty().addListener(this::comprobarLongitud);
@@ -132,42 +132,27 @@ public class UISignUpController {
         txtRepiteContrasena.textProperty().addListener(this::comprobarLongitud);
         txtNumeroTelefono.textProperty().addListener(this::comprobarLongitud);
 
-        btnRegistrarse.setOnAction(this::handleBotonRegistro);
-        btnVolver.setOnAction(this::handleBotonVolver);
+        btnRegistrarse.setOnAction(this::botonRegistroPulsado);
+
+        btnVolver.setOnAction(this::botonVolverPulsado);
 
         stage.show();
-    }
 
-    private void handleBotonRegistro(ActionEvent event) {
-        //LOGGER.info("SignIn Controlador: Iniciando vista Sign Up");
-
-        //boolean errorPatrones = comprobarPatronNombreCompleto();
-        boolean errorContrasenas = comprobarContrasenasCoinciden();
-        boolean errorNombre = comprobarPatronNombreCompleto();
-        boolean errorEmail = comprobarPatronEmail();
-        boolean errorUsuario = comprobarPatronUsuario();
-        boolean errorContrasena = comprobarPatronContrasena();
-        boolean errorTelefono = comprobarPatronNumeroTelefono();
-
-        if(!errorContrasenas && !errorNombre && !errorEmail && !errorUsuario && !errorContrasena && !errorTelefono) {
-        //if (!errorPatrones && !errorContrasenas) {
-            lblTitulo.setText("OK"); //quitar mas tarde
-        } else {
-            lblTitulo.setText("NO"); //quitar mas tarde
-        }
+        txtNombre.requestFocus();
     }
 
     private boolean camposVacios() {
-        boolean vacios = false;
+        boolean vacio = false;
 
         if (txtNombre.getText().isEmpty() || txtEmail.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtContrasena.getText().isEmpty() || txtRepiteContrasena.getText().isEmpty() || txtNumeroTelefono.getText().isEmpty()) {
-            vacios = true;
+
+            vacio = true;
         }
 
-        return vacios;
+        return vacio;
     }
 
-    private void habilitarBotonRegistrarse() {
+    private void habilitarBotones() {
         if (camposVacios()) {
             btnRegistrarse.setDisable(true);
         } else {
@@ -179,68 +164,52 @@ public class UISignUpController {
         if (txtNombre.getText().length() > MAX_LENGHT) {
             String nombre = txtNombre.getText().substring(0, MAX_LENGHT);
             txtNombre.setText(nombre);
-        } else {
-            lblNombreError.setText("");
         }
 
         if (txtEmail.getText().length() > MAX_LENGHT) {
             String email = txtEmail.getText().substring(0, MAX_LENGHT);
             txtEmail.setText(email);
-        } else {
-            lblEmailError.setText("");
         }
 
         if (txtUsuario.getText().length() > MAX_LENGHT) {
             String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
             txtUsuario.setText(usuario);
-        } else {
-            lblUsuarioError.setText("");
         }
 
         if (txtContrasena.getText().length() > MAX_LENGHT) {
             String contrasena = txtContrasena.getText().substring(0, MAX_LENGHT);
             txtContrasena.setText(contrasena);
-        } else {
-            lblContrasenaError.setText("");
         }
 
         if (txtRepiteContrasena.getText().length() > MAX_LENGHT) {
             String repiteContrasena = txtRepiteContrasena.getText().substring(0, MAX_LENGHT);
             txtRepiteContrasena.setText(repiteContrasena);
-        } else {
-            lblRepiteContrasenaError.setText("");
         }
 
         if (txtNumeroTelefono.getText().length() > MAX_LENGHT_TELEFONO) {
             String numeroTelefono = txtNumeroTelefono.getText().substring(0, MAX_LENGHT_TELEFONO);
             txtNumeroTelefono.setText(numeroTelefono);
-        } else {
-            lblNumeroTelefonoError.setText("");
         }
 
-        habilitarBotonRegistrarse();
+        habilitarBotones();
     }
 
-    private boolean comprobarPatronNombreCompleto() {
+    private boolean comprobarPatrones() {
         boolean error = false;
 
         if (txtNombre.getText().isEmpty()) {
-            lblNombre.setText("");
+            lblNombreError.setText("");
         } else {
             Matcher matcher = VALID_NOMBRE.matcher(txtNombre.getText());
             if (!matcher.find()) {
-                lblNombreError.setText("El nombre solo debe contener letras");
+                lblNombreError.setText("El nombre sólo debe contener letras");
                 lblNombreError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblNombreError.setText("");
             }
         }
-
-        return error;
-    }
-
-    private boolean comprobarPatronEmail() {
-        boolean error = false;
 
         if (txtEmail.getText().isEmpty()) {
             lblEmailError.setText("");
@@ -251,86 +220,68 @@ public class UISignUpController {
                 lblEmailError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblEmailError.setText("");
             }
         }
-
-        return error;
-    }
-
-    private boolean comprobarPatronUsuario() {
-        boolean error = false;
 
         if (txtUsuario.getText().isEmpty()) {
             lblUsuarioError.setText("");
         } else {
             Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
             if (!matcher.find()) {
-                lblUsuarioError.setText("El usuario solo debe contener letras y números");
+                lblUsuarioError.setText("El usuario sólo debe contener letras y números");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblUsuarioError.setText("");
             }
         }
-
-        return error;
-    }
-
-    private boolean comprobarPatronContrasena() {
-        boolean error = false;
 
         if (txtContrasena.getText().isEmpty()) {
             lblContrasenaError.setText("");
         } else {
             Matcher matcher = VALID_CONTRASENA.matcher(txtContrasena.getText());
             if (!matcher.find()) {
-                lblContrasenaError.setText("La contrasena solo debe contener letras y números");
+                lblContrasenaError.setText("Introduce sólo letras y números");
                 lblContrasenaError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblContrasenaError.setText("");
             }
         }
-
-        return error;
-    }
-
-    private boolean comprobarContrasenasCoinciden() {
-        boolean error = false;
-
-        if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
-            lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
-            lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
-        } else {
-            lblRepiteContrasenaError.setText("");
-        }
-
-        return error;
-    }
-
-    private boolean comprobarPatronNumeroTelefono() {
-        boolean error = false;
 
         if (txtNumeroTelefono.getText().isEmpty()) {
             lblNumeroTelefonoError.setText("");
         } else {
             Matcher matcher = VALID_TELEFONO.matcher(txtNumeroTelefono.getText());
             if (!matcher.find()) {
-                lblNumeroTelefonoError.setText("Número de teléfono inválido");
+                lblNumeroTelefonoError.setText("Número de teléfono no válido");
                 lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
+            } else {
+                lblNumeroTelefonoError.setText("");
             }
         }
 
         return error;
     }
+    
+    private boolean comprobarContrasenas() {
+        boolean error=false;
+        
+        if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
+            lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
+            lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
 
-    private boolean comprobarPatrones() {
-        boolean error = false;
-
-        if (comprobarPatronNombreCompleto() || comprobarPatronEmail() || comprobarPatronUsuario() || comprobarPatronContrasena() || comprobarPatronNumeroTelefono()) {
             error = true;
+        } else {
+            lblRepiteContrasenaError.setText("");
         }
-
+        
         return error;
     }
 
@@ -339,17 +290,42 @@ public class UISignUpController {
      *
      * @param event El evento de acción.
      */
-    private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("SignUp Controlador: Iniciando vista SignIn");
+    private void botonRegistroPulsado(ActionEvent event) {
+        LOGGER.info("UISignUpController: Comprobando errores");
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
-            Parent root = (Parent) loader.load();
-            UISignInController controller = ((UISignInController) loader.getController());
-            //controller.setStage(stage);
-            //controller.initStage(root);
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
+        boolean errorPatrones = comprobarPatrones();
+        boolean errorContrasenas = comprobarContrasenas();
+
+        if (!errorPatrones && !errorContrasenas) {
+            LOGGER.info("UISignUpController: Iniciando vista Grupo");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                Parent root = (Parent) loader.load();
+                UIGrupoController controller = ((UIGrupoController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
+            }
+        }
+    }
+    
+    private void botonVolverPulsado(ActionEvent event) {
+        LOGGER.info("UISignUpController: Comprobando errores");
+
+        boolean errorPatrones = comprobarPatrones();
+
+        if (!errorPatrones) {
+            LOGGER.info("UISignUpController: Iniciando vista Sign In");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
+                Parent root = (Parent) loader.load();
+                UISignInController controller = ((UISignInController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
+            }
         }
     }
 }
