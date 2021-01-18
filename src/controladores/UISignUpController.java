@@ -464,6 +464,12 @@ public class UISignUpController {
         }
     }
     
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         
