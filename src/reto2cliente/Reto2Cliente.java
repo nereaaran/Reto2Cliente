@@ -27,7 +27,7 @@ public class Reto2Cliente extends Application {
     private static final Logger LOGGER = Logger.getLogger("reto2Cliente.Reto2Cliente");
 
     /**
-     * Método que inicia la Aplicación JavaFX. Carga y muestra la pantalla
+     * Método que inicia la Aplicación JavaFX, carga y muestra la pantalla
      * inicial.
      *
      * @param primaryStage La pantalla principal de la aplicación.
@@ -37,19 +37,14 @@ public class Reto2Cliente extends Application {
         try {
             LOGGER.info("Reto2Cliente: Iniciando pantalla principal");
 
-            // Carga el archivo fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
             Parent ventana = (Parent) loader.load();
-            // Enlaza el controlador con el archivo fxml
             UISignInController controlador = (UISignInController) loader.getController();
-            // Prepara el escenario principal donde se ejecutara la ventana 
             controlador.setStage(primaryStage);
-            // Inicializa la ventana de SignIn
             controlador.initStage(ventana);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-
     }
 
     /**
@@ -58,5 +53,4 @@ public class Reto2Cliente extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

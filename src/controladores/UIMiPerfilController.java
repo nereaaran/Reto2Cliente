@@ -144,17 +144,7 @@ public class UIMiPerfilController {
         stage.show();
     }
 
-    /**
-     * Cierra la ventana MiPerfil.
-     *
-     * @param event El evento de acción.
-     */
-    private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("MiPerfil Controlador: Cerrando MiPerfil");
-
-        stage.close();
-    }
-
+    
     
     private void handleBotonCambiarContrasena(ActionEvent event) {
         LOGGER.info("MiPerfil Controlador: Pulsado boton Cambiar Contraseña");
@@ -175,9 +165,19 @@ public class UIMiPerfilController {
             lblContraseñaNuevaRepetirError.setTextFill(Color.web("#FF0000"));
         }
     }
+    
+    
+    /**
+     * Cierra la ventana MiPerfil.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonVolver(ActionEvent event) {
+        LOGGER.info("MiPerfil Controlador: Cerrando MiPerfil");
 
-    
-    
+        stage.close();
+    }
+
     /**
      * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
      * campo de texto no esta vacio, no supera los 50 caracteres y sigue el

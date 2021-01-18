@@ -6,13 +6,13 @@
 package controladores;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,83 +20,185 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
  * Controlador de la vista UISignUp que contiene los metodos para definir y
  * controlar su comportamiento.
  *
- * @author Nerea Aranguren
+ * @author Cristina Milea y Nerea Aranguren
  */
 public class UISignUpController {
 
     /**
      * Atributo estático y constante que guarda los loggers de la clase.
      */
-    private static final Logger LOGGER = Logger.getLogger("controladores.UISignInController");
+    private static final Logger LOGGER = Logger.getLogger("controladores.UISignUpController");
 
     /**
-     * Lista de elementos importados de la vista FXML que representan objetos.
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en los campos de texto.
      */
-    @FXML
-    private Pane paneSignUp;
-    @FXML
-    private Label lblTitulo;
-    @FXML
-    private Label lblNombre;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private Label lblEmail;
-    @FXML
-    private TextField txtEmail;
-    @FXML
-    private Label lblUsuario;
-    @FXML
-    private TextField txtUsuario;
-    @FXML
-    private Label lblContraseña;
-    @FXML
-    private PasswordField txtContraseña;
-    @FXML
-    private Label lblRepiteContraseña;
-    @FXML
-    private PasswordField txtRepiteContraseña;
-    @FXML
-    private Button btnRegistrarse;
-    @FXML
-    private Button btnVolver;
-    @FXML
-    private Label lblContraseñaRepiteError;
-    @FXML
-    private Label lblContraseñaError;
-    @FXML
-    private Label lblUsuarioError;
-    @FXML
-    private Label lblEmailError;
-    @FXML
-    private Label lblNombreError;
-    @FXML
-    private Label lblNumeroTelefono;
-    @FXML
-    private PasswordField txtNumeroTelefono;
-    @FXML
-    private Label lblNumeroTelefonoError;
+    private static final int MAX_LENGHT = 50;
 
     /**
-     * Variable de tipo stage que se usa para visualizar la ventana
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en el campo de texto de telefono.
+     */
+    private static final int MAX_LENGHT_TELEFONO = 9;
+
+    /**
+     * Atributo estático y constante que guarda el patron correcto de nombre.
+     */
+    public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de email.
+     */
+    public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de usuario.
+     */
+    public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de
+     * contraseña.
+     */
+    public static final Pattern VALID_CONTRASENA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de telefono.
+     */
+    public static final Pattern VALID_TELEFONO = Pattern.compile("^[0-9]{9}", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Variable de tipo stage que se usa para visualizar la ventana.
      */
     private Stage stage;
 
     /**
+     * Elemento tipo pane importado de la vista FXML.
+     */
+    @FXML
+    private Pane paneSignUp;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Título.
+     */
+    @FXML
+    private Label lblTitulo;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Nombre.
+     */
+    @FXML
+    private Label lblNombre;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Nombre.
+     */
+    @FXML
+    private TextField txtNombre;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Email.
+     */
+    @FXML
+    private Label lblEmail;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Email.
+     */
+    @FXML
+    private TextField txtEmail;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Usuario.
+     */
+    @FXML
+    private Label lblUsuario;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Usuario.
+     */
+    @FXML
+    private TextField txtUsuario;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Contraseña.
+     */
+    @FXML
+    private Label lblContrasena;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Contraseña.
+     */
+    @FXML
+    private PasswordField txtContrasena;
+    /**
+     * Elemento tipo label importado del FXML que referencia a RepiteContraseña.
+     */
+    @FXML
+    private Label lblRepiteContrasena;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a
+     * RepiteContraseña.
+     */
+    @FXML
+    private PasswordField txtRepiteContrasena;
+    /**
+     * Elemento tipo boton importado del FXML que referencia a Registrarse.
+     */
+    @FXML
+    private Button btnRegistrarse;
+    /**
+     * Elemento tipo boton importado del FXML que referencia a Volver.
+     */
+    @FXML
+    private Button btnVolver;
+    /**
+     * Elemento tipo label importado del FXML que referencia a
+     * RepiteContraseñaError.
+     */
+    @FXML
+    private Label lblRepiteContrasenaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a ContraseñaError.
+     */
+    @FXML
+    private Label lblContrasenaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a UsuarioError.
+     */
+    @FXML
+    private Label lblUsuarioError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a EmailError.
+     */
+    @FXML
+    private Label lblEmailError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NombreError.
+     */
+    @FXML
+    private Label lblNombreError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NumeroTelefono.
+     */
+    @FXML
+    private Label lblNumeroTelefono;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a
+     * NumeroTelefono.
+     */
+    @FXML
+    private TextField txtNumeroTelefono;
+    /**
+     * Elemento tipo label importado del FXML que referencia a
+     * NumeroTelefonoError.
+     */
+    @FXML
+    private Label lblNumeroTelefonoError;
+
+    /**
      * Método que establece al escenario del login como escenario principal.
      *
-     * @param primaryStage El escenario principal.
+     * @param stageSignUp El escenario de Sign Up.
      */
-    public void setStage(Stage primaryStage) {
-        LOGGER.info("SignUp Controlador: Estableciendo stage");
+    public void setStage(Stage stageSignUp) {
+        LOGGER.info("UISignUpController: Estableciendo stage");
 
-        stage = primaryStage;
+        stage = stageSignUp;
     }
 
     /**
@@ -105,48 +207,253 @@ public class UISignUpController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("SignUp Controlador: Iniciando stage principal");
+        LOGGER.info("UISignUpController: Iniciando stage principal");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Sign Up");
+
+        stage.setTitle("Sign up");
         stage.setResizable(false);
 
-        txtUsuario.requestFocus();
         btnRegistrarse.setDisable(true);
 
-        btnRegistrarse.setOnAction(this::handleBotonRegistro);
-        btnVolver.setOnAction(this::handleBotonVolver);
+        txtNombre.textProperty().addListener(this::comprobarLongitud);
+        txtEmail.textProperty().addListener(this::comprobarLongitud);
+        txtUsuario.textProperty().addListener(this::comprobarLongitud);
+        txtContrasena.textProperty().addListener(this::comprobarLongitud);
+        txtRepiteContrasena.textProperty().addListener(this::comprobarLongitud);
+        txtNumeroTelefono.textProperty().addListener(this::comprobarLongitud);
+
+        btnRegistrarse.setOnAction(this::botonRegistroPulsado);
+
+        btnVolver.setOnAction(this::botonVolverPulsado);
 
         stage.show();
+
+        txtNombre.requestFocus();
     }
 
-    
-    
-    private void handleBotonRegistro(ActionEvent event) {
-        //LOGGER.info("SignIn Controlador: Iniciando vista Sign Up");
+    /**
+     * Método que comprueba que si hay algún campo de texto vacio.
+     *
+     * @return Variable que indica si hay algún campo de texto vacio.
+     */
+    private boolean camposVacios() {
+        boolean vacio = false;
 
+        if (txtNombre.getText().isEmpty() || txtEmail.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtContrasena.getText().isEmpty() || txtRepiteContrasena.getText().isEmpty() || txtNumeroTelefono.getText().isEmpty()) {
+
+            vacio = true;
+        }
+
+        return vacio;
     }
-    
-    
-    
+
+    /**
+     * Método que habilita y deshabilita el boton de Registrarse en función del
+     * metodo 'camposVacios'.
+     */
+    private void habilitarBotones() {
+        if (camposVacios()) {
+            btnRegistrarse.setDisable(true);
+        } else {
+            btnRegistrarse.setDisable(false);
+        }
+    }
+
+    /**
+     * Método que comprueba la longitud de los campos de texto. Si exceden el
+     * maximo permitido no recoge el resto de carácteres.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
+    private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
+        if (txtNombre.getText().length() > MAX_LENGHT) {
+            String nombre = txtNombre.getText().substring(0, MAX_LENGHT);
+            txtNombre.setText(nombre);
+        }
+
+        if (txtEmail.getText().length() > MAX_LENGHT) {
+            String email = txtEmail.getText().substring(0, MAX_LENGHT);
+            txtEmail.setText(email);
+        }
+
+        if (txtUsuario.getText().length() > MAX_LENGHT) {
+            String usuario = txtUsuario.getText().substring(0, MAX_LENGHT);
+            txtUsuario.setText(usuario);
+        }
+
+        if (txtContrasena.getText().length() > MAX_LENGHT) {
+            String contrasena = txtContrasena.getText().substring(0, MAX_LENGHT);
+            txtContrasena.setText(contrasena);
+        }
+
+        if (txtRepiteContrasena.getText().length() > MAX_LENGHT) {
+            String repiteContrasena = txtRepiteContrasena.getText().substring(0, MAX_LENGHT);
+            txtRepiteContrasena.setText(repiteContrasena);
+        }
+
+        if (txtNumeroTelefono.getText().length() > MAX_LENGHT_TELEFONO) {
+            String numeroTelefono = txtNumeroTelefono.getText().substring(0, MAX_LENGHT_TELEFONO);
+            txtNumeroTelefono.setText(numeroTelefono);
+        }
+
+        habilitarBotones();
+    }
+
+    /**
+     * Método que comprueba que el texto introducido en los campos de texto de
+     * Nombre, Email, Usuario, Contraseña y NumeroTelefono cumple con los
+     * patrones establecidos, si no lo hace muestra el error en los labels
+     * correspondientes.
+     *
+     * @return Variable que indica si hay algún patrón que no se cumple.
+     */
+    private boolean comprobarPatrones() {
+        boolean error = false;
+
+        if (txtNombre.getText().isEmpty()) {
+            lblNombreError.setText("");
+        } else {
+            Matcher matcher = VALID_NOMBRE.matcher(txtNombre.getText());
+            if (!matcher.find()) {
+                lblNombreError.setText("El nombre sólo debe contener letras");
+                lblNombreError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblNombreError.setText("");
+            }
+        }
+
+        if (txtEmail.getText().isEmpty()) {
+            lblEmailError.setText("");
+        } else {
+            Matcher matcher = VALID_EMAIL.matcher(txtEmail.getText());
+            if (!matcher.find()) {
+                lblEmailError.setText("Email inválido");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblEmailError.setText("");
+            }
+        }
+
+        if (txtUsuario.getText().isEmpty()) {
+            lblUsuarioError.setText("");
+        } else {
+            Matcher matcher = VALID_USUARIO.matcher(txtUsuario.getText());
+            if (!matcher.find()) {
+                lblUsuarioError.setText("El usuario sólo debe contener letras y números");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblUsuarioError.setText("");
+            }
+        }
+
+        if (txtContrasena.getText().isEmpty()) {
+            lblContrasenaError.setText("");
+        } else {
+            Matcher matcher = VALID_CONTRASENA.matcher(txtContrasena.getText());
+            if (!matcher.find()) {
+                lblContrasenaError.setText("Introduce sólo letras y números");
+                lblContrasenaError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblContrasenaError.setText("");
+            }
+        }
+
+        if (txtNumeroTelefono.getText().isEmpty()) {
+            lblNumeroTelefonoError.setText("");
+        } else {
+            Matcher matcher = VALID_TELEFONO.matcher(txtNumeroTelefono.getText());
+            if (!matcher.find()) {
+                lblNumeroTelefonoError.setText("Número de teléfono no válido");
+                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+
+                error = true;
+            } else {
+                lblNumeroTelefonoError.setText("");
+            }
+        }
+
+        return error;
+    }
+
+    /**
+     * Método que comprueba que Contraseña y RepiteContraseña contienen el mismo
+     * texto.
+     *
+     * @return Variable que indica si las contraseñas coinciden o no.
+     */
+    private boolean comprobarContrasenas() {
+        boolean error = false;
+
+        if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
+            lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
+            lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
+
+            error = true;
+        } else {
+            lblRepiteContrasenaError.setText("");
+        }
+
+        return error;
+    }
+
+    /**
+     * Método que carga y abre la venta UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
+    private void botonRegistroPulsado(ActionEvent event) {
+        LOGGER.info("UISignUpController: Comprobando errores");
+
+        boolean errorPatrones = comprobarPatrones();
+        boolean errorContrasenas = comprobarContrasenas();
+
+        if (!errorPatrones && !errorContrasenas) {
+            LOGGER.info("UISignUpController: Iniciando vista Grupo");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                Parent root = (Parent) loader.load();
+                UIGrupoController controller = ((UIGrupoController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
+            }
+        }
+    }
+
     /**
      * Método que carga y abre la venta UISignIn.
      *
      * @param event El evento de acción.
      */
-    private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("SignUp Controlador: Iniciando vista SignIn");
+    private void botonVolverPulsado(ActionEvent event) {
+        LOGGER.info("UISignUpController: Iniciando vista SignIn");
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
-            Parent root = (Parent) loader.load();
-            UISignInController controller = ((UISignInController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
+        boolean errorPatrones = comprobarPatrones();
+
+        if (!errorPatrones) {
+            LOGGER.info("UISignUpController: Iniciando vista Sign In");
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
+                Parent root = (Parent) loader.load();
+                UISignInController controller = ((UISignInController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
+            }
         }
     }
-
 }

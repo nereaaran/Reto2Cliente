@@ -117,11 +117,10 @@ public class UISignInController {
         stage.show();
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
-        
-        
-        
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
             Parent root = (Parent) loader.load();
@@ -210,27 +209,5 @@ public class UISignInController {
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * Ventana de alerta que sale para confirmar o negar el cambio de pantalla.
-     *
-     * @return Devuelve el resultado de la elección.
-     */
-    private boolean mostrarAlertConfirmation() {
-        boolean confirm = false;
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setHeaderText(null);
-        alert.setTitle("Sign In");
-        alert.setContentText("Seguro que quieres cerrar la ventana?");
-        Optional<ButtonType> respuesta = alert.showAndWait();
-
-        if (respuesta.get() == ButtonType.OK) {
-            confirm = true;
-        }
-
-        return confirm;
     }
 }
