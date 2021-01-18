@@ -5,6 +5,8 @@
  */
 package controladores;
 
+import implementaciones.UsuarioGestionImplementacion;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -212,7 +214,7 @@ public class UISignUpController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("UISignUpController: Iniciando stage principal");
+        LOGGER.info("UISignUpController: Iniciando stage");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -221,8 +223,8 @@ public class UISignUpController {
         stage.setResizable(false);
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
-        
-        btnRegistrarse.setDisable(true);
+
+        //btnRegistrarse.setDisable(true);
 
         txtNombre.textProperty().addListener(this::comprobarLongitud);
         txtEmail.textProperty().addListener(this::comprobarLongitud);
@@ -261,6 +263,7 @@ public class UISignUpController {
      * metodo 'camposVacios'.
      */
     private void habilitarBotones() {
+
         if (camposVacios()) {
             btnRegistrarse.setDisable(true);
         } else {
@@ -427,8 +430,15 @@ public class UISignUpController {
         boolean errorContrasenias = comprobarContrasenias();
 
         if (!errorPatrones && !errorContrasenias) {
-            LOGGER.info("UISignUpController: Iniciando vista Grupo");
+            LOGGER.info("UISignUpController: Comprobando si existe el usuario");
+            
+            UsuarioGestion usuarioGestion = new UsuarioGestionImplementacion();
+
+            usuarioGestion.buscarUsuarioPorLogin("knuspo");
+
             try {
+                LOGGER.info("UISignUpController: Iniciando vista Grupo");
+                
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
                 Parent root = (Parent) loader.load();
                 UIGrupoController controller = ((UIGrupoController) loader.getController());
@@ -463,7 +473,7 @@ public class UISignUpController {
             }
         }
     }
-    
+
     /**
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
@@ -472,14 +482,14 @@ public class UISignUpController {
      */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        
+
         alert.setTitle("Salir");
         alert.setHeaderText(null);
         alert.setContentText("¿Seguro que quieres cerrar la ventana?");
-        
+
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
         Optional<ButtonType> result = alert.showAndWait();
-        
+
         if (result.get().equals(ButtonType.OK)) {
             stage.close();
             Platform.exit();

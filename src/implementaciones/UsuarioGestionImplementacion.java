@@ -5,11 +5,11 @@
  */
 package implementaciones;
 
-import entidad.Alumno;
 import entidad.Usuario;
 import interfaces.UsuarioGestion;
 import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import rest.UsuarioRESTClient;
 
 /**
@@ -17,9 +17,8 @@ import rest.UsuarioRESTClient;
  * @author 2dam
  */
 public class UsuarioGestionImplementacion implements UsuarioGestion {
-//REST users web client
 
-    private UsuarioRESTClient webClient;
+    private final UsuarioRESTClient webClient;
 
     public UsuarioGestionImplementacion() {
         webClient = new UsuarioRESTClient();
@@ -41,17 +40,16 @@ public class UsuarioGestionImplementacion implements UsuarioGestion {
     }
 
     @Override
-    public Alumno find(Integer id) throws ClientErrorException {
-        Alumno usuario = null;
-        usuario = this.webClient.find(Alumno.class, id);
-        System.out.println("ENCONTRADO");
-        
-        return usuario;
+    public Usuario find(Integer id) throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<Usuario> buscarUsuarioPorLogin(String login) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collection<Usuario> usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {}, login);
+        System.out.println("ENCONTRADO");
+
+        return usuario;
     }
 
     @Override

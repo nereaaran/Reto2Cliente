@@ -5,7 +5,6 @@
  */
 package interfaces;
 
-import entidad.Alumno;
 import entidad.Usuario;
 import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
@@ -44,7 +43,7 @@ public interface UsuarioGestion {
      * @param id El id del usuario del que se quiere obtener la información.
      * @return Objeto Usuario con la informacion del usuario buscado.
      */
-    public Alumno find(Integer id) throws ClientErrorException;
+    public Usuario find(Integer id) throws ClientErrorException;
 
     /**
      * Método que busca un usuario por su login.
