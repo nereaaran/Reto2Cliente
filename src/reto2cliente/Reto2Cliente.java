@@ -6,6 +6,8 @@
 package reto2cliente;
 
 import controladores.UISignInController;
+import entidad.Libro;
+import implementaciones.LibroGestionImplementation;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -56,7 +58,37 @@ public class Reto2Cliente extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        LibroGestionImplementation lgi = new LibroGestionImplementation();
+        
+        Libro libro = new Libro();
+        
+        /*     CREATE LIBRO.    FUNCIONA. 
+        libro.setTitulo("A");
+        libro.setAutor("A");
+        libro.setEditorial("A");
+        libro.setIsbn(new Long(1));
+        libro.setGenero("A");
+        libro.setCantidadTotal(1);
+        libro.setCantidadDisponible(1);
+        libro.setDescargable(false);
+        libro.setLinkDescarga("");
+        lgi.create(libro);*/
+        
+        //     FIND LIBRO.     PERFECTO
+        libro = lgi.find(1);
+        //System.out.println(libro.toString());
+        
+        //      REMOVE LIBRO   SUPONGO PERFECTO
+        //lgi.remove(libro);
+        
+        
+        /*      EDIT LIBRO     SUPONGO PERFECTO
+        libro.setAutor("MACAULY CULKIN");
+        lgi.edit(libro);*/
+        
+        
         launch(args);
     }
-
+    
 }
