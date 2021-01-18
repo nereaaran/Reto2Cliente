@@ -6,22 +6,27 @@
 package controladores;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UISignUp que contiene los metodos para definir y
@@ -64,7 +69,7 @@ public class UISignUpController {
      * Atributo estático y constante que guarda el patron correcto de
      * contraseña.
      */
-    public static final Pattern VALID_CONTRASENA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_CONTRASENIA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     /**
      * Atributo estático y constante que guarda el patron correcto de telefono.
      */
@@ -119,23 +124,23 @@ public class UISignUpController {
      * Elemento tipo label importado del FXML que referencia a Contraseña.
      */
     @FXML
-    private Label lblContrasena;
+    private Label lblContrasenia;
     /**
      * Elemento tipo textfield importado del FXML que referencia a Contraseña.
      */
     @FXML
-    private PasswordField txtContrasena;
+    private PasswordField txtContrasenia;
     /**
      * Elemento tipo label importado del FXML que referencia a RepiteContraseña.
      */
     @FXML
-    private Label lblRepiteContrasena;
+    private Label lblRepiteContrasenia;
     /**
      * Elemento tipo textfield importado del FXML que referencia a
      * RepiteContraseña.
      */
     @FXML
-    private PasswordField txtRepiteContrasena;
+    private PasswordField txtRepiteContrasenia;
     /**
      * Elemento tipo boton importado del FXML que referencia a Registrarse.
      */
@@ -151,12 +156,12 @@ public class UISignUpController {
      * RepiteContraseñaError.
      */
     @FXML
-    private Label lblRepiteContrasenaError;
+    private Label lblRepiteContraseniaError;
     /**
      * Elemento tipo label importado del FXML que referencia a ContraseñaError.
      */
     @FXML
-    private Label lblContrasenaError;
+    private Label lblContraseniaError;
     /**
      * Elemento tipo label importado del FXML que referencia a UsuarioError.
      */
@@ -193,12 +198,12 @@ public class UISignUpController {
     /**
      * Método que establece al escenario del login como escenario principal.
      *
-     * @param stageSignUp El escenario de Sign Up.
+     * @param primaryStage El escenario de Sign Up.
      */
-    public void setStage(Stage stageSignUp) {
+    public void setStage(Stage primaryStage) {
         LOGGER.info("UISignUpController: Estableciendo stage");
 
-        stage = stageSignUp;
+        stage = primaryStage;
     }
 
     /**
@@ -215,13 +220,15 @@ public class UISignUpController {
         stage.setTitle("Sign up");
         stage.setResizable(false);
 
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
+        
         btnRegistrarse.setDisable(true);
 
         txtNombre.textProperty().addListener(this::comprobarLongitud);
         txtEmail.textProperty().addListener(this::comprobarLongitud);
         txtUsuario.textProperty().addListener(this::comprobarLongitud);
-        txtContrasena.textProperty().addListener(this::comprobarLongitud);
-        txtRepiteContrasena.textProperty().addListener(this::comprobarLongitud);
+        txtContrasenia.textProperty().addListener(this::comprobarLongitud);
+        txtRepiteContrasenia.textProperty().addListener(this::comprobarLongitud);
         txtNumeroTelefono.textProperty().addListener(this::comprobarLongitud);
 
         btnRegistrarse.setOnAction(this::botonRegistroPulsado);
@@ -241,7 +248,7 @@ public class UISignUpController {
     private boolean camposVacios() {
         boolean vacio = false;
 
-        if (txtNombre.getText().isEmpty() || txtEmail.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtContrasena.getText().isEmpty() || txtRepiteContrasena.getText().isEmpty() || txtNumeroTelefono.getText().isEmpty()) {
+        if (txtNombre.getText().isEmpty() || txtEmail.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtContrasenia.getText().isEmpty() || txtRepiteContrasenia.getText().isEmpty() || txtNumeroTelefono.getText().isEmpty()) {
 
             vacio = true;
         }
@@ -285,14 +292,14 @@ public class UISignUpController {
             txtUsuario.setText(usuario);
         }
 
-        if (txtContrasena.getText().length() > MAX_LENGHT) {
-            String contrasena = txtContrasena.getText().substring(0, MAX_LENGHT);
-            txtContrasena.setText(contrasena);
+        if (txtContrasenia.getText().length() > MAX_LENGHT) {
+            String contrasenia = txtContrasenia.getText().substring(0, MAX_LENGHT);
+            txtContrasenia.setText(contrasenia);
         }
 
-        if (txtRepiteContrasena.getText().length() > MAX_LENGHT) {
-            String repiteContrasena = txtRepiteContrasena.getText().substring(0, MAX_LENGHT);
-            txtRepiteContrasena.setText(repiteContrasena);
+        if (txtRepiteContrasenia.getText().length() > MAX_LENGHT) {
+            String repiteContrasenia = txtRepiteContrasenia.getText().substring(0, MAX_LENGHT);
+            txtRepiteContrasenia.setText(repiteContrasenia);
         }
 
         if (txtNumeroTelefono.getText().length() > MAX_LENGHT_TELEFONO) {
@@ -356,17 +363,17 @@ public class UISignUpController {
             }
         }
 
-        if (txtContrasena.getText().isEmpty()) {
-            lblContrasenaError.setText("");
+        if (txtContrasenia.getText().isEmpty()) {
+            lblContraseniaError.setText("");
         } else {
-            Matcher matcher = VALID_CONTRASENA.matcher(txtContrasena.getText());
+            Matcher matcher = VALID_CONTRASENIA.matcher(txtContrasenia.getText());
             if (!matcher.find()) {
-                lblContrasenaError.setText("Introduce sólo letras y números");
-                lblContrasenaError.setTextFill(Color.web("#FF0000"));
+                lblContraseniaError.setText("Introduce sólo letras y números");
+                lblContraseniaError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
             } else {
-                lblContrasenaError.setText("");
+                lblContraseniaError.setText("");
             }
         }
 
@@ -393,16 +400,16 @@ public class UISignUpController {
      *
      * @return Variable que indica si las contraseñas coinciden o no.
      */
-    private boolean comprobarContrasenas() {
+    private boolean comprobarContrasenias() {
         boolean error = false;
 
-        if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
-            lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
-            lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
+        if (!txtContrasenia.getText().equals(txtRepiteContrasenia.getText())) {
+            lblRepiteContraseniaError.setText("Las contraseñas no coinciden");
+            lblRepiteContraseniaError.setTextFill(Color.web("#FF0000"));
 
             error = true;
         } else {
-            lblRepiteContrasenaError.setText("");
+            lblRepiteContraseniaError.setText("");
         }
 
         return error;
@@ -417,9 +424,9 @@ public class UISignUpController {
         LOGGER.info("UISignUpController: Comprobando errores");
 
         boolean errorPatrones = comprobarPatrones();
-        boolean errorContrasenas = comprobarContrasenas();
+        boolean errorContrasenias = comprobarContrasenias();
 
-        if (!errorPatrones && !errorContrasenas) {
+        if (!errorPatrones && !errorContrasenias) {
             LOGGER.info("UISignUpController: Iniciando vista Grupo");
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
@@ -454,6 +461,25 @@ public class UISignUpController {
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
             }
+        }
+    }
+    
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+        
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
     }
 }
