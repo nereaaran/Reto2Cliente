@@ -35,6 +35,6 @@
       </Button>
       <Label fx:id="lblEmailError" layoutX="147.0" layoutY="207.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblInformativo" layoutX="146.0" layoutY="57.0" prefHeight="67.0" prefWidth="309.0" text="Introduce la cuenta de email usada en el registro y se te enviará un correo con una nueva contraseña." textAlignment="CENTER" wrapText="true" />
-      <Label fx:id="lblContraseniaRestaurada" layoutX="197.0" layoutY="289.0" prefHeight="17.0" prefWidth="240.0" text="Contrasenia restaurada. Revisa tu email" />
+      <Label fx:id="lblContraseniaRestaurada" layoutX="197.0" layoutY="289.0" prefHeight="17.0" prefWidth="284.0" />
    </children>
 </Pane>

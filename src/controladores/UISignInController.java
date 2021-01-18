@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -25,6 +26,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UISignIn que contiene los metodos para definir y
@@ -104,6 +106,8 @@ public class UISignInController {
         stage.setTitle("Sign In");
         stage.setResizable(false);
 
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
+
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
 
@@ -121,7 +125,7 @@ public class UISignInController {
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
 
-        try {
+        try {///////////////////// ESTO NO VA AQUI///////////////////////////////////////////////////////7
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
             Parent root = (Parent) loader.load();
             UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
@@ -208,6 +212,31 @@ public class UISignInController {
             controller.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.s
+     */
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
     }
 }
