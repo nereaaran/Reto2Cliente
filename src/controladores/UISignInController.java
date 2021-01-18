@@ -58,9 +58,9 @@ public class UISignInController {
     @FXML
     private TextField txtUsuario;
     @FXML
-    private Label lblContraseña;
+    private Label lblContrasenia;
     @FXML
-    private PasswordField txtContraseña;
+    private PasswordField txtContrasenia;
     @FXML
     private Button btnIniciarSesion;
     @FXML
@@ -70,11 +70,11 @@ public class UISignInController {
     @FXML
     private Label lblNoTienesCuenta;
     @FXML
-    private Label lblContraseñaError;
+    private Label lblContraseniaError;
     @FXML
     private Label lblUsuarioError;
     @FXML
-    private Hyperlink linkContraseñaOlvidada;
+    private Hyperlink linkContraseniaOlvidada;
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -109,10 +109,10 @@ public class UISignInController {
 
         btnIniciarSesion.setOnAction(this::handleBotonIniciarSesion);
         btnRegistrate.setOnAction(this::handleBotonRegistro);
-        linkContraseñaOlvidada.setOnAction(this::handleBotonContraseñaOlvidada);
+        linkContraseniaOlvidada.setOnAction(this::handleBotonContraseniaOlvidada);
 
         txtUsuario.textProperty().addListener(this::handleTextoCambiado);
-        txtContraseña.textProperty().addListener(this::handleTextoCambiado);
+        txtContrasenia.textProperty().addListener(this::handleTextoCambiado);
 
         stage.show();
     }
@@ -149,7 +149,7 @@ public class UISignInController {
         // Guarda el textField
         TextField changedTextField = (TextField) textProperty.getBean();
 
-        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContraseña.getText().isEmpty()) {
+        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContrasenia.getText().isEmpty()) {
             btnIniciarSesion.setDisable(false);
         } else {
             btnIniciarSesion.setDisable(true);
@@ -179,8 +179,8 @@ public class UISignInController {
      *
      * @param event El evento de acción.
      */
-    private void handleBotonContraseñaOlvidada(ActionEvent event) {
-        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+    private void handleBotonContraseniaOlvidada(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contrasenia");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIRestaurarContrasenia.fxml"));

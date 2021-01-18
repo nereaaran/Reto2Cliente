@@ -4,8 +4,6 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
@@ -16,11 +14,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIAlumnoController">
+<AnchorPane id="AnchorPane" fx:id="paneGeneralAlumno" prefHeight="612.0" prefWidth="803.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIAlumnoController">
    <children>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="607.0" prefWidth="803.0">
+      <fx:include source="UIMenuBar.fxml" />
+      <SplitPane dividerPositions="0.5" layoutY="26.0" orientation="VERTICAL" prefHeight="581.0" prefWidth="849.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
+          <AnchorPane fx:id="paneSuperiorAlumno" minHeight="0.0" minWidth="0.0" prefHeight="281.0" prefWidth="801.0">
                <children>
                   <Button fx:id="btnAnadir" layoutX="677.0" layoutY="94.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Añadir" />
                   <Button fx:id="btnModificar" layoutX="677.0" layoutY="123.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Modificar" />
@@ -39,8 +38,8 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Separator layoutX="11.0" layoutY="232.0" prefHeight="0.0" prefWidth="638.0" />
-                  <TextField fx:id="txtBuscarAlumno" layoutX="18.0" layoutY="245.0" prefHeight="25.0" prefWidth="264.0" promptText="Buscar alumno" />
+                  <Separator layoutX="7.0" layoutY="244.0" prefHeight="3.0" prefWidth="644.0" />
+                  <TextField fx:id="txtBuscarAlumno" layoutX="18.0" layoutY="259.0" prefHeight="25.0" prefWidth="264.0" promptText="Buscar alumno" />
                   <Label fx:id="lblFechaNacimiento" layoutX="363.0" layoutY="194.0" text="Fecha de nacimiento" />
                   <Separator layoutX="649.0" layoutY="87.0" orientation="VERTICAL" prefHeight="200.0" />
                   <DatePicker fx:id="datePickerFechaNacimiento" layoutX="491.0" layoutY="190.0" prefHeight="25.0" prefWidth="138.0" />
@@ -59,28 +58,18 @@
                      </items>
                   </MenuButton>
                   <Button fx:id="btnVolver" layoutX="677.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
-                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
-                  <MenuBar fx:id="munuBar" layoutX="-10.0" layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="818.0">
-                     <menus>
-                        <Menu mnemonicParsing="false" text="Ajustes">
-                           <items>
-                              <MenuItem fx:id="mnMiPerfil" mnemonicParsing="false" text="Mi perfil" />
-                              <MenuItem fx:id="mnCerrarSesion" mnemonicParsing="false" text="Cerrar sesion" />
-                           </items>
-                        </Menu>
-                     </menus>
-                  </MenuBar>
+                  <Button fx:id="btnBuscar" layoutX="287.0" layoutY="259.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <Label fx:id="lblNombreCompletoError" layoutX="139.0" layoutY="118.0" prefHeight="18.0" prefWidth="253.0" />
                   <Label fx:id="lblDniError" layoutX="473.0" layoutY="122.0" prefHeight="18.0" prefWidth="160.0" />
                   <Label fx:id="lblUsuarioError" layoutX="50.0" layoutY="170.0" prefHeight="18.0" prefWidth="253.0" />
                   <Label fx:id="lblEmailError" layoutX="346.0" layoutY="170.0" prefHeight="18.0" prefWidth="253.0" />
-                  <Label fx:id="lblFechaNacimientoError" layoutX="396.0" layoutY="216.0" prefHeight="18.0" prefWidth="253.0" />
+                  <Label fx:id="lblFechaNacimientoError" layoutX="362.0" layoutY="215.0" prefHeight="18.0" prefWidth="272.0" />
                   <Label fx:id="lblBuscarAlumnoError" layoutX="23.0" layoutY="271.0" prefHeight="18.0" prefWidth="253.0" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="699.0">
+          <AnchorPane fx:id="paneInferiorAlumno" minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="699.0">
                <children>
-                  <TableView fx:id="tablaAlumno" layoutX="251.0" layoutY="23.0" prefHeight="277.0" prefWidth="550.0">
+                  <TableView fx:id="tablaAlumnos" layoutX="251.0" layoutY="23.0" prefHeight="277.0" prefWidth="550.0">
                     <columns>
                       <TableColumn fx:id="dniCL" prefWidth="75.99999487400055" text="DNI" />
                         <TableColumn fx:id="nombreCompletoCL" prefWidth="170.66668701171875" text="Nombre completo" />
@@ -88,14 +77,14 @@
                         <TableColumn fx:id="emailCL" prefWidth="148.66668701171875" text="Email" />
                     </columns>
                   </TableView>
-                  <TableView fx:id="tablaGrupo" layoutX="2.0" layoutY="23.0" prefHeight="275.0" prefWidth="243.0">
+                  <TableView fx:id="tablaGrupos" layoutX="2.0" layoutY="23.0" prefHeight="275.0" prefWidth="243.0">
                      <columns>
                         <TableColumn fx:id="nombreGrupoCL" prefWidth="117.33333837985992" text="Grupo" />
                         <TableColumn fx:id="numeroAlumnosCL" prefWidth="118.66668701171875" text="Nº alumnos" />
                      </columns>
                   </TableView>
-                  <Label fx:id="lblListaGrupos" layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="LISTA DE LOS GRUPOS" />
-                  <Label fx:id="lblAlumnosAsignados" layoutX="264.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="ALUMNOS ASIGNADOS" />
+                  <Label fx:id="lblListaGrupos" layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="LISTA DE GRUPOS" />
+                  <Label fx:id="lblAlumnosAsignados" layoutX="264.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="LISTA DE ALUMNOS" />
                </children>
             </AnchorPane>
         </items>

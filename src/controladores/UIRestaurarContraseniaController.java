@@ -49,13 +49,13 @@ public class UIRestaurarContraseniaController {
     @FXML
     private TextField txtEmail;
     @FXML
-    private Button btnRestaurarContraseña;
+    private Button btnRestaurarContrasenia;
     @FXML
     private Button btnVolver;
     @FXML
     private Label lblEmailError;
     @FXML
-    private Label lblContraseñaRestaurada;
+    private Label lblContraseniaRestaurada;
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -67,7 +67,7 @@ public class UIRestaurarContraseniaController {
      * @param primaryStage El escenario principal.
      */
     public void setStage(Stage primaryStage) {
-        LOGGER.info("RestaurarContraseña Controlador: Estableciendo stage");
+        LOGGER.info("RestaurarContrasenia Controlador: Estableciendo stage");
 
         stage = primaryStage;
     }
@@ -79,7 +79,7 @@ public class UIRestaurarContraseniaController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("RestaurarContraseña Controlador: Iniciando stage");
+        LOGGER.info("RestaurarContrasenia Controlador: Iniciando stage");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -87,20 +87,20 @@ public class UIRestaurarContraseniaController {
         stage.setResizable(false);
 
         txtEmail.requestFocus();
-        btnRestaurarContraseña.setDisable(true);
+        btnRestaurarContrasenia.setDisable(true);
         btnVolver.setOnAction(this::handleBotonVolver);
 
         txtEmail.textProperty().addListener(this::handleTextoCambiado);
-        btnRestaurarContraseña.setOnAction(this::handleBotonRestaurarContrasena);
+        btnRestaurarContrasenia.setOnAction(this::handleBotonRestaurarContrasenia);
 
         stage.show();
     }
 
     
-    private void handleBotonRestaurarContrasena(ActionEvent event) {
+    private void handleBotonRestaurarContrasenia(ActionEvent event) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        lblContraseñaRestaurada.setText("Contraseña restaurada. Revisa tu email");
-        lblContraseñaRestaurada.setTextFill(Color.web("#008000"));
+        lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
+        lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
     }
 
     
@@ -125,9 +125,9 @@ public class UIRestaurarContraseniaController {
             }
         }
         if (textoCorrecto) {
-            btnRestaurarContraseña.setDisable(false);
+            btnRestaurarContrasenia.setDisable(false);
         } else {
-            btnRestaurarContraseña.setDisable(true);
+            btnRestaurarContrasenia.setDisable(true);
         }
     }
 
@@ -182,7 +182,7 @@ public class UIRestaurarContraseniaController {
      * @param event El evento de acción.
      */
     private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("RestaurarContraseña Controlador: Iniciando vista SignIn");
+        LOGGER.info("RestaurarContrasenia Controlador: Iniciando vista SignIn");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
