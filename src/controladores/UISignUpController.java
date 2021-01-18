@@ -34,67 +34,159 @@ public class UISignUpController {
     /**
      * Atributo estático y constante que guarda los loggers de la clase.
      */
-    private static final Logger LOGGER = Logger.getLogger("controladores.UISignInController");
+    private static final Logger LOGGER = Logger.getLogger("controladores.UISignUpController");
 
+    /**
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en los campos de texto.
+     */
     private static final int MAX_LENGHT = 50;
+
+    /**
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en el campo de texto de telefono.
+     */
     private static final int MAX_LENGHT_TELEFONO = 9;
 
+    /**
+     * Atributo estático y constante que guarda el patron correcto de nombre.
+     */
     public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de email.
+     */
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de usuario.
+     */
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de
+     * contraseña.
+     */
     public static final Pattern VALID_CONTRASENA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de telefono.
+     */
     public static final Pattern VALID_TELEFONO = Pattern.compile("^[0-9]{9}", Pattern.CASE_INSENSITIVE);
 
     /**
-     * Variable de tipo stage que se usa para visualizar la ventana
+     * Variable de tipo stage que se usa para visualizar la ventana.
      */
     private Stage stage;
 
     /**
-     * Lista de elementos importados de la vista FXML que representan objetos.
+     * Elemento tipo pane importado de la vista FXML.
      */
     @FXML
     private Pane paneSignUp;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Título.
+     */
     @FXML
     private Label lblTitulo;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Nombre.
+     */
     @FXML
     private Label lblNombre;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Nombre.
+     */
     @FXML
     private TextField txtNombre;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Email.
+     */
     @FXML
     private Label lblEmail;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Email.
+     */
     @FXML
     private TextField txtEmail;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Usuario.
+     */
     @FXML
     private Label lblUsuario;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Usuario.
+     */
     @FXML
     private TextField txtUsuario;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Contraseña.
+     */
     @FXML
     private Label lblContrasena;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a Contraseña.
+     */
     @FXML
     private PasswordField txtContrasena;
+    /**
+     * Elemento tipo label importado del FXML que referencia a RepiteContraseña.
+     */
     @FXML
     private Label lblRepiteContrasena;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a
+     * RepiteContraseña.
+     */
     @FXML
     private PasswordField txtRepiteContrasena;
+    /**
+     * Elemento tipo boton importado del FXML que referencia a Registrarse.
+     */
     @FXML
     private Button btnRegistrarse;
+    /**
+     * Elemento tipo boton importado del FXML que referencia a Volver.
+     */
     @FXML
     private Button btnVolver;
+    /**
+     * Elemento tipo label importado del FXML que referencia a
+     * RepiteContraseñaError.
+     */
     @FXML
     private Label lblRepiteContrasenaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a ContraseñaError.
+     */
     @FXML
     private Label lblContrasenaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a UsuarioError.
+     */
     @FXML
     private Label lblUsuarioError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a EmailError.
+     */
     @FXML
     private Label lblEmailError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NombreError.
+     */
     @FXML
     private Label lblNombreError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NumeroTelefono.
+     */
     @FXML
     private Label lblNumeroTelefono;
+    /**
+     * Elemento tipo textfield importado del FXML que referencia a
+     * NumeroTelefono.
+     */
     @FXML
     private TextField txtNumeroTelefono;
+    /**
+     * Elemento tipo label importado del FXML que referencia a
+     * NumeroTelefonoError.
+     */
     @FXML
     private Label lblNumeroTelefonoError;
 
@@ -141,6 +233,11 @@ public class UISignUpController {
         txtNombre.requestFocus();
     }
 
+    /**
+     * Método que comprueba que si hay algún campo de texto vacio.
+     *
+     * @return Variable que indica si hay algún campo de texto vacio.
+     */
     private boolean camposVacios() {
         boolean vacio = false;
 
@@ -152,6 +249,10 @@ public class UISignUpController {
         return vacio;
     }
 
+    /**
+     * Método que habilita y deshabilita el boton de Registrarse en función del
+     * metodo 'camposVacios'.
+     */
     private void habilitarBotones() {
         if (camposVacios()) {
             btnRegistrarse.setDisable(true);
@@ -160,6 +261,14 @@ public class UISignUpController {
         }
     }
 
+    /**
+     * Método que comprueba la longitud de los campos de texto. Si exceden el
+     * maximo permitido no recoge el resto de carácteres.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombre.getText().length() > MAX_LENGHT) {
             String nombre = txtNombre.getText().substring(0, MAX_LENGHT);
@@ -194,6 +303,14 @@ public class UISignUpController {
         habilitarBotones();
     }
 
+    /**
+     * Método que comprueba que el texto introducido en los campos de texto de
+     * Nombre, Email, Usuario, Contraseña y NumeroTelefono cumple con los
+     * patrones establecidos, si no lo hace muestra el error en los labels
+     * correspondientes.
+     *
+     * @return Variable que indica si hay algún patrón que no se cumple.
+     */
     private boolean comprobarPatrones() {
         boolean error = false;
 
@@ -269,10 +386,16 @@ public class UISignUpController {
 
         return error;
     }
-    
+
+    /**
+     * Método que comprueba que Contraseña y RepiteContraseña contienen el mismo
+     * texto.
+     *
+     * @return Variable que indica si las contraseñas coinciden o no.
+     */
     private boolean comprobarContrasenas() {
-        boolean error=false;
-        
+        boolean error = false;
+
         if (!txtContrasena.getText().equals(txtRepiteContrasena.getText())) {
             lblRepiteContrasenaError.setText("Las contraseñas no coinciden");
             lblRepiteContrasenaError.setTextFill(Color.web("#FF0000"));
@@ -281,12 +404,12 @@ public class UISignUpController {
         } else {
             lblRepiteContrasenaError.setText("");
         }
-        
+
         return error;
     }
 
     /**
-     * Método que carga y abre la venta UISignIn.
+     * Método que carga y abre la venta UIGrupo.
      *
      * @param event El evento de acción.
      */
@@ -309,9 +432,14 @@ public class UISignUpController {
             }
         }
     }
-    
+
+    /**
+     * Método que carga y abre la venta UISignIn.
+     *
+     * @param event El evento de acción.
+     */
     private void botonVolverPulsado(ActionEvent event) {
-        LOGGER.info("UISignUpController: Comprobando errores");
+        LOGGER.info("UISignUpController: Iniciando vista SignIn");
 
         boolean errorPatrones = comprobarPatrones();
 
