@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author JonY
  */
 @XmlRootElement(name = "profesor")
-public class Profesor implements Serializable{
+public class Profesor extends Usuario implements Serializable{
     
     private  Integer telefono;
 

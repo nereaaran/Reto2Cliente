@@ -5,7 +5,7 @@
  */
 package reto2cliente;
 
-import controladores.*;
+import controladores.UISignInController;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -15,26 +15,41 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 /**
+ * Clase principal del lado Cliente que inicia la Aplicacion JavaFX.
  *
- * @author nerea
+ * @author Nerea Aranguren
  */
 public class Reto2Cliente extends Application {
 
-    public static final Logger LOGGER = Logger.getLogger("reto2cliente.Reto2Cliente");
+    /**
+     * Atributo estático y constante que guarda los loggers de la clase.
+     */
+    private static final Logger LOGGER = Logger.getLogger("reto2Cliente.Reto2Cliente");
 
+    /**
+     * Método que inicia la Aplicación JavaFX. Carga y muestra la pantalla
+     * inicial.
+     *
+     * @param primaryStage La pantalla principal de la aplicación.
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignUp.fxml"));
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
+            LOGGER.info("Reto2Cliente: Iniciando pantalla principal");
+
+            // Carga el archivo fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
             Parent ventana = (Parent) loader.load();
-            //UIAlumnoController controlador = (UIAlumnoController) loader.getController();
-            UISignUpController controlador = (UISignUpController) loader.getController();
+            // Enlaza el controlador con el archivo fxml
+            UISignInController controlador = (UISignInController) loader.getController();
+            // Prepara el escenario principal donde se ejecutara la ventana 
             controlador.setStage(primaryStage);
+            // Inicializa la ventana de SignIn
             controlador.initStage(ventana);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
+
     }
 
     /**
