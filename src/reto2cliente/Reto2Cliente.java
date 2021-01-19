@@ -9,6 +9,8 @@ import controladores.UISignInController;
 import entidad.Libro;
 import implementaciones.LibroGestionImplementation;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -60,8 +62,8 @@ public class Reto2Cliente extends Application {
     public static void main(String[] args) {
         
         LibroGestionImplementation lgi = new LibroGestionImplementation();
-        
         Libro libro = new Libro();
+        Collection<Libro> libros = null;
         
         /*     CREATE LIBRO.    FUNCIONA. 
         libro.setTitulo("A");
@@ -76,7 +78,7 @@ public class Reto2Cliente extends Application {
         lgi.create(libro);*/
         
         //     FIND LIBRO.     PERFECTO
-        libro = lgi.find(1);
+        //libro = lgi.find(1);
         //System.out.println(libro.toString());
         
         //      REMOVE LIBRO   SUPONGO PERFECTO
@@ -86,6 +88,25 @@ public class Reto2Cliente extends Application {
         /*      EDIT LIBRO     SUPONGO PERFECTO
         libro.setAutor("MACAULY CULKIN");
         lgi.edit(libro);*/
+        
+        //      BUSCAR TODOS LOS LIBROS     SUPONGO PERFECTO
+        //libros = lgi.buscarTodosLosLibros();
+        
+        //      BUSCAR LIBROS AUTOR         NO VA   -----------------------------------------
+        libros = lgi.buscarLibrosPorAutor("harry");
+        
+        
+        //      BUSCAR LIBROS POR TITULO    SUPONGO PERFECTO
+        //libros=lgi.buscarLibrosPorTitulo("to");
+        /*
+        Iterator it = libros.iterator();
+        while(it.hasNext())
+            System.out.println(it.next());*/
+        
+        for(Libro l:libros)
+            System.out.println(l.toString());
+        
+        
         
         
         launch(args);

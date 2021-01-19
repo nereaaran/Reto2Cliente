@@ -10,6 +10,7 @@ import interfaces.LibroGestion;
 import java.util.Collection;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import rest.LibroRESTClient;
 
 /**
@@ -109,35 +110,66 @@ public class LibroGestionImplementation implements LibroGestion {
         return libro;
     }
 
+    /**
+     * Obtiene todos los libros mandando una petición GET al servicio web
+     * RESTful.
+     *
+     * @return Una colección de objetos Libro con los datos.
+     * @throws ClientErrorException Si hay algun error durante el proceso.
+     */
     @Override
     public Collection<Libro> buscarTodosLosLibros() throws ClientErrorException {
-    Collection<Libro> libros = null;
+        Collection<Libro> libros = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando todos los libros");
 
-            libros = this.webClient.buscarTodosLosLibros(Libro.class);
+            libros = this.webClient.buscarTodosLosLibros(new GenericType<Collection<Libro>>() {
+            });
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
         return libros;
     }
 
+    /**
+     * Obtiene un libro mandando una peticion GET al servicio web RESTful.
+     *
+     * @param titulo El titulo del objeto libro que se buscará.
+     * @return Una colección de objetos Libro con los datos.
+     * @throws ClientErrorException Si hay algun error durante el proceso.
+     */
     @Override
     public Collection<Libro> buscarLibrosPorTitulo(String titulo) throws ClientErrorException {
-    Collection<Libro> libros = null;
+        Collection<Libro> libros = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando libros por titulo");
 
-            libros = this.webClient.buscarLibrosPorTitulo(Libro.class, titulo);
+            libros = this.webClient.buscarLibrosPorTitulo(new GenericType<Collection<Libro>>() {
+            }, titulo);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
         return libros;
     }
 
+    /**
+     * Obtiene un libro mandando una peticion GET al servicio web RESTful.
+     *
+     * @param autor El autor del objeto libro que se buscará.
+     * @return Una colección de objetos Libro con los datos.
+     * @throws ClientErrorException Si hay algun error durante el proceso.
+     */
     @Override
     public Collection<Libro> buscarLibrosPorAutor(String autor) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        Collection<Libro> libros = null;
+        try {
+            LOGGER.info("LibroGestionImplementation: Buscando libros por autor");
 
+            libros = this.webClient.buscarLibrosPorTitulo(new GenericType<Collection<Libro>>() {
+            }, autor);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return libros;
+    }
 }

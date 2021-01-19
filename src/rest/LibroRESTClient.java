@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:LibroFacadeREST [libro]<br>
@@ -47,14 +48,12 @@ public class LibroRESTClient {
      *
      * @param <T> Clase de tipo generico.
      * @param responseType La clase objeto de la instancia de retorno.
-     * @param titulo El titulo de la instancia del lado servidor.
      * @return Coleccion de objetos con los datos.
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarLibrosPorTitulo(Class<T> responseType, String titulo) throws ClientErrorException {
+    public <T> T buscarTodosLosLibros(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("titulo/{0}", new Object[]{titulo}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -64,12 +63,14 @@ public class LibroRESTClient {
      *
      * @param <T> Clase de tipo generico.
      * @param responseType La clase objeto de la instancia de retorno.
+     * @param titulo El titulo de la instancia del lado servidor.
      * @return Coleccion de objetos con los datos.
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarTodosLosLibros(Class<T> responseType) throws ClientErrorException {
+    public <T> T buscarLibrosPorTitulo(GenericType<T> responseType, String titulo) throws ClientErrorException {
         WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("titulo/{0}", new Object[]{titulo}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 
@@ -84,7 +85,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarLibrosPorAutor(Class<T> responseType, String autor) throws ClientErrorException {
+    public <T> T buscarLibrosPorAutor(GenericType<T> responseType, String autor) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("autor/{0}", new Object[]{autor}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
