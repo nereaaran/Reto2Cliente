@@ -126,10 +126,10 @@ public class UISignInController {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
 
         try {///////////////////// ESTO NO VA AQUI///////////////////////////////////////////////////////7
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
             Parent root = (Parent) loader.load();
-            UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
-            controller.setStage();
+            UILibroController controller = ((UILibroController) loader.getController());
+            controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
@@ -219,7 +219,7 @@ public class UISignInController {
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
      *
-     * @param event El evento de acción.s
+     * @param event El evento de acción.
      */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

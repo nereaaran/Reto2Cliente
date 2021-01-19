@@ -151,6 +151,19 @@ public class UIMiPerfilController {
         stage.show();
     }
 
+    /*      ESTE ES LA LLAMADA PARA ABRIR LA VENTANA
+    
+    try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
+            Parent root = (Parent) loader.load();
+            UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
+            controller.setStage();
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    
+    */
     
     
     private void handleBotonCambiarContrasena(ActionEvent event) {
@@ -263,7 +276,7 @@ public class UIMiPerfilController {
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
      *
-     * @param event El evento de acción.s
+     * @param event El evento de acción.
      */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
