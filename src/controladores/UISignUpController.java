@@ -5,9 +5,15 @@
  */
 package controladores;
 
-import implementaciones.UsuarioGestionImplementacion;
+import static entidad.TipoUsuario.PROFESOR;
+import static entidad.UserPrivilege.USER;
+import static entidad.UserStatus.ENABLED;
+import entidad.Usuario;
+import implementaciones.UsuarioGestionImplementation;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -203,7 +209,7 @@ public class UISignUpController {
      * @param primaryStage El escenario de Sign Up.
      */
     public void setStage(Stage primaryStage) {
-        LOGGER.info("UISignUpController: Estableciendo stage");
+        LOGGER.info("Sign Up Controlador: Estableciendo stage");
 
         stage = primaryStage;
     }
@@ -214,7 +220,7 @@ public class UISignUpController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("UISignUpController: Iniciando stage");
+        LOGGER.info("Sign Up Controlador: Iniciando stage");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -224,8 +230,7 @@ public class UISignUpController {
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
-        //btnRegistrarse.setDisable(true);
-
+        btnRegistrarse.setDisable(true);
         txtNombre.textProperty().addListener(this::comprobarLongitud);
         txtEmail.textProperty().addListener(this::comprobarLongitud);
         txtUsuario.textProperty().addListener(this::comprobarLongitud);
@@ -424,30 +429,100 @@ public class UISignUpController {
      * @param event El evento de acción.
      */
     private void botonRegistroPulsado(ActionEvent event) {
-        LOGGER.info("UISignUpController: Comprobando errores");
+        LOGGER.info("Sign Up Controlador: Comprobando errores");
 
         boolean errorPatrones = comprobarPatrones();
         boolean errorContrasenias = comprobarContrasenias();
+        boolean existeEmail = comprobarEmailExiste();
+        boolean existeUsuario = comprobarUsuarioExiste();
 
         if (!errorPatrones && !errorContrasenias) {
-            LOGGER.info("UISignUpController: Comprobando si existe el usuario");
-            
-            UsuarioGestion usuarioGestion = new UsuarioGestionImplementacion();
+            if (!existeEmail && !existeUsuario) {
+                LOGGER.info("Sign Up Controlador: Guardando el usuario en la base de datos");
 
-            usuarioGestion.buscarUsuarioPorLogin("knuspo");
-
-            try {
-                LOGGER.info("UISignUpController: Iniciando vista Grupo");
                 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                Parent root = (Parent) loader.load();
-                UIGrupoController controller = ((UIGrupoController) loader.getController());
-                controller.setStage(stage);
-                controller.initStage(root);
-            } catch (IOException e) {
-                LOGGER.severe(e.getMessage());
+                
+                
+                Usuario nuevoUsuario = new Usuario();
+                nuevoUsuario.setLogin(txtUsuario.getText());
+                nuevoUsuario.setEmail(txtEmail.getText());
+                nuevoUsuario.setFullName(txtNombre.getText());
+                nuevoUsuario.setStatus(ENABLED);
+                nuevoUsuario.setPrivilege(USER);
+                nuevoUsuario.setTipoUsuario(PROFESOR);
+                nuevoUsuario.setPassword(txtContrasenia.getText());
+                //nuevoUsuario.setLastAccess();
+                //nuevoUsuario.setlastPasswordChange();
+                
+                
+                
+                
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                    Parent root = (Parent) loader.load();
+                    UIGrupoController controller = ((UIGrupoController) loader.getController());
+                    controller.setStage(stage);
+                    controller.initStage(root);
+                } catch (IOException e) {
+                    LOGGER.severe(e.getMessage());
+                }
             }
         }
+    }
+
+    /**
+     * Método que comprueba si existe el email en la base de datos.
+     *
+     * @return Variable que indica si el email existe o no.
+     */
+    private boolean comprobarEmailExiste() {
+        LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
+
+        boolean existe = false;
+
+        UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
+        Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+
+        for (Usuario u : usuario) {
+            String email = u.getEmail();
+
+            if (txtEmail.getText().equals(email)) {
+                lblNumeroTelefonoError.setText("El email ya existe");
+                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+
+                existe = true;
+            }
+        }
+
+        return existe;
+    }
+
+    /**
+     * Método que comprueba si existe el usuario en la base de datos.
+     *
+     * @return Variable que indica si el usuario existe o no.
+     */
+    private boolean comprobarUsuarioExiste() {
+        LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
+
+        boolean existe = false;
+
+        UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
+        Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+
+        for (Usuario u : usuario) {
+            String login = u.getLogin();
+
+            if (txtUsuario.getText().equals(login)) {
+                lblNumeroTelefonoError.setText("El usuario ya existe");
+                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+
+                existe = true;
+            }
+        }
+
+        return existe;
     }
 
     /**
@@ -456,12 +531,12 @@ public class UISignUpController {
      * @param event El evento de acción.
      */
     private void botonVolverPulsado(ActionEvent event) {
-        LOGGER.info("UISignUpController: Iniciando vista SignIn");
+        LOGGER.info("Sign Up Controlador: Iniciando vista SignIn");
 
         boolean errorPatrones = comprobarPatrones();
 
         if (!errorPatrones) {
-            LOGGER.info("UISignUpController: Iniciando vista Sign In");
+            LOGGER.info("Sign Up Controlador: Iniciando vista Sign In");
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
                 Parent root = (Parent) loader.load();

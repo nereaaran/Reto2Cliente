@@ -13,8 +13,8 @@ import javax.ws.rs.core.GenericType;
 import rest.UsuarioRESTClient;
 
 /**
- *
- * @author 2dam
+ * 
+ * @author Cristina Milea
  */
 public class UsuarioGestionImplementation implements UsuarioGestion {
 
@@ -48,14 +48,18 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     public Collection<Usuario> buscarUsuarioPorLogin(String login) throws ClientErrorException {
         Collection<Usuario> usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {}, login);
         
-        System.out.println("ENCONTRADO");
+        System.out.println("USUARIO ENCONTRADO" + usuario.toString());
 
         return usuario;
     }
 
     @Override
     public Collection<Usuario> buscarUsuarioPorEmail(String email) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Collection<Usuario> usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {}, email);
+        
+        System.out.println("EMAIL ENCONTRADO" + usuario.toString());
+
+        return usuario;
     }
 
     @Override
