@@ -5,16 +5,13 @@
  */
 package controladores;
 
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -53,7 +50,7 @@ public class UILibroController {
     /**
      * Variable que guarda los carácteres máximos del campo de texto titulo.
      */
-    private static final int MAX_LENGHT_TITULO = 50;
+    private static final int MAX_LENGHT_TITULO = 100;
 
     /**
      * Variable que guarda los carácteres máximos del campo de texto isbn.
@@ -196,29 +193,121 @@ public class UILibroController {
         btnLimpiar.setDisable(true);
         btnBuscar.setDisable(true);
 
-        txtBuscarLibro.textProperty().addListener(this::handleTextoCambiado);
-
         txtTitulo.requestFocus();
+
+        txtBuscarLibro.textProperty().addListener(this::handleTextoCambiado);
+        txtTitulo.textProperty().addListener(this::handleTextoCambiado);
+        txtAutor.textProperty().addListener(this::handleTextoCambiado);
+        txtEditorial.textProperty().addListener(this::handleTextoCambiado);
+        txtGenero.textProperty().addListener(this::handleTextoCambiado);
+        txtCantidadTotal.textProperty().addListener(this::handleTextoCambiado);
+        txtIsbn.textProperty().addListener(this::handleTextoCambiado);
+        txtLinkDescarga.textProperty().addListener(this::handleTextoCambiado);
+        cbxDescargable.selectedProperty().addListener(this::handleCheckboxCambiado<Boolean>);
+
+        btnLimpiar.setOnAction(this::handleBtnLimpiar);
 
         stage.show();
     }
 
+    /**
+     * Método que carga y abre la venta UIRestaurarContrasenia.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBtnLimpiar(ActionEvent event) {
+        txtTitulo.clear();
+        txtAutor.clear();
+        txtEditorial.clear();
+        txtGenero.clear();
+        txtCantidadTotal.clear();
+        txtIsbn.clear();
+        txtLinkDescarga.clear();
+        cbxDescargable.setSelected(false);
+    }
+
+    /**
+     * Se ejecuta cuando un campo de texto ha sido modificado. Identifica el
+     * campo de texto modificado, comprueba que no se pase de los caracteres
+     * máximos y llama a la funcion encargada de habilitar o deshabilitar los
+     * botones.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
-        // Identifica el TextField que lo ha llamado
         StringProperty textProperty = (StringProperty) observable;
-        // Guarda el textField
         TextField changedTextField = (TextField) textProperty.getBean();
         String changedTextFieldName = changedTextField.getId();
 
         textFieldOverMaxLength(changedTextField, changedTextFieldName);
 
+        if(cbxDescargable.isSelected()){
+            System.out.println("1111");
+        } else {
+            System.out.println("222");
+        }
         habilitarBotones();
-
     }
 
+    /**
+     * Habilita y deshabilita los botones en funcion de si hay campos de texto
+     * con texto o no.
+     */
     private void habilitarBotones() {
         btnBuscar.setDisable(txtBuscarLibro.getText().isEmpty());
 
+        if (!camposTextoVacios()) {
+            btnAnadir.setDisable(false);
+            btnModificar.setDisable(false);
+            btnEliminar.setDisable(false);
+        } else {
+            btnAnadir.setDisable(true);
+            btnModificar.setDisable(true);
+            btnEliminar.setDisable(true);
+        }
+        if(camposTextoConTexto()){
+            btnLimpiar.setDisable(false);
+        } else {
+            btnLimpiar.setDisable(true);
+        }
+    }
+
+    /**
+     * Comprueba si algún campo de texto contiene texto o un checkbox está
+     * seleccionado.
+     *
+     * @return Variable indicando si hay algun campo de texto con texto o no.
+     */
+    private boolean camposTextoConTexto() {
+        System.out.println("AAAAAAAAAAAAA");
+        if (!txtTitulo.getText().isEmpty() || !txtAutor.getText().isEmpty()
+                || !txtEditorial.getText().isEmpty() || !txtGenero.getText().isEmpty()
+                || !txtCantidadTotal.getText().isEmpty() || !txtIsbn.getText().isEmpty()
+                || !txtLinkDescarga.getText().isEmpty() || cbxDescargable.isSelected()) {
+            System.out.println("BBBBBBBBBBBBBBBBB");
+            return true;
+        } else {
+            System.out.println("bbbbb");
+            return false;
+        }
+    }
+
+    /**
+     * Comprueba si algún campo de texto de Titulo, Autor, Editorial, Genero,
+     * CantidadTotal o Isbn está vacio.
+     *
+     * @return Una variable indicando si hay algun campo de texto vacio o no.
+     */
+    private boolean camposTextoVacios() {
+        if (txtTitulo.getText().isEmpty() || txtAutor.getText().isEmpty()
+                || txtEditorial.getText().isEmpty() || txtGenero.getText().isEmpty()
+                || txtCantidadTotal.getText().isEmpty() || txtIsbn.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -226,34 +315,35 @@ public class UILibroController {
      * supera no muestra ni recoge los nuevos caracteres introducidos.
      *
      * @param changedTextField El campo de texto modificado.
-     * @return Variable indicando si supera los 50 caracteres o no.
+     * @param changedTextFieldName El id del campo modificado.
      */
     private void textFieldOverMaxLength(TextField changedTextField, String changedTextFieldName) {
+        int maxLenght = 0;
 
-        if (changedTextFieldName.equals("txtBuscarLibro") || changedTextFieldName.equals("txtAutor")
-                || changedTextFieldName.equals("txtEditorial") || changedTextFieldName.equals("txtGenero")) {
-            if (changedTextField.getText().length() > MAX_LENGHT_TEXTO) {
-                String text = changedTextField.getText().substring(0, MAX_LENGHT_TEXTO);
-                changedTextField.setText(text);
-            }
-            
-        } else if(changedTextFieldName.equals("txtTitulo")){
-            if (changedTextField.getText().length() > MAX_LENGHT_TITULO) {
-                String text = changedTextField.getText().substring(0, MAX_LENGHT_TITULO);
-                changedTextField.setText(text);
-            }
-        }else if(changedTextFieldName.equals("txtCantidadTotal")){
-            if (changedTextField.getText().length() > MAX_LENGHT_CANTIDAD_TOTAL) {
-                String text = changedTextField.getText().substring(0, MAX_LENGHT_CANTIDAD_TOTAL);
-                changedTextField.setText(text);
-            }
-        }else if(changedTextFieldName.equals("txtIsbn")){
-            if (changedTextField.getText().length() > MAX_LENGHT_ISBN) {
-                String text = changedTextField.getText().substring(0, MAX_LENGHT_ISBN);
-                changedTextField.setText(text);
-            }
+        switch (changedTextFieldName) {
+            case "txtBuscarLibro":
+            case "txtAutor":
+            case "txtEditorial":
+            case "txtGenero":
+                maxLenght = MAX_LENGHT_TEXTO;
+                break;
+            case "txtTitulo":
+                maxLenght = MAX_LENGHT_TITULO;
+                break;
+            case "txtCantidadTotal":
+                maxLenght = MAX_LENGHT_CANTIDAD_TOTAL;
+                break;
+            case "txtIsbn":
+                maxLenght = MAX_LENGHT_ISBN;
+                break;
+            default:
+                maxLenght = 200;
+                break;
         }
-
+        if (changedTextField.getText().length() > maxLenght) {
+            String text = changedTextField.getText().substring(0, maxLenght);
+            changedTextField.setText(text);
+        }
     }
 
     /**
