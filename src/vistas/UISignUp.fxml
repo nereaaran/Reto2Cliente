@@ -44,22 +44,22 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <Label fx:id="lblContrasena" layoutX="146.0" layoutY="318.0" prefHeight="27.0" prefWidth="309.0" text="Contraseña">
+      <Label fx:id="lblContrasenia" layoutX="146.0" layoutY="318.0" prefHeight="27.0" prefWidth="309.0" text="Contraseña">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtContrasena" layoutX="146.0" layoutY="345.0" prefHeight="25.0" prefWidth="309.0" promptText="Introduce la contraseña">
+      <PasswordField fx:id="txtContrasenia" layoutX="146.0" layoutY="345.0" prefHeight="25.0" prefWidth="309.0" promptText="Introduce la contraseña">
          <font>
             <Font size="14.0" />
          </font>
       </PasswordField>
-      <Label fx:id="lblRepiteContrasena" layoutX="146.0" layoutY="400.0" prefHeight="27.0" prefWidth="309.0" text="Repite la contraseña">
+      <Label fx:id="lblRepiteContrasenia" layoutX="146.0" layoutY="400.0" prefHeight="27.0" prefWidth="309.0" text="Repite la contraseña">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtRepiteContrasena" layoutX="146.0" layoutY="427.0" prefHeight="25.0" prefWidth="309.0" promptText="Repite la contraseña">
+      <PasswordField fx:id="txtRepiteContrasenia" layoutX="146.0" layoutY="427.0" prefHeight="25.0" prefWidth="309.0" promptText="Repite la contraseña">
          <font>
             <Font size="14.0" />
          </font>
@@ -74,8 +74,8 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Label fx:id="lblRepiteContrasenaError" layoutX="147.0" layoutY="464.0" prefHeight="17.0" prefWidth="441.0" />
-      <Label fx:id="lblContrasenaError" layoutX="146.0" layoutY="382.0" prefHeight="17.0" prefWidth="309.0" />
+      <Label fx:id="lblRepiteContraseniaError" layoutX="147.0" layoutY="464.0" prefHeight="17.0" prefWidth="441.0" />
+      <Label fx:id="lblContraseniaError" layoutX="146.0" layoutY="382.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblUsuarioError" layoutX="146.0" layoutY="300.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblEmailError" layoutX="146.0" layoutY="218.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblNombreError" layoutX="147.0" layoutY="137.0" prefHeight="17.0" prefWidth="309.0" />

@@ -138,8 +138,8 @@ public class UIAlumnoController {
 
     private Stage stage;
 
-    public void setStage(Stage stageAlumno) {
-        stage = stageAlumno;
+    public void setStage(Stage primaryStage) {
+        stage = primaryStage;
     }
 
     public void initStage(Parent root) {
@@ -148,6 +148,8 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
+
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
 
         btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
@@ -387,14 +389,14 @@ public class UIAlumnoController {
 
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-
+        
         alert.setTitle("Salir");
         alert.setHeaderText(null);
         alert.setContentText("¿Seguro que quieres cerrar la ventana?");
-
+        
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
         Optional<ButtonType> result = alert.showAndWait();
-
+        
         if (result.get().equals(ButtonType.OK)) {
             stage.close();
             Platform.exit();

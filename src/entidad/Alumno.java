@@ -6,7 +6,6 @@
 package entidad;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Collection;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;

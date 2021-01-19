@@ -5,7 +5,6 @@
  */
 package interfaces;
 
-import entidad.Alumno;
 import entidad.Usuario;
 import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
