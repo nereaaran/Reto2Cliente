@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,6 +43,28 @@ public class UILibroController {
      * Atributo estático y constante que guarda los loggers de la clase.
      */
     private static final Logger LOGGER = Logger.getLogger("controladores.UILibroController");
+
+    /**
+     * Variable que guarda los carácteres máximos de los campos de texto autor,
+     * genero y editorial.
+     */
+    private static final int MAX_LENGHT_TEXTO = 50;
+
+    /**
+     * Variable que guarda los carácteres máximos del campo de texto titulo.
+     */
+    private static final int MAX_LENGHT_TITULO = 50;
+
+    /**
+     * Variable que guarda los carácteres máximos del campo de texto isbn.
+     */
+    private static final int MAX_LENGHT_ISBN = 13;
+
+    /**
+     * Variable que guarda los carácteres máximos del campo de texto cantidad
+     * total.
+     */
+    private static final int MAX_LENGHT_CANTIDAD_TOTAL = 3;
 
     /**
      * Lista de elementos importados de la vista FXML que representan objetos.
@@ -158,7 +181,7 @@ public class UILibroController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
-        LOGGER.info("Libro Controlador: Iniciando stage principal");
+        LOGGER.info("Libro Controlador: Iniciando stage");
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -173,50 +196,66 @@ public class UILibroController {
         btnLimpiar.setDisable(true);
         btnBuscar.setDisable(true);
 
-        
         txtBuscarLibro.textProperty().addListener(this::handleTextoCambiado);
-        
-        
+
         txtTitulo.requestFocus();
-        
+
         stage.show();
     }
-    
-    
-    private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue){
-        
+
+    private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
+        // Identifica el TextField que lo ha llamado
+        StringProperty textProperty = (StringProperty) observable;
+        // Guarda el textField
+        TextField changedTextField = (TextField) textProperty.getBean();
+        String changedTextFieldName = changedTextField.getId();
+
+        textFieldOverMaxLength(changedTextField, changedTextFieldName);
+
         habilitarBotones();
-        
+
     }
-    
-    
+
     private void habilitarBotones() {
-    
-    
-    
+        btnBuscar.setDisable(txtBuscarLibro.getText().isEmpty());
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    /**
+     * Comprueba que el texto introducido no supera los 50 caracteres. Si se
+     * supera no muestra ni recoge los nuevos caracteres introducidos.
+     *
+     * @param changedTextField El campo de texto modificado.
+     * @return Variable indicando si supera los 50 caracteres o no.
+     */
+    private void textFieldOverMaxLength(TextField changedTextField, String changedTextFieldName) {
+
+        if (changedTextFieldName.equals("txtBuscarLibro") || changedTextFieldName.equals("txtAutor")
+                || changedTextFieldName.equals("txtEditorial") || changedTextFieldName.equals("txtGenero")) {
+            if (changedTextField.getText().length() > MAX_LENGHT_TEXTO) {
+                String text = changedTextField.getText().substring(0, MAX_LENGHT_TEXTO);
+                changedTextField.setText(text);
+            }
+            
+        } else if(changedTextFieldName.equals("txtTitulo")){
+            if (changedTextField.getText().length() > MAX_LENGHT_TITULO) {
+                String text = changedTextField.getText().substring(0, MAX_LENGHT_TITULO);
+                changedTextField.setText(text);
+            }
+        }else if(changedTextFieldName.equals("txtCantidadTotal")){
+            if (changedTextField.getText().length() > MAX_LENGHT_CANTIDAD_TOTAL) {
+                String text = changedTextField.getText().substring(0, MAX_LENGHT_CANTIDAD_TOTAL);
+                changedTextField.setText(text);
+            }
+        }else if(changedTextFieldName.equals("txtIsbn")){
+            if (changedTextField.getText().length() > MAX_LENGHT_ISBN) {
+                String text = changedTextField.getText().substring(0, MAX_LENGHT_ISBN);
+                changedTextField.setText(text);
+            }
+        }
+
+    }
+
     /**
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
