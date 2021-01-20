@@ -5,7 +5,7 @@
  */
 package controladores;
 
-import entidad.Profesor;
+import entidad.*;
 import static entidad.TipoUsuario.PROFESOR;
 import static entidad.UserPrivilege.USER;
 import static entidad.UserStatus.ENABLED;
