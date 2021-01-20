@@ -5,6 +5,7 @@
  */
 package reto2cliente;
 
+import controladores.UIAlumnoController;
 import controladores.UISignInController;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -39,9 +40,11 @@ public class Reto2Cliente extends Application {
 
             // Carga el archivo fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
+            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
             Parent ventana = (Parent) loader.load();
             // Enlaza el controlador con el archivo fxml
             UISignInController controlador = (UISignInController) loader.getController();
+            //UIAlumnoController controlador = (UIAlumnoController) loader.getController();
             // Prepara el escenario principal donde se ejecutara la ventana 
             controlador.setStage(primaryStage);
             // Inicializa la ventana de SignIn

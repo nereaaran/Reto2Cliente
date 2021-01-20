@@ -182,7 +182,16 @@ public class UIAlumnoController {
         boolean vacio = false;
 
         if (txtNombreCompleto.getText().isEmpty() || txtDni.getText().isEmpty() || txtUsuario.getText().isEmpty() || txtEmail.getText().isEmpty()) {
-            btnLimpiar.setDisable(false); //---------------------------- Esta linea si funciona, pero no se deshabilita ----------------------------
+            vacio = true;
+        }
+
+        return vacio;
+    }
+    
+    private boolean camposNoVacios() {
+        boolean vacio = false;
+
+        if (!txtNombreCompleto.getText().isEmpty() || !txtDni.getText().isEmpty() || !txtUsuario.getText().isEmpty() || !txtEmail.getText().isEmpty()) {
             vacio = true;
         }
 
@@ -213,6 +222,12 @@ public class UIAlumnoController {
             btnAnadir.setDisable(false);
             btnModificar.setDisable(false);
             btnEliminar.setDisable(false);
+        }
+        
+        if(camposNoVacios()) {
+            btnLimpiar.setDisable(false);
+        } else {
+            btnLimpiar.setDisable(true);
         }
 
         if (txtBuscarAlumno.getText().isEmpty()) {

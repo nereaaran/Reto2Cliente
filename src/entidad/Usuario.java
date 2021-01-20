@@ -6,6 +6,7 @@
 package entidad;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -54,12 +55,12 @@ public class Usuario implements Serializable {
     /**
      * Fecha del último acceso del usuario.
      */
-    private String lastAccess;
+    private Date lastAccess;
     /**
      * Fecha de la última vez en la que se ha modificado la contraseña del
      * usuario.
      */
-    private String lastPasswordChange;
+    private Date lastPasswordChange;
 
     /**
      * Método que obtiene el id del usuario.
@@ -210,7 +211,7 @@ public class Usuario implements Serializable {
      *
      * @return el último acceso que se va a mostrar.
      */
-    public String getLastAccess() {
+    public Date getLastAccess() {
         return lastAccess;
     }
 
@@ -219,7 +220,7 @@ public class Usuario implements Serializable {
      *
      * @param lastAccess el último acceso que se va a guardar.
      */
-    public void setLastAccess(String lastAccess) {
+    public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
     }
 
@@ -228,7 +229,7 @@ public class Usuario implements Serializable {
      *
      * @return la fecha del último cambio de contraseña que se va a mostrar.
      */
-    public String getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -238,7 +239,7 @@ public class Usuario implements Serializable {
      * @param lastPasswordChange la fecha del último cambio de contraseña que se
      * va a guardar.
      */
-    public void setLastPasswordChange(String lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 

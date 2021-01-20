@@ -13,7 +13,6 @@ import entidad.Usuario;
 import implementaciones.UsuarioGestionImplementation;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -436,16 +435,17 @@ public class UISignUpController {
 
         boolean errorPatrones = comprobarPatrones();
         boolean errorContrasenias = comprobarContrasenias();
-        boolean existeEmail = comprobarEmailExiste();
-        boolean existeUsuario = comprobarUsuarioExiste();
+        //boolean existeEmail = comprobarEmailExiste();
+        //boolean existeUsuario = comprobarUsuarioExiste();
 
         if (!errorPatrones && !errorContrasenias) {
-            if (!existeEmail && !existeUsuario) {
-                LOGGER.info("Sign Up Controlador: Creando nuevo usuario");
+            //if (!existeEmail && !existeUsuario) {
+            LOGGER.info("Sign Up Controlador: Creando nuevo usuario");
 
                 Date date = new Date(System.currentTimeMillis());
 
-                Profesor nuevoProfesor=new Profesor();
+                //Profesor nuevoProfesor = new Profesor();
+                Usuario nuevoProfesor=new Usuario();
                 nuevoProfesor.setLogin(txtUsuario.getText());
                 nuevoProfesor.setEmail(txtEmail.getText());
                 nuevoProfesor.setFullName(txtNombre.getText());
@@ -453,27 +453,27 @@ public class UISignUpController {
                 nuevoProfesor.setPrivilege(USER);
                 nuevoProfesor.setTipoUsuario(PROFESOR);
                 nuevoProfesor.setPassword(txtContrasenia.getText());
-                nuevoProfesor.setLastAccess(date.toString());
-                nuevoProfesor.setLastPasswordChange(date.toString());
-                nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
-
-                UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
-                usuarioGestion.create(nuevoProfesor);
+                nuevoProfesor.setLastAccess(date);
+                nuevoProfesor.setLastPasswordChange(date);
+                //nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
 
                 System.out.println(nuevoProfesor.toString());
 
-                try {
-                    LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
+                UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
+                usuarioGestion.create(nuevoProfesor);
+            
+            try {
+                LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
 
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                    Parent root = (Parent) loader.load();
-                    UIGrupoController controller = ((UIGrupoController) loader.getController());
-                    controller.setStage(stage);
-                    controller.initStage(root);
-                } catch (IOException e) {
-                    LOGGER.severe(e.getMessage());
-                }
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                Parent root = (Parent) loader.load();
+                UIGrupoController controller = ((UIGrupoController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
             }
+            //}
         }
     }
 
@@ -482,7 +482,7 @@ public class UISignUpController {
      *
      * @return Variable que indica si el email existe o no.
      */
-    private boolean comprobarEmailExiste() {
+    /*private boolean comprobarEmailExiste() {
         LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
 
         boolean existe = false;
@@ -502,14 +502,14 @@ public class UISignUpController {
         }
 
         return existe;
-    }
-
+    }*/
+    
     /**
      * Método que comprueba si existe el usuario en la base de datos.
      *
      * @return Variable que indica si el usuario existe o no.
      */
-    private boolean comprobarUsuarioExiste() {
+    /*private boolean comprobarUsuarioExiste() {
         LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
 
         boolean existe = false;
@@ -529,8 +529,8 @@ public class UISignUpController {
         }
 
         return existe;
-    }
-
+    }*/
+    
     /**
      * Método que carga y abre la venta UISignIn.
      *
