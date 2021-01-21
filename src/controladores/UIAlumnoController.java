@@ -35,113 +35,261 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * FXML Controller class
+ * Controlador de la vista UIAlumno que contiene los metodos para definir y
+ * controlar su comportamiento.
  *
  * @author Cristina Milea
  */
 public class UIAlumnoController {
 
+    /**
+     * Atributo estático y constante que guarda los loggers de la clase.
+     */
     public static final Logger LOGGER = Logger.getLogger("controladores.UIAlumnoController");
 
+    /**
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en los campos de texto.
+     */
     private static final int MAX_LENGHT = 50;
+    /**
+     * Atributo estático y constante que guarda los caracteres máximos admitidos
+     * en el campo de texto de teléfono.
+     */
     private static final int MAX_LENGHT_DNI = 9;
 
+    /**
+     * Atributo estático y constante que guarda el patron correcto del nombre.
+     */
     public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto del DNI.
+     */
     public static final Pattern VALID_DNI = Pattern.compile("^[XYZ]{0,1}[0-9]{7,8}[A-Z]", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto del usuario.
+     */
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto del email.
+     */
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
+    /**
+     * Elemento tipo anchorpane importado de la vista FXML.
+     */
     @FXML
     private AnchorPane paneGeneralAlumno;
+    /**
+     * Elemento tipo anchorpane importado de la vista FXML.
+     */
     @FXML
     private AnchorPane paneSuperiorAlumno;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnAnadir;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnModificar;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnEliminar;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnLimpiar;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblDni;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblUsuario;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblNombreCompleto;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblEmail;
+    /**
+     * Elemento tipo textfield importado de la vista FXML.
+     */
     @FXML
     private TextField txtDni;
+    /**
+     * Elemento tipo textfield importado de la vista FXML.
+     */
     @FXML
     private TextField txtUsuario;
+    /**
+     * Elemento tipo textfield importado de la vista FXML.
+     */
     @FXML
     private TextField txtNombreCompleto;
+    /**
+     * Elemento tipo textfield importado de la vista FXML.
+     */
     @FXML
     private TextField txtEmail;
+    /**
+     * Elemento tipo textfield importado de la vista FXML.
+     */
     @FXML
     private TextField txtBuscarAlumno;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblFechaNacimiento;
+    /**
+     * Elemento tipo datepicker importado de la vista FXML.
+     */
     @FXML
     private DatePicker datePickerFechaNacimiento;
+    /**
+     * Elemento tipo menubutton importado de la vista FXML.
+     */
     @FXML
     private MenuButton menuGrupos;
+    /**
+     * Elemento tipo menuitem importado de la vista FXML.
+     */
     @FXML
     private MenuItem lbNombreGrupo;
+    /**
+     * Elemento tipo checkbox importado de la vista FXML.
+     */
     @FXML
     private CheckBox cbxNomberGrupo;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnVolver;
+    /**
+     * Elemento tipo botón importado de la vista FXML.
+     */
     @FXML
     private Button btnBuscar;
-    @FXML
-    private MenuBar munuBar;
-    @FXML
-    private MenuItem mnMiPerfil;
-    @FXML
-    private MenuItem mnCerrarSesion;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblNombreCompletoError;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblDniError;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblUsuarioError;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblEmailError;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblFechaNacimientoError;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblBuscarAlumnoError;
+    /**
+     * Elemento tipo anchorpane importado de la vista FXML.
+     */
     @FXML
     private AnchorPane paneInferiorAlumno;
+    /**
+     * Elemento tipo tabla importado de la vista FXML.
+     */
     @FXML
     private TableView<?> tablaAlumnos;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> dniCL;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> nombreCompletoCL;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> fechaNacimientoCL;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> emailCL;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableView<?> tablaGrupos;
+    /**
+     * Elemento tipo tabla importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> nombreGrupoCL;
+    /**
+     * Elemento tipo tablecolumn importado de la vista FXML.
+     */
     @FXML
     private TableColumn<?, ?> numeroAlumnosCL;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblListaGrupos;
+    /**
+     * Elemento tipo label importado de la vista FXML.
+     */
     @FXML
     private Label lblAlumnosAsignados;
 
+    /**
+     * Variable de tipo stage que se usa para visualizar la ventana.
+     */
     private Stage stage;
 
+    /**
+     * Método que establece el escenario como escenario principal.
+     *
+     * @param primaryStage El escenario de Sign Up.
+     */
     public void setStage(Stage primaryStage) {
         stage = primaryStage;
     }
 
+    /**
+     * Método que inicializa el escenario y los componentes de la vista.
+     *
+     * @param root El objeto padre que representa el nodo root.
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -178,6 +326,11 @@ public class UIAlumnoController {
         txtNombreCompleto.requestFocus();
     }
 
+    /**
+     * Método que comprueba que si hay algún campo de texto vacio.
+     *
+     * @return Variable que indica si hay algún campo de texto vacío.
+     */
     private boolean camposVacios() {
         boolean vacio = false;
 
@@ -187,7 +340,13 @@ public class UIAlumnoController {
 
         return vacio;
     }
-    
+
+    /**
+     * Método que comprueba que si hay algún campo de texto que no esté vacío.
+     *
+     * @return Variable que indica si hay algún campo de texto que no esté
+     * vacío.
+     */
     private boolean camposNoVacios() {
         boolean vacio = false;
 
@@ -198,6 +357,11 @@ public class UIAlumnoController {
         return vacio;
     }
 
+    /**
+     * Método que comprueba que si el datepicker está vacío.
+     *
+     * @return Variable que indica si el datepicker está vacío.
+     */
     private boolean datePickerVacio() {
         boolean vacio = false;
 
@@ -213,6 +377,10 @@ public class UIAlumnoController {
         return vacio;
     }
 
+    /**
+     * Método que habilita y deshabilita o habilita los botones Añadir,
+     * Modificar y Eliminar.
+     */
     private void habilitarBotones() {
         if (camposVacios()) {
             btnAnadir.setDisable(true);
@@ -223,8 +391,8 @@ public class UIAlumnoController {
             btnModificar.setDisable(false);
             btnEliminar.setDisable(false);
         }
-        
-        if(camposNoVacios()) {
+
+        if (camposNoVacios()) {
             btnLimpiar.setDisable(false);
         } else {
             btnLimpiar.setDisable(true);
@@ -237,6 +405,14 @@ public class UIAlumnoController {
         }
     }
 
+    /**
+     * Método que comprueba la longitud de los campos de texto. Si exceden el
+     * maximo permitido no recoge el resto de carácteres.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreCompleto.getText().length() > MAX_LENGHT) {
             String nombreCompleto = txtNombreCompleto.getText().substring(0, MAX_LENGHT);
@@ -266,6 +442,14 @@ public class UIAlumnoController {
         habilitarBotones();
     }
 
+    /**
+     * Método que comprueba que el texto introducido en los campos de texto de
+     * Nombre Completo, DNI, Usuario e Email cumple con los patrones
+     * establecidos, si no lo hace muestra el error en los labels
+     * correspondientes.
+     *
+     * @return Variable que indica si hay algún patrón que no se cumple.
+     */
     private boolean comprobarPatrones() {
         boolean error = false;
 
@@ -328,6 +512,11 @@ public class UIAlumnoController {
         return error;
     }
 
+    /**
+     * Método que añade un alumno nuevo a la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void botonAnadirPulsado(ActionEvent event) {
         boolean errorPatrones = comprobarPatrones();
         boolean errorDatePicker = datePickerVacio();
@@ -337,6 +526,11 @@ public class UIAlumnoController {
         }
     }
 
+    /**
+     * Método que modifica un alumno de la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void botonModificarPulsado(ActionEvent event) {
         boolean errorPatrones = comprobarPatrones();
         boolean errorDatePicker = datePickerVacio();
@@ -346,6 +540,11 @@ public class UIAlumnoController {
         }
     }
 
+    /**
+     * Método que elimina un alumno de la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void botonEliminarPulsado(ActionEvent event) {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -363,13 +562,28 @@ public class UIAlumnoController {
         }
     }
 
+    /**
+     * Método que vacía los campos de texto y labels de error.
+     *
+     * @param event El evento de acción.
+     */
     private void botonLimpiarPulsado(ActionEvent event) {
         limpiarCampos();
     }
 
+    /**
+     * Método que busca un alumno en la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void botonBuscarPulsado(ActionEvent event) {
     }
 
+    /**
+     * Método que carga y abre la ventana UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
     private void botonVolverPulsado(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
@@ -382,6 +596,11 @@ public class UIAlumnoController {
         }
     }
 
+    /**
+     * Método que vacía los campos de texto y labels de error.
+     *
+     * @param event El evento de acción.
+     */
     private void limpiarCampos() {
         txtNombreCompleto.clear();
         txtDni.clear();
@@ -402,16 +621,22 @@ public class UIAlumnoController {
         txtNombreCompleto.requestFocus();
     }
 
+    /**
+     * Cuadro de diálogo que se abre al pulsar la "X" de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        
+
         alert.setTitle("Salir");
         alert.setHeaderText(null);
         alert.setContentText("¿Seguro que quieres cerrar la ventana?");
-        
+
         alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
         Optional<ButtonType> result = alert.showAndWait();
-        
+
         if (result.get().equals(ButtonType.OK)) {
             stage.close();
             Platform.exit();
