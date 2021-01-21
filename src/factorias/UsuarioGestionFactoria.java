@@ -27,7 +27,7 @@ public class UsuarioGestionFactoria {
      * @return la implementación.
      */
     public static UsuarioGestion crearUsuarioGestion() {
-        LOGGER.info("UsuarioGestionFactoria: Creando la implementacion");
+        LOGGER.info("UsuarioGestionFactoria: Creando la implementacion de Usuario");
 
         UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
 

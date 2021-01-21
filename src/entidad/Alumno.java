@@ -40,6 +40,17 @@ public class Alumno extends Usuario implements Serializable {
     private Collection<Grupo> grupos;
 
     /**
+     * Constructor vacío que hereda los atributos de la clase Usuario.
+     */
+    public Alumno() {
+        super();
+        this.dni = null;
+        this.fechaNacimiento = null;
+        this.alumnoLibros = null;
+        this.grupos = null;
+    }
+
+    /**
      * Método que obtiene el DNI del alumno.
      *
      * @return el DNI que va a mostrar.
@@ -116,7 +127,7 @@ public class Alumno extends Usuario implements Serializable {
      *
      * @return el código hash del objeto.
      */
-    @Override    
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 83 * hash + Objects.hashCode(this.dni);
@@ -132,7 +143,7 @@ public class Alumno extends Usuario implements Serializable {
      * @param obj cualquier tipo de objeto.
      * @return un "false" si los objetos noson iguales y un "true" si lo son.
      */
-    @Override    
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -167,5 +178,5 @@ public class Alumno extends Usuario implements Serializable {
     @Override
     public String toString() {
         return "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
-    }    
+    }
 }

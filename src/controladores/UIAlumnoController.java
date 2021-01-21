@@ -5,13 +5,20 @@
  */
 package controladores;
 
+import entidad.*;
+import entidad.Usuario;
+import implementaciones.UsuarioGestionImplementation;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,12 +30,12 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -224,42 +231,42 @@ public class UIAlumnoController {
      * Elemento tipo tabla importado de la vista FXML.
      */
     @FXML
-    private TableView<?> tablaAlumnos;
+    private TableView<Alumno> tablaAlumnos;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> dniCL;
+    private TableColumn<Alumno, String> dniCL;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> nombreCompletoCL;
+    private TableColumn<Alumno, String> nombreCompletoCL;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> fechaNacimientoCL;
+    private TableColumn<Alumno, Date> fechaNacimientoCL;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> emailCL;
+    private TableColumn<Alumno, String> emailCL;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableView<?> tablaGrupos;
+    private TableView<Grupo> tablaGrupos;
     /**
      * Elemento tipo tabla importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> nombreGrupoCL;
+    private TableColumn<Grupo, String> nombreGrupoCL;
     /**
      * Elemento tipo tablecolumn importado de la vista FXML.
      */
     @FXML
-    private TableColumn<?, ?> numeroAlumnosCL;
+    private TableColumn<Grupo, Integer> numeroAlumnosCL;
     /**
      * Elemento tipo label importado de la vista FXML.
      */
@@ -272,6 +279,11 @@ public class UIAlumnoController {
     private Label lblAlumnosAsignados;
 
     /**
+     * Entidad Usuario del lado cliente.
+     */
+    private ObservableList<Usuario> alumnos;
+    
+    /**
      * Variable de tipo stage que se usa para visualizar la ventana.
      */
     private Stage stage;
@@ -282,6 +294,8 @@ public class UIAlumnoController {
      * @param primaryStage El escenario de Sign Up.
      */
     public void setStage(Stage primaryStage) {
+        LOGGER.info("Alumno Controlador: Estableciendo stage");
+        
         stage = primaryStage;
     }
 
@@ -291,12 +305,28 @@ public class UIAlumnoController {
      * @param root El objeto padre que representa el nodo root.
      */
     public void initStage(Parent root) {
+        LOGGER.info("Alumno Controlador: Iniciando stage");
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
 
+        nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
+                
+        //Falta lo de jony
+        
+        dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
+        emailCL.setCellValueFactory(new PropertyValueFactory<>("email"));
+            
+        /*UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
+        alumnos=FXCollections.observableArrayList(usuarioGestion.consultarTodosAlumnos());
+        tablaAlumnos.setItems(alumnos);*/
+        
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
         btnAnadir.setDisable(true);
@@ -518,11 +548,15 @@ public class UIAlumnoController {
      * @param event El evento de acción.
      */
     private void botonAnadirPulsado(ActionEvent event) {
+        LOGGER.info("Alumno Controlador: Comprobando errores");
+        
         boolean errorPatrones = comprobarPatrones();
         boolean errorDatePicker = datePickerVacio();
 
         if (!errorPatrones || !errorDatePicker) {
-            lblBuscarAlumnoError.setText("OK"); //Quitar mas tarde
+            LOGGER.info("Alumno Controlador: Añadiendo alumno a la base de datos");
+        
+            //CREATE
         }
     }
 

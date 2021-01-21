@@ -5,14 +5,14 @@
  */
 package controladores;
 
-import entidad.*;
 import static entidad.TipoUsuario.PROFESOR;
 import static entidad.UserPrivilege.USER;
 import static entidad.UserStatus.ENABLED;
-import entidad.Usuario;
+import entidad.*;
 import implementaciones.UsuarioGestionImplementation;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -62,31 +62,26 @@ public class UISignUpController {
     private static final int MAX_LENGHT_TELEFONO = 9;
 
     /**
-     * Atributo estático y constante que guarda el patron correcto de nombre.
+     * Atributo estático y constante que guarda el patron correcto del nombre.
      */
     public static final Pattern VALID_NOMBRE = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
     /**
-     * Atributo estático y constante que guarda el patron correcto de email.
+     * Atributo estático y constante que guarda el patron correcto del email.
      */
     public static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     /**
-     * Atributo estático y constante que guarda el patron correcto de usuario.
+     * Atributo estático y constante que guarda el patron correcto del usuario.
      */
     public static final Pattern VALID_USUARIO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     /**
-     * Atributo estático y constante que guarda el patron correcto de
+     * Atributo estático y constante que guarda el patron correcto de la
      * contraseña.
      */
     public static final Pattern VALID_CONTRASENIA = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
     /**
-     * Atributo estático y constante que guarda el patron correcto de telefono.
+     * Atributo estático y constante que guarda el patron correcto del teléfono.
      */
     public static final Pattern VALID_TELEFONO = Pattern.compile("^[0-9]{9}", Pattern.CASE_INSENSITIVE);
-
-    /**
-     * Variable de tipo stage que se usa para visualizar la ventana.
-     */
-    private Stage stage;
 
     /**
      * Elemento tipo pane importado de la vista FXML.
@@ -204,7 +199,12 @@ public class UISignUpController {
     private Label lblNumeroTelefonoError;
 
     /**
-     * Método que establece al escenario del login como escenario principal.
+     * Variable de tipo stage que se usa para visualizar la ventana.
+     */
+    private Stage stage;
+
+    /**
+     * Método que establece el escenario del sign up como escenario principal.
      *
      * @param primaryStage El escenario de Sign Up.
      */
@@ -215,7 +215,7 @@ public class UISignUpController {
     }
 
     /**
-     * Método que inicializa el escenario y los componentes del Login.
+     * Método que inicializa el escenario y los componentes del Sign Up.
      *
      * @param root El objeto padre que representa el nodo root.
      */
@@ -435,17 +435,17 @@ public class UISignUpController {
 
         boolean errorPatrones = comprobarPatrones();
         boolean errorContrasenias = comprobarContrasenias();
-        //boolean existeEmail = comprobarEmailExiste();
-        //boolean existeUsuario = comprobarUsuarioExiste();
+        boolean existeEmail = comprobarEmailExiste();
+        boolean existeUsuario = comprobarUsuarioExiste();
 
         if (!errorPatrones && !errorContrasenias) {
-            //if (!existeEmail && !existeUsuario) {
-            LOGGER.info("Sign Up Controlador: Creando nuevo usuario");
+            if (!existeEmail && !existeUsuario) {
+                LOGGER.info("Sign Up Controlador: Creando nuevo profesor");
 
                 Date date = new Date(System.currentTimeMillis());
 
-                //Profesor nuevoProfesor = new Profesor();
-                Usuario nuevoProfesor=new Usuario();
+                Profesor nuevoProfesor = new Profesor();
+                //Usuario nuevoProfesor = new Usuario();
                 nuevoProfesor.setLogin(txtUsuario.getText());
                 nuevoProfesor.setEmail(txtEmail.getText());
                 nuevoProfesor.setFullName(txtNombre.getText());
@@ -455,25 +455,31 @@ public class UISignUpController {
                 nuevoProfesor.setPassword(txtContrasenia.getText());
                 nuevoProfesor.setLastAccess(date);
                 nuevoProfesor.setLastPasswordChange(date);
-                //nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
+                nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
 
                 System.out.println(nuevoProfesor.toString());
 
                 UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
                 usuarioGestion.create(nuevoProfesor);
-            
-            try {
-                LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                Parent root = (Parent) loader.load();
-                UIGrupoController controller = ((UIGrupoController) loader.getController());
-                controller.setStage(stage);
-                controller.initStage(root);
-            } catch (IOException e) {
-                LOGGER.severe(e.getMessage());
+                Usuario usuario = usuarioGestion.find(1);
+                System.out.println(usuario.toString());
+
+                usuario.setFullName("Macaulay Culkin");
+                usuarioGestion.edit(usuario);
+
+                try {
+                    LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                    Parent root = (Parent) loader.load();
+                    UIGrupoController controller = ((UIGrupoController) loader.getController());
+                    controller.setStage(stage);
+                    controller.initStage(root);
+                } catch (IOException e) {
+                    LOGGER.severe(e.getMessage());
+                }
             }
-            //}
         }
     }
 
@@ -482,7 +488,7 @@ public class UISignUpController {
      *
      * @return Variable que indica si el email existe o no.
      */
-    /*private boolean comprobarEmailExiste() {
+    private boolean comprobarEmailExiste() {
         LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
 
         boolean existe = false;
@@ -502,14 +508,14 @@ public class UISignUpController {
         }
 
         return existe;
-    }*/
+    }
     
     /**
      * Método que comprueba si existe el usuario en la base de datos.
      *
      * @return Variable que indica si el usuario existe o no.
      */
-    /*private boolean comprobarUsuarioExiste() {
+    private boolean comprobarUsuarioExiste() {
         LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
 
         boolean existe = false;
@@ -529,10 +535,10 @@ public class UISignUpController {
         }
 
         return existe;
-    }*/
+    }
     
     /**
-     * Método que carga y abre la venta UISignIn.
+     * Método que carga y abre la ventana UISignIn.
      *
      * @param event El evento de acción.
      */
@@ -556,7 +562,7 @@ public class UISignUpController {
     }
 
     /**
-     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * Cuadro de diálogo que se abre al pulsar la "X" de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
      *
      * @param event El evento de acción.

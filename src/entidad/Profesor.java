@@ -19,10 +19,8 @@ public class Profesor extends Usuario implements Serializable{
     private  Integer telefono;
 
     public Profesor() {
-    }
-
-    public Profesor(Integer telefono) {
-        this.telefono = telefono;
+        super();
+        this.telefono = null;
     }
 
     public Integer getTelefono() {

@@ -5,7 +5,7 @@
  */
 package implementaciones;
 
-import entidad.Usuario;
+import entidad.*;
 import interfaces.UsuarioGestion;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -61,8 +61,14 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @param usuario el usuario que se modificará.
      */
     @Override
-    public void edit(Usuario usuario) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void edit(Usuario usuario) {
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Editando usuario");
+
+            webClient.edit(usuario);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     /**
@@ -72,8 +78,14 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @param id el id del usuario que se eliminará.
      */
     @Override
-    public void remove(Integer id) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void remove(Integer id) {
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Borrando usuario");
+
+            webClient.remove(id);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     /**
@@ -83,8 +95,17 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @param id el id del usuario por el que buscará.
      */
     @Override
-    public Usuario find(Integer id) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Usuario find(Integer id) {
+        Usuario usuario = null;
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por id");
+
+            usuario = webClient.find(Usuario.class, id);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
     }
 
     /**
@@ -97,6 +118,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Collection<Usuario> buscarUsuarioPorLogin(String login) {
         Collection<Usuario> usuario = null;
+
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login");
 
@@ -119,6 +141,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Collection<Usuario> buscarUsuarioPorEmail(String email) {
         Collection<Usuario> usuario = null;
+
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
 
