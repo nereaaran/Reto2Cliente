@@ -6,7 +6,6 @@
 package interfaces;
 
 import entidad.Alumno;
-import javax.ws.rs.ClientErrorException;
 
 /**
  * Interfaz lógica que declara los métodos para la gestión de los alumnos.
@@ -20,21 +19,21 @@ public interface AlumnoGestion {
      *
      * @param alumno Objeto alumno que se va a añadir.
      */
-    public void create(Alumno alumno) throws ClientErrorException;
+    public void create(Alumno alumno);
 
     /**
      * Método que actualiza la información de un alumno existente.
      *
      * @param alumno Objeto bibliotecario que se va a actualizar.
      */
-    public void edit(Alumno alumno) throws ClientErrorException;
+    public void edit(Alumno alumno);
 
     /**
      * Método que elimina un alumno existente.
      *
      * @param id El id del alumno que se va a eliminar.
      */
-    public void remove(Integer id) throws ClientErrorException;
+    public void remove(Integer id);
 
     /**
      * Método que obtiene información de un alumno existente por id.
@@ -42,5 +41,5 @@ public interface AlumnoGestion {
      * @param id El id del alumno del que se quiere obtener la información.
      * @return Objeto Alumno con la información del alumno. buscado.
      */
-    public Alumno find(Integer id) throws ClientErrorException;
+    public Alumno find(Integer id);
 }

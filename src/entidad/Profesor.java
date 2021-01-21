@@ -14,9 +14,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author JonY
  */
 @XmlRootElement(name = "profesor")
-public class Profesor extends Usuario implements Serializable{
-    
-    private  Integer telefono;
+public class Profesor extends Usuario implements Serializable {
+
+    private Integer telefono;
 
     public Profesor() {
         super();
@@ -33,8 +33,8 @@ public class Profesor extends Usuario implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.telefono);
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.telefono);
         return hash;
     }
 
@@ -54,5 +54,11 @@ public class Profesor extends Usuario implements Serializable{
             return false;
         }
         return true;
-    }   
+    }
+
+    @Override
+    public String toString() {
+        String toString = super.toString();
+        return toString + "\n" + "Profesor{" + "telefono=" + telefono + '}';
+    }
 }

@@ -5,7 +5,11 @@
  */
 package factorias;
 
+import implementaciones.AlumnoGestionImplementation;
+import implementaciones.ProfesorGestionImplementation;
 import implementaciones.UsuarioGestionImplementation;
+import interfaces.AlumnoGestion;
+import interfaces.ProfesorGestion;
 import interfaces.UsuarioGestion;
 import java.util.logging.Logger;
 
@@ -26,11 +30,27 @@ public class UsuarioGestionFactoria {
      *
      * @return la implementación.
      */
-    public static UsuarioGestion crearUsuarioGestion() {
+    public static UsuarioGestion getUsuarioGestion() {
         LOGGER.info("UsuarioGestionFactoria: Creando la implementacion de Usuario");
 
         UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
 
         return usuarioGestion;
+    }
+
+    public static ProfesorGestion getProfesorGestion() {
+        LOGGER.info("UsuarioGestionFactoria: Creando la implementacion de Profesor");
+
+        ProfesorGestion profesorGestion = new ProfesorGestionImplementation();
+
+        return profesorGestion;
+    }
+
+    public static AlumnoGestion getAlumnoGestion() {
+        LOGGER.info("UsuarioGestionFactoria: Creando la implementacion de Alumno");
+
+        AlumnoGestion alumnoGestion = new AlumnoGestionImplementation();
+
+        return alumnoGestion;
     }
 }

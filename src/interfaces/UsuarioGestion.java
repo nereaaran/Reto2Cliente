@@ -5,9 +5,8 @@
  */
 package interfaces;
 
-import entidad.*;
+import entidad.Usuario;
 import java.util.Collection;
-import javax.ws.rs.ClientErrorException;
 
 /**
  * Interfaz lógica que declara los métodos para la gestión de los usuarios.
@@ -68,14 +67,14 @@ public interface UsuarioGestion {
      * @param contrasenia La contraseña del usuario.
      * @return Colección de usuario con el login y contraseña buscada.
      */
-    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia) throws ClientErrorException;
+    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia);
 
     /**
      * Método que busca todos los alumnos.
      *
      * @return Colección de todos los alumnos.
      */
-    public Collection<Usuario> consultarTodosAlumnos() throws ClientErrorException;
+    public Collection<Usuario> consultarTodosAlumnos();
 
     /**
      * Método que busca todos los alumnos por nombre.
@@ -83,6 +82,6 @@ public interface UsuarioGestion {
      * @param nombre El nombre por el que se quire buscar.
      * @return Colección de todos los alumnos con el nombre buscado.
      */
-    public Collection<Usuario> buscarAlumnoPorNombre(String nombre) throws ClientErrorException;
+    public Collection<Usuario> buscarAlumnoPorNombre(String nombre);
 
 }

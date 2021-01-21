@@ -9,7 +9,9 @@ import static entidad.TipoUsuario.PROFESOR;
 import static entidad.UserPrivilege.USER;
 import static entidad.UserStatus.ENABLED;
 import entidad.*;
+import factorias.UsuarioGestionFactoria;
 import implementaciones.UsuarioGestionImplementation;
+import interfaces.ProfesorGestion;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Collection;
@@ -435,51 +437,42 @@ public class UISignUpController {
 
         boolean errorPatrones = comprobarPatrones();
         boolean errorContrasenias = comprobarContrasenias();
-        boolean existeEmail = comprobarEmailExiste();
-        boolean existeUsuario = comprobarUsuarioExiste();
+        //boolean existeEmail = comprobarEmailExiste();
+        //boolean existeUsuario = comprobarUsuarioExiste();
 
         if (!errorPatrones && !errorContrasenias) {
-            if (!existeEmail && !existeUsuario) {
-                LOGGER.info("Sign Up Controlador: Creando nuevo profesor");
+            //if (!existeEmail && !existeUsuario) {
+            LOGGER.info("Sign Up Controlador: Creando nuevo profesor");
 
-                Date date = new Date(System.currentTimeMillis());
+            Date date = new Date(System.currentTimeMillis());
 
-                Profesor nuevoProfesor = new Profesor();
-                //Usuario nuevoProfesor = new Usuario();
-                nuevoProfesor.setLogin(txtUsuario.getText());
-                nuevoProfesor.setEmail(txtEmail.getText());
-                nuevoProfesor.setFullName(txtNombre.getText());
-                nuevoProfesor.setStatus(ENABLED);
-                nuevoProfesor.setPrivilege(USER);
-                nuevoProfesor.setTipoUsuario(PROFESOR);
-                nuevoProfesor.setPassword(txtContrasenia.getText());
-                nuevoProfesor.setLastAccess(date);
-                nuevoProfesor.setLastPasswordChange(date);
-                nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
+            Profesor nuevoProfesor = new Profesor();
+            nuevoProfesor.setLogin(txtUsuario.getText());
+            nuevoProfesor.setEmail(txtEmail.getText());
+            nuevoProfesor.setFullName(txtNombre.getText());
+            nuevoProfesor.setStatus(ENABLED);
+            nuevoProfesor.setPrivilege(USER);
+            nuevoProfesor.setTipoUsuario(PROFESOR);
+            nuevoProfesor.setPassword(txtContrasenia.getText());
+            nuevoProfesor.setLastAccess(date);
+            nuevoProfesor.setLastPasswordChange(date);
+            nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
 
-                System.out.println(nuevoProfesor.toString());
+            ProfesorGestion profesorGestion = UsuarioGestionFactoria.getProfesorGestion();
+            profesorGestion.create(nuevoProfesor);
 
-                UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
-                usuarioGestion.create(nuevoProfesor);
+            try {
+                LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
 
-                Usuario usuario = usuarioGestion.find(1);
-                System.out.println(usuario.toString());
-
-                usuario.setFullName("Macaulay Culkin");
-                usuarioGestion.edit(usuario);
-
-                try {
-                    LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
-
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                    Parent root = (Parent) loader.load();
-                    UIGrupoController controller = ((UIGrupoController) loader.getController());
-                    controller.setStage(stage);
-                    controller.initStage(root);
-                } catch (IOException e) {
-                    LOGGER.severe(e.getMessage());
-                }
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                Parent root = (Parent) loader.load();
+                UIGrupoController controller = ((UIGrupoController) loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+            } catch (IOException e) {
+                LOGGER.severe(e.getMessage());
             }
+            //}
         }
     }
 
@@ -509,7 +502,7 @@ public class UISignUpController {
 
         return existe;
     }
-    
+
     /**
      * Método que comprueba si existe el usuario en la base de datos.
      *
@@ -536,7 +529,7 @@ public class UISignUpController {
 
         return existe;
     }
-    
+
     /**
      * Método que carga y abre la ventana UISignIn.
      *

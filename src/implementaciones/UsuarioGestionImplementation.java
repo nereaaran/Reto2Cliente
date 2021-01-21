@@ -5,7 +5,7 @@
  */
 package implementaciones;
 
-import entidad.*;
+import entidad.Usuario;
 import interfaces.UsuarioGestion;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -163,7 +163,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia) throws ClientErrorException {
+    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -174,7 +174,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection<Usuario> consultarTodosAlumnos() throws ClientErrorException {
+    public Collection<Usuario> consultarTodosAlumnos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -186,7 +186,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection<Usuario> buscarAlumnoPorNombre(String nombre) throws ClientErrorException {
+    public Collection<Usuario> buscarAlumnoPorNombre(String nombre) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

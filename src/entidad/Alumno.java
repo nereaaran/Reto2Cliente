@@ -129,11 +129,11 @@ public class Alumno extends Usuario implements Serializable {
      */
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.dni);
-        hash = 83 * hash + Objects.hashCode(this.fechaNacimiento);
-        hash = 83 * hash + Objects.hashCode(this.alumnoLibros);
-        hash = 83 * hash + Objects.hashCode(this.grupos);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.dni);
+        hash = 29 * hash + Objects.hashCode(this.fechaNacimiento);
+        hash = 29 * hash + Objects.hashCode(this.alumnoLibros);
+        hash = 29 * hash + Objects.hashCode(this.grupos);
         return hash;
     }
 
@@ -177,6 +177,7 @@ public class Alumno extends Usuario implements Serializable {
      */
     @Override
     public String toString() {
-        return "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
+        String toString = super.toString();
+        return toString + "\n" + "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
     }
 }

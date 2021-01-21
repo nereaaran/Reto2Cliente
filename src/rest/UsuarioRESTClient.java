@@ -21,7 +21,7 @@ import javax.ws.rs.core.GenericType;
  *        client.close();
  * </pre>
  *
- * @author Cristina Milea y Nerea Aranguren.
+ * @author Cristina Milea y Nerea Aranguren
  */
 public class UsuarioRESTClient {
 
