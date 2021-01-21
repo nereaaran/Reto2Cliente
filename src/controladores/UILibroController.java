@@ -5,7 +5,10 @@
  */
 package controladores;
 
+import entidad.Libro;
+import implementaciones.LibroGestionImplementation;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -253,12 +256,68 @@ public class UILibroController {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBtnAnadir(ActionEvent event) {
+        
+        Libro libroPrueba = new Libro();
+        
+        libroPrueba.setTitulo("JAVa para novatOs");
+        libroPrueba.setAutor("c");
+        libroPrueba.setEditorial("c");
+        libroPrueba.setIsbn(new Long(1));
+        libroPrueba.setGenero("c");
+        libroPrueba.setCantidadTotal(2);
+        libroPrueba.setCantidadDisponible(2);
+        libroPrueba.setDescargable(false);
+        libroPrueba.setLinkDescarga("");
+        
+        
         if (patronesTextoBien()) {
-            ///////////////////////////////////////////////
-            limpiarCamposTexto();
+            if(comprobarLibroExiste(libroPrueba)){
+                System.out.println("EXISTE");
+            } else {
+                System.out.println("NO EXISTE");
+            }
+            //limpiarCamposTexto();
         }
     }
 
+    private boolean comprobarLibroExiste(Libro libro){
+        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+        Collection<Libro> libros = null;
+        libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
+        
+        if(libros.size()>0){
+            for(Libro l : libros){
+                if(l.getTitulo().equalsIgnoreCase(libro.getTitulo())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Comprueba que los patrone de titulo, autor, editorial, genero, cantidad
      * total e isbn son correctos.
