@@ -24,7 +24,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     /**
      * Atributo estático y constante que guarda los loggers de la clase.
      */
-    private static final Logger LOGGER = Logger.getLogger("implementaciones.LibroGestionImplementation");
+    private static final Logger LOGGER = Logger.getLogger("implementaciones.UsuarioGestionImplementation");
 
     /**
      * Cliente web de REST usuario.
@@ -48,6 +48,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     public void create(Usuario usuario) {
         try {
             LOGGER.info("UsuarioGestionImplementation: Creando usuario");
+
             webClient.create(usuario);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
@@ -97,6 +98,8 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     public Collection<Usuario> buscarUsuarioPorLogin(String login) {
         Collection<Usuario> usuario = null;
         try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login");
+
             usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
             }, login);
         } catch (ClientErrorException e) {
@@ -117,6 +120,8 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     public Collection<Usuario> buscarUsuarioPorEmail(String email) {
         Collection<Usuario> usuario = null;
         try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
+
             usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
             }, email);
         } catch (ClientErrorException e) {
