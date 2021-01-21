@@ -5,13 +5,17 @@
  */
 package controladores;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -25,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -62,6 +67,21 @@ public class UILibroController {
      * total.
      */
     private static final int MAX_LENGHT_CANTIDAD_TOTAL = 3;
+    /*
+     * Atributo estático y constante que guarda el patron correcto de titulo.
+     */
+    public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * Atributo estático y constante que guarda el patron correcto de autor,
+     * genero y editorial.
+     */
+    public static final Pattern VALID_AUTOR_GENERO = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto de isbn y
+     * cantidad total.
+     */
+    public static final Pattern VALID_NUMERO = Pattern.compile("^[0-9]", Pattern.CASE_INSENSITIVE);
 
     /**
      * Lista de elementos importados de la vista FXML que representan objetos.
@@ -135,6 +155,8 @@ public class UILibroController {
     @FXML
     private Label lblBuscarLibroError;
     @FXML
+    private Label lblInformacion;
+    @FXML
     private AnchorPane paneInferiorLibro;
     @FXML
     private TableView<?> tablaLibro;
@@ -203,19 +225,106 @@ public class UILibroController {
         txtCantidadTotal.textProperty().addListener(this::handleTextoCambiado);
         txtIsbn.textProperty().addListener(this::handleTextoCambiado);
         txtLinkDescarga.textProperty().addListener(this::handleTextoCambiado);
-        cbxDescargable.selectedProperty().addListener(this::handleCheckboxCambiado<Boolean>);
 
         btnLimpiar.setOnAction(this::handleBtnLimpiar);
+        btnAnadir.setOnAction(this::handleBtnAnadir);
+        btnModificar.setOnAction(this::handleBtnModificar);
+        btnEliminar.setOnAction(this::handleBtnEliminar);
+        mnCerrarSesion.setOnAction(this::handleCerrarSesion);
 
         stage.show();
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    private void handleBtnEliminar(ActionEvent event) {
+        if (eliminarLibroVentana()) {
+            ///////////////////////////////////////////////
+            limpiarCamposTexto();
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    private void handleBtnModificar(ActionEvent event) {
+        if (patronesTextoBien()) {
+            ///////////////////////////////////////////////
+            limpiarCamposTexto();
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    private void handleBtnAnadir(ActionEvent event) {
+        if (patronesTextoBien()) {
+            ///////////////////////////////////////////////
+            limpiarCamposTexto();
+        }
+    }
+
     /**
-     * Método que carga y abre la venta UIRestaurarContrasenia.
+     * Comprueba que los patrone de titulo, autor, editorial, genero, cantidad
+     * total e isbn son correctos.
      *
-     * @param event El evento de acción.
+     * @return Variable indicando si todos los patrones son correctos.
      */
-    private void handleBtnLimpiar(ActionEvent event) {
+    private boolean patronesTextoBien() {
+        boolean patronesTextoBien = true;
+
+        Matcher matcher = null;
+
+        matcher = VALID_TITULO_EDITORIAL.matcher(txtTitulo.getText());
+        if (!matcher.find()) {
+            lblTituloError.setText("El titulo sólo debe contener letras y numeros");
+            lblTituloError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblTituloError.setText("");
+        }
+        matcher = VALID_AUTOR_GENERO.matcher(txtAutor.getText());
+        if (!matcher.find()) {
+            lblAutorError.setText("El autor sólo debe contener letras");
+            lblAutorError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblAutorError.setText("");
+        }
+        matcher = VALID_AUTOR_GENERO.matcher(txtGenero.getText());
+        if (!matcher.find()) {
+            lblGeneroError.setText("El genero sólo debe contener letras");
+            lblGeneroError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblGeneroError.setText("");
+        }
+        matcher = VALID_TITULO_EDITORIAL.matcher(txtEditorial.getText());
+        if (!matcher.find()) {
+            lblEditorialError.setText("La editorial sólo debe contener letras y numeros");
+            lblEditorialError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblEditorialError.setText("");
+        }
+        matcher = VALID_NUMERO.matcher(txtCantidadTotal.getText());
+        if (!matcher.find()) {
+            lblCantidadTotalError.setText("La cantidad sólo debe contener numeros");
+            lblCantidadTotalError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblCantidadTotalError.setText("");
+        }
+        matcher = VALID_NUMERO.matcher(txtIsbn.getText());
+        if (!matcher.find()) {
+            lblIsbnError.setText("El isbn sólo debe contener numeros");
+            lblIsbnError.setTextFill(Color.web("#FF0000"));
+            patronesTextoBien = false;
+        } else {
+            lblIsbnError.setText("");
+        }
+        return patronesTextoBien;
+    }
+
+    /**
+     * Vacia los campos de texto y pone el checkBox a false.
+     */
+    private void limpiarCamposTexto() {
         txtTitulo.clear();
         txtAutor.clear();
         txtEditorial.clear();
@@ -224,6 +333,15 @@ public class UILibroController {
         txtIsbn.clear();
         txtLinkDescarga.clear();
         cbxDescargable.setSelected(false);
+    }
+
+    /**
+     * Llama a un metodo para limpiar los campos de texto..
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBtnLimpiar(ActionEvent event) {
+        limpiarCamposTexto();
     }
 
     /**
@@ -243,11 +361,6 @@ public class UILibroController {
 
         textFieldOverMaxLength(changedTextField, changedTextFieldName);
 
-        if(cbxDescargable.isSelected()){
-            System.out.println("1111");
-        } else {
-            System.out.println("222");
-        }
         habilitarBotones();
     }
 
@@ -267,7 +380,7 @@ public class UILibroController {
             btnModificar.setDisable(true);
             btnEliminar.setDisable(true);
         }
-        if(camposTextoConTexto()){
+        if (camposTextoConTexto()) {
             btnLimpiar.setDisable(false);
         } else {
             btnLimpiar.setDisable(true);
@@ -281,15 +394,12 @@ public class UILibroController {
      * @return Variable indicando si hay algun campo de texto con texto o no.
      */
     private boolean camposTextoConTexto() {
-        System.out.println("AAAAAAAAAAAAA");
         if (!txtTitulo.getText().isEmpty() || !txtAutor.getText().isEmpty()
                 || !txtEditorial.getText().isEmpty() || !txtGenero.getText().isEmpty()
                 || !txtCantidadTotal.getText().isEmpty() || !txtIsbn.getText().isEmpty()
-                || !txtLinkDescarga.getText().isEmpty() || cbxDescargable.isSelected()) {
-            System.out.println("BBBBBBBBBBBBBBBBB");
+                || !txtLinkDescarga.getText().isEmpty()) {
             return true;
         } else {
-            System.out.println("bbbbb");
             return false;
         }
     }
@@ -347,6 +457,49 @@ public class UILibroController {
     }
 
     /**
+     * Ventana emergente que se abre cuando se pulsa el boton eliminar para
+     * confirmar si se quiere eliminar el libro.
+     *
+     * @return Variable indicando si se quiere eliminar o no.
+     */
+    private boolean eliminarLibroVentana() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Eliminar libro");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres eliminar el libro?");
+
+        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.YES)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Cuando se pulsa Cerrar Sesion se cierra la ventana y se abre la de
+     * SignIn.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleCerrarSesion(ActionEvent event) {
+        LOGGER.info("Libro Controlador: Iniciando vista SignIn");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
+            Parent root = (Parent) loader.load();
+            UISignInController controller = ((UISignInController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
      *
@@ -363,6 +516,7 @@ public class UILibroController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get().equals(ButtonType.OK)) {
+            LOGGER.info("Libro Controlador: Cerrando aplicacion");
             stage.close();
             Platform.exit();
         } else {
