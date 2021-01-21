@@ -5,6 +5,8 @@
  */
 package controladores;
 
+import implementaciones.UsuarioGestionImplementacion;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -238,5 +240,16 @@ public class UISignInController {
             event.consume();
             alert.close();
         }
+    }
+    
+    
+    
+    private void handleIniciarSesion(ActionEvent event) {
+        
+        UsuarioGestion usuarioGestion= new UsuarioGestionImplementacion();
+        
+        usuarioGestion.find(4);
+        
+        
     }
 }

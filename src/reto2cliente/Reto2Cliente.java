@@ -6,7 +6,11 @@
 package reto2cliente;
 
 import controladores.UISignInController;
+import entidad.Libro;
+import implementaciones.LibroGestionImplementation;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -51,6 +55,55 @@ public class Reto2Cliente extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        /*  
+        LibroGestionImplementation lgi = new LibroGestionImplementation();
+        Libro libro = new Libro();
+        Collection<Libro> libros = null;
+        
+           CREATE LIBRO.    FUNCIONA. 
+        libro.setTitulo("A");
+        libro.setAutor("A");
+        libro.setEditorial("A");
+        libro.setIsbn(new Long(1));
+        libro.setGenero("A");
+        libro.setCantidadTotal(1);
+        libro.setCantidadDisponible(1);
+        libro.setDescargable(false);
+        libro.setLinkDescarga("");
+        lgi.create(libro);
+        
+        //     FIND LIBRO.     PERFECTO
+        //libro = lgi.find(1);
+        //System.out.println(libro.toString());
+        
+        //      REMOVE LIBRO   SUPONGO PERFECTO
+        //lgi.remove(libro);
+        
+        
+        /*      EDIT LIBRO     SUPONGO PERFECTO
+        libro.setAutor("MACAULY CULKIN");
+        lgi.edit(libro);
+        
+        //      BUSCAR TODOS LOS LIBROS     SUPONGO PERFECTO
+        //libros = lgi.buscarTodosLosLibros();
+        
+        //      BUSCAR LIBROS AUTOR         NO VA   -----------------------------------------
+        libros = lgi.buscarLibrosPorAutor("harry");
+        
+        
+        //      BUSCAR LIBROS POR TITULO    SUPONGO PERFECTO
+        //libros=lgi.buscarLibrosPorTitulo("to");
+        /*
+        Iterator it = libros.iterator();
+        while(it.hasNext())
+            System.out.println(it.next());
+        
+        for(Libro l:libros)
+            System.out.println(l.toString());*/
+        
+        
+        
+        
         launch(args);
     }
 }
