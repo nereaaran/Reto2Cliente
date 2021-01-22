@@ -14,7 +14,7 @@ import javax.ws.rs.ClientErrorException;
  *
  * @author nerea
  */
-public class LibroGestionImplementation implements LibroGestion{
+public class LibroGestionImplementation implements LibroGestion {
 
     @Override
     public void create(Libro libro) throws ClientErrorException {
@@ -50,5 +50,5 @@ public class LibroGestionImplementation implements LibroGestion{
     public Collection<Libro> buscarLibrosPorAutor(String autor) throws ClientErrorException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

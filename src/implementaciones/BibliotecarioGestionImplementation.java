@@ -13,7 +13,7 @@ import javax.ws.rs.ClientErrorException;
  *
  * @author nerea
  */
-public class BibliotecarioGestionImplementation implements BibliotecarioGestion{
+public class BibliotecarioGestionImplementation implements BibliotecarioGestion {
 
     @Override
     public void create(Bibliotecario bibliotecario) throws ClientErrorException {
@@ -34,5 +34,5 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion{
     public Bibliotecario find(Integer id) throws ClientErrorException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

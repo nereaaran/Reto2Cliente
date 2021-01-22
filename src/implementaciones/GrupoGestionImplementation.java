@@ -14,7 +14,7 @@ import javax.ws.rs.ClientErrorException;
  *
  * @author nerea
  */
-public class GrupoGestionImplementation implements GrupoGestion{
+public class GrupoGestionImplementation implements GrupoGestion {
 
     @Override
     public void create(Grupo grupo) throws ClientErrorException {
@@ -45,5 +45,5 @@ public class GrupoGestionImplementation implements GrupoGestion{
     public Collection<Grupo> buscarTodosLosGruposGrupo() throws ClientErrorException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
