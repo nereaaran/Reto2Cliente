@@ -7,7 +7,9 @@ package controladores;
 
 import entidad.Libro;
 import implementaciones.LibroGestionImplementation;
+import interfaces.LibroGestion;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -16,6 +18,8 @@ import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +35,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -162,25 +167,31 @@ public class UILibroController {
     @FXML
     private AnchorPane paneInferiorLibro;
     @FXML
-    private TableView<?> tablaLibro;
+    private TableView<Libro> tablaLibros;
     @FXML
-    private TableColumn<?, ?> tituloCL;
+    private TableColumn<Libro, String> tituloCL;
     @FXML
-    private TableColumn<?, ?> autorCL;
+    private TableColumn<Libro, String> autorCL;
     @FXML
-    private TableColumn<?, ?> editorialCL;
+    private TableColumn<Libro, String> editorialCL;
     @FXML
-    private TableColumn<?, ?> isbnCL;
+    private TableColumn<Libro, Long> isbnCL;
     @FXML
-    private TableColumn<?, ?> generoCL;
+    private TableColumn<Libro, String> generoCL;
     @FXML
-    private TableColumn<?, ?> cantidadTotalCL;
+    private TableColumn<Libro, Integer> cantidadTotalCL;
     @FXML
-    private TableColumn<?, ?> cantidadDisponibleCL;
+    private TableColumn<Libro, Integer> cantidadDisponibleCL;
     @FXML
-    private TableColumn<?, ?> descargableCL;
+    private TableColumn<Libro, Boolean> descargableCL;
     @FXML
-    private TableColumn<?, ?> linkdescargaCL;
+    private TableColumn<Libro, String> linkdescargaCL;
+    
+    /**
+     * Lista observable de Libro para la tabla.
+     */
+    private ObservableList<Libro> librosObservableList;
+    
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -212,14 +223,15 @@ public class UILibroController {
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
+        // Estado inicial de los controles
         btnAnadir.setDisable(true);
         btnModificar.setDisable(true);
         btnEliminar.setDisable(true);
         btnLimpiar.setDisable(true);
         btnBuscar.setDisable(true);
-
         txtTitulo.requestFocus();
-
+        
+        // Añade listeners a propiedades de cambio de texto
         txtBuscarLibro.textProperty().addListener(this::handleTextoCambiado);
         txtTitulo.textProperty().addListener(this::handleTextoCambiado);
         txtAutor.textProperty().addListener(this::handleTextoCambiado);
@@ -228,12 +240,33 @@ public class UILibroController {
         txtCantidadTotal.textProperty().addListener(this::handleTextoCambiado);
         txtIsbn.textProperty().addListener(this::handleTextoCambiado);
         txtLinkDescarga.textProperty().addListener(this::handleTextoCambiado);
-
+        
+        // Añade acciones a los botones
         btnLimpiar.setOnAction(this::handleBtnLimpiar);
         btnAnadir.setOnAction(this::handleBtnAnadir);
         btnModificar.setOnAction(this::handleBtnModificar);
         btnEliminar.setOnAction(this::handleBtnEliminar);
+        btnBuscar.setOnAction(this::handleBtnBuscar);
         mnCerrarSesion.setOnAction(this::handleCerrarSesion);
+        
+        // 
+        tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        autorCL.setCellValueFactory(new PropertyValueFactory<>("autor"));
+        editorialCL.setCellValueFactory(new PropertyValueFactory<>("editorial"));
+        generoCL.setCellValueFactory(new PropertyValueFactory<>("genero"));
+        isbnCL.setCellValueFactory(new PropertyValueFactory<>("isbn"));
+        cantidadTotalCL.setCellValueFactory(new PropertyValueFactory<>("cantidadTotal"));
+        cantidadDisponibleCL.setCellValueFactory(new PropertyValueFactory<>("cantidadDisponible"));
+        descargableCL.setCellValueFactory(new PropertyValueFactory<>("descargable"));
+        linkdescargaCL.setCellValueFactory(new PropertyValueFactory<>("linkDescarga"));
+        
+        LibroGestion libroGestion = new LibroGestionImplementation();
+        librosObservableList = FXCollections.observableArrayList(new ArrayList<>(libroGestion.buscarTodosLosLibros()));
+        if(librosObservableList.isEmpty())
+            System.out.println("VACIO");
+        else 
+            System.out.println("ELSE");
+        tablaLibros.setItems(librosObservableList);
 
         stage.show();
     }
@@ -254,70 +287,76 @@ public class UILibroController {
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    private void handleBtnAnadir(ActionEvent event) {
+//////////////////////////////////////////////////////////////////////////////////////////////////
+    private void handleBtnBuscar(ActionEvent event) {
+        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+        Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(txtBuscarLibro.getText());
         
-        Libro libroPrueba = new Libro();
-        
-        libroPrueba.setTitulo("JAVa para novatOs");
-        libroPrueba.setAutor("c");
-        libroPrueba.setEditorial("c");
-        libroPrueba.setIsbn(new Long(1));
-        libroPrueba.setGenero("c");
-        libroPrueba.setCantidadTotal(2);
-        libroPrueba.setCantidadDisponible(2);
-        libroPrueba.setDescargable(false);
-        libroPrueba.setLinkDescarga("");
-        
-        
-        if (patronesTextoBien()) {
-            if(comprobarLibroExiste(libroPrueba)){
-                System.out.println("EXISTE");
-            } else {
-                System.out.println("NO EXISTE");
-            }
-            //limpiarCamposTexto();
+        if(libros.isEmpty()){
+            lblBuscarLibroError.setText("El libro no existe");
+            lblBuscarLibroError.setTextFill(Color.web("#FF0000"));
+        } else {
+            ////////////////////////////////////////////////////////////////////////////////////7
         }
     }
 
-    private boolean comprobarLibroExiste(Libro libro){
+    /**
+     * Se ejecuta cuando se pulsa el boton Añadir. Si los datos son correctos y
+     * el libro no existe se añade. Si ya existe se suma uno a la cantidad total
+     * del libro encontrado.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBtnAnadir(ActionEvent event) {
+        if (patronesTextoBien()) {
+            Libro libroNuevo = new Libro();
+
+            libroNuevo.setTitulo(txtTitulo.getText());
+            libroNuevo.setAutor(txtAutor.getText());
+            libroNuevo.setEditorial(txtEditorial.getText());
+            libroNuevo.setIsbn(new Long(txtIsbn.getText()));
+            libroNuevo.setGenero(txtGenero.getText());
+            libroNuevo.setCantidadTotal(Integer.parseInt(txtCantidadTotal.getText()));
+            libroNuevo.setCantidadDisponible(libroNuevo.getCantidadTotal());
+            libroNuevo.setDescargable(cbxDescargable.isSelected());
+            libroNuevo.setLinkDescarga(txtLinkDescarga.getText());
+
+            if (comprobarLibroExiste(libroNuevo)) {
+                lblInformacion.setText("Libro existente. Se ha sumado a cantidad total");
+                lblInformacion.setTextFill(Color.web("#008000"));
+            } else {
+                LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+                libroGestionImplementation.create(libroNuevo);
+                lblInformacion.setText("Libro añadido");
+                lblInformacion.setTextFill(Color.web("#008000"));
+            }
+            limpiarCamposTexto();
+        }
+    }
+
+    /**
+     * Comprueba si el libro que se va a añadir existe en la base de datos.
+     *
+     * @param libro El libro que se quiere añadir.
+     * @return Variable que indica si existe o no el libro.
+     */
+    private boolean comprobarLibroExiste(Libro libro) {
         LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
         Collection<Libro> libros = null;
         libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
-        
-        if(libros.size()>0){
-            for(Libro l : libros){
-                if(l.getTitulo().equalsIgnoreCase(libro.getTitulo())){
+
+        if (libros.size() > 0) {
+            for (Libro l : libros) {
+                if (l.getTitulo().equalsIgnoreCase(libro.getTitulo())) {
+                    l.setCantidadTotal(l.getCantidadTotal() + 1);
+                    libroGestionImplementation.edit(l);
                     return true;
                 }
             }
         }
         return false;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     /**
      * Comprueba que los patrone de titulo, autor, editorial, genero, cantidad
      * total e isbn son correctos.
