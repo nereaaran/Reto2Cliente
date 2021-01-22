@@ -7,6 +7,7 @@ package interfaces;
 
 import entidad.Alumno;
 import entidad.Usuario;
+import excepcion.*;
 import java.util.Collection;
 
 /**
@@ -50,16 +51,20 @@ public interface UsuarioGestion {
      *
      * @param login El login del usuario.
      * @return Colección de usuario con el login buscado.
+     * @throws excepcion.LoginExisteException si el usuario ya existe en la base
+     * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorLogin(String login);
+    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException;
 
     /**
      * Método que busca un usuario por su email.
      *
      * @param email El email del usuario.
      * @return Colección de usuario con el email buscado.
+     * @throws excepcion.EmailExisteException si el email ya existe en la base
+     * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorEmail(String email);
+    public Collection<Usuario> buscarUsuarioPorEmail(String email) throws EmailExisteException;
 
     /**
      * Método que busca un usuario por su login y contraseña.

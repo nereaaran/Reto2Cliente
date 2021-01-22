@@ -5,6 +5,7 @@
  */
 package implementaciones;
 
+import excepcion.*;
 import entidad.Usuario;
 import interfaces.UsuarioGestion;
 import java.util.Collection;
@@ -114,16 +115,20 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      *
      * @param login el login del usuario por el que se buscará.
      * @return la colección de usuarios que encuentra.
+     * @throws excepcion.LoginExisteException si el usuario ya existe en la base
+     * de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorLogin(String login) {
+    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException {
         Collection<Usuario> usuario = null;
 
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login");
 
-            usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
-            }, login);
+            if (!webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
+            }, login).isEmpty()) {
+                throw new LoginExisteException();
+            }
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
@@ -139,14 +144,16 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorEmail(String email) {
+    public Collection<Usuario> buscarUsuarioPorEmail(String email) throws EmailExisteException {
         Collection<Usuario> usuario = null;
 
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
 
-            usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
-            }, email);
+            if (!webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
+            }, email).isEmpty()) {
+                throw new EmailExisteException();
+            }
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

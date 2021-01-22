@@ -9,12 +9,10 @@ import static entidad.TipoUsuario.PROFESOR;
 import static entidad.UserPrivilege.USER;
 import static entidad.UserStatus.ENABLED;
 import entidad.*;
+import excepcion.*;
 import factorias.GestionFactoria;
-import implementaciones.UsuarioGestionImplementation;
-import interfaces.ProfesorGestion;
-import interfaces.UsuarioGestion;
+import interfaces.*;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -428,7 +426,8 @@ public class UISignUpController {
     }
 
     /**
-     * Método que carga y abre la venta UIGrupo.
+     * Método que comprueba los errores posibles y si no hay ninguno carga y
+     * abre la venta UIGrupo.
      *
      * @param event El evento de acción.
      */
@@ -437,31 +436,42 @@ public class UISignUpController {
 
         boolean errorPatrones = comprobarPatrones();
         boolean errorContrasenias = comprobarContrasenias();
-        //boolean existeEmail = comprobarEmailExiste();
-        //boolean existeUsuario = comprobarUsuarioExiste();
 
         if (!errorPatrones && !errorContrasenias) {
-            //if (!existeEmail && !existeUsuario) {
-            LOGGER.info("Sign Up Controlador: Creando nuevo profesor");
-
-            Date date = new Date(System.currentTimeMillis());
-
-            Profesor nuevoProfesor = new Profesor();
-            nuevoProfesor.setLogin(txtUsuario.getText());
-            nuevoProfesor.setEmail(txtEmail.getText());
-            nuevoProfesor.setFullName(txtNombre.getText());
-            nuevoProfesor.setStatus(ENABLED);
-            nuevoProfesor.setPrivilege(USER);
-            nuevoProfesor.setTipoUsuario(PROFESOR);
-            nuevoProfesor.setPassword(txtContrasenia.getText());
-            nuevoProfesor.setLastAccess(date);
-            nuevoProfesor.setLastPasswordChange(date);
-            nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
-
-            ProfesorGestion profesorGestion = GestionFactoria.getProfesorGestion();
-            profesorGestion.create(nuevoProfesor);
-
             try {
+                UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
+
+                //Comprueba si existe el email
+                LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
+
+                usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+
+                //Comprueba si existe el login
+                LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
+
+                usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+
+                //Se crea el profesor
+                LOGGER.info("Sign Up Controlador: Creando profesor");
+
+                Date date = new Date(System.currentTimeMillis());
+
+                Profesor nuevoProfesor = new Profesor();
+                nuevoProfesor.setLogin(txtUsuario.getText());
+                nuevoProfesor.setEmail(txtEmail.getText());
+                nuevoProfesor.setFullName(txtNombre.getText());
+                nuevoProfesor.setStatus(ENABLED);
+                nuevoProfesor.setPrivilege(USER);
+                nuevoProfesor.setTipoUsuario(PROFESOR);
+                nuevoProfesor.setPassword(txtContrasenia.getText());
+                nuevoProfesor.setLastAccess(date);
+                nuevoProfesor.setLastPasswordChange(date);
+                nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
+
+                ProfesorGestion profesorGestion = GestionFactoria.getProfesorGestion();
+                profesorGestion.create(nuevoProfesor);
+
+                //Abre la vista de UIGrupo
                 LOGGER.info("Sign Up Controlador: Abriendo la vista UIGrupo");
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
@@ -469,65 +479,18 @@ public class UISignUpController {
                 UIGrupoController controller = ((UIGrupoController) loader.getController());
                 controller.setStage(stage);
                 controller.initStage(root);
-            } catch (IOException e) {
-                LOGGER.severe(e.getMessage());
-            }
-            //}
-        }
-    }
-
-    /**
-     * Método que comprueba si existe el email en la base de datos.
-     *
-     * @return Variable que indica si el email existe o no.
-     */
-    private boolean comprobarEmailExiste() {
-        LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
-
-        boolean existe = false;
-
-        UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
-        Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
-
-        for (Usuario u : usuario) {
-            String email = u.getEmail();
-
-            if (txtEmail.getText().equals(email)) {
+            } catch (EmailExisteException ee) {
+                LOGGER.severe(ee.getMessage());
                 lblNumeroTelefonoError.setText("El email ya existe");
                 lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
-
-                existe = true;
-            }
-        }
-
-        return existe;
-    }
-
-    /**
-     * Método que comprueba si existe el usuario en la base de datos.
-     *
-     * @return Variable que indica si el usuario existe o no.
-     */
-    private boolean comprobarUsuarioExiste() {
-        LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
-
-        boolean existe = false;
-
-        UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
-        Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
-
-        for (Usuario u : usuario) {
-            String login = u.getLogin();
-
-            if (txtUsuario.getText().equals(login)) {
-                lblNumeroTelefonoError.setText("El usuario ya existe");
+            } catch (LoginExisteException le) {
+                LOGGER.severe(le.getMessage());
+                lblNumeroTelefonoError.setText("El login ya existe");
                 lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
-
-                existe = true;
+            } catch (IOException ie) {
+                LOGGER.severe(ie.getMessage());
             }
         }
-
-        return existe;
     }
 
     /**
