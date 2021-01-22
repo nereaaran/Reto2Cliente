@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 import rest.UsuarioRESTClient;
+import seguridad.CifradoAsimetrico;
 
 /**
  * Clase que implementa la interfaz UsuarioGestion usando un cliente web
@@ -47,6 +48,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      */
     @Override
     public void create(Usuario usuario) {
+        usuario.setPassword(cifrarContrasena(usuario.getPassword()));
         try {
             LOGGER.info("UsuarioGestionImplementation: Creando usuario");
 
@@ -63,6 +65,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      */
     @Override
     public void edit(Usuario usuario) {
+        usuario.setPassword(cifrarContrasena(usuario.getPassword()));
         try {
             LOGGER.info("UsuarioGestionImplementation: Editando usuario");
 
@@ -195,5 +198,17 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Collection<Usuario> buscarAlumnoPorNombre(String nombre) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * Cifra la contraseña con la clave publica.
+     *
+     * @param contrasena La contraseña del usuario.
+     * @return La contraseña cifra y en hexadecimal.
+     */
+    private String cifrarContrasena(String contrasena) {
+        LOGGER.info("AlumnoGestionImplementation: Cifrando contraseña");
+        CifradoAsimetrico cifrar = new CifradoAsimetrico();
+        return cifrar.cifrarConClavePublica(contrasena);
     }
 }

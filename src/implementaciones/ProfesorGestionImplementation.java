@@ -10,6 +10,7 @@ import interfaces.ProfesorGestion;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
 import rest.ProfesorRESTClient;
+import seguridad.CifradoAsimetrico;
 
 /**
  * Clase que implementa la interfaz ProfesorGestion usando un cliente web
@@ -44,6 +45,7 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
      */
     @Override
     public void create(Profesor profesor) {
+        profesor.setPassword(cifrarContrasena(profesor.getPassword()));
         try {
             LOGGER.info("ProfesorGestionImplementation: Creando profesor");
 
@@ -60,6 +62,7 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
      */
     @Override
     public void edit(Profesor profesor) {
+        profesor.setPassword(cifrarContrasena(profesor.getPassword()));
         try {
             LOGGER.info("ProfesorGestionImplementation: Editando profesor");
 
@@ -106,4 +109,15 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
         return profesor;
     }
 
+    /**
+     * Cifra la contraseña con la clave publica.
+     *
+     * @param contrasena La contraseña del usuario.
+     * @return La contraseña cifra y en hexadecimal.
+     */
+    private String cifrarContrasena(String contrasena) {
+        LOGGER.info("AlumnoGestionImplementation: Cifrando contraseña");
+        CifradoAsimetrico cifrar = new CifradoAsimetrico();
+        return cifrar.cifrarConClavePublica(contrasena);
+    }
 }
