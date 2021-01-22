@@ -9,7 +9,7 @@ import static entidad.TipoUsuario.PROFESOR;
 import static entidad.UserPrivilege.USER;
 import static entidad.UserStatus.ENABLED;
 import entidad.*;
-import factorias.UsuarioGestionFactoria;
+import factorias.GestionFactoria;
 import implementaciones.UsuarioGestionImplementation;
 import interfaces.ProfesorGestion;
 import interfaces.UsuarioGestion;
@@ -458,7 +458,7 @@ public class UISignUpController {
             nuevoProfesor.setLastPasswordChange(date);
             nuevoProfesor.setTelefono(Integer.parseInt(txtNumeroTelefono.getText()));
 
-            ProfesorGestion profesorGestion = UsuarioGestionFactoria.getProfesorGestion();
+            ProfesorGestion profesorGestion = GestionFactoria.getProfesorGestion();
             profesorGestion.create(nuevoProfesor);
 
             try {
