@@ -33,9 +33,9 @@ public interface LibroGestion {
     /**
      * Método que elimina un libro existente.
      *
-     * @param id El id del libro que se va a eliminar.
+     * @param libro El objeto Libro que se va a eliminar.
      */
-    public void remove(Integer id) throws ClientErrorException;
+    public void remove(Libro libro) throws ClientErrorException;
 
     /**
      * Método que obtiene información de un libro existente por id.

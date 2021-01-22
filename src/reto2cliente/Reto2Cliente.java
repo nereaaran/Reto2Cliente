@@ -7,7 +7,16 @@ package reto2cliente;
 
 import controladores.UIAlumnoController;
 import controladores.UISignInController;
+import entidad.Alumno;
+import entidad.Libro;
+import entidad.TipoUsuario;
+import entidad.UserPrivilege;
+import entidad.UserStatus;
+import implementaciones.AlumnoGestionImplementation;
+import implementaciones.LibroGestionImplementation;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -59,7 +68,18 @@ public class Reto2Cliente extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        AlumnoGestionImplementation agi = new AlumnoGestionImplementation();
+        Alumno alumno = new Alumno();
+        
+        alumno = agi.find(15);
+        alumno.setPassword("abcd*1234");
+        alumno.setFullName("PRueba");
+        
+        agi.edit(alumno);
+        
+        
         launch(args);
     }
-
+    
 }

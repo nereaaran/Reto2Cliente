@@ -10,6 +10,7 @@ import interfaces.AlumnoGestion;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
 import rest.AlumnoRESTClient;
+import seguridad.CifradoAsimetrico;
 
 /**
  * Clase que implementa la interfaz AlumnoGestion usando un cliente web RESTful.
@@ -36,6 +37,18 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
     }
 
     /**
+     * Cifra la contraseña con la clave publica.
+     *
+     * @param contrasena La contraseña del usuario.
+     * @return La contraseña cifra y en hexadecimal.
+     */
+    private String cifrarContrasena(String contrasena) {
+        LOGGER.info("AlumnoGestionImplementation: Cifrando contraseña");
+        CifradoAsimetrico cifrar = new CifradoAsimetrico();
+        return cifrar.cifrarConClavePublica(contrasena);
+    }
+
+    /**
      * Manda una petición REST de tipo create al servidor y se crea un nuevo
      * alumno.
      *
@@ -43,6 +56,8 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
      */
     @Override
     public void create(Alumno alumno) {
+        alumno.setPassword(cifrarContrasena(alumno.getPassword()));
+
         try {
             LOGGER.info("AlumnoGestionImplementation: Creando alumno");
 
@@ -59,6 +74,8 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
      */
     @Override
     public void edit(Alumno alumno) {
+        alumno.setPassword(cifrarContrasena(alumno.getPassword()));
+        
         try {
             LOGGER.info("AlumnoGestionImplementation: Editando alumno");
 
