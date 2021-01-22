@@ -6,9 +6,8 @@
 package controladores;
 
 import entidad.*;
-import entidad.Usuario;
-import implementaciones.UsuarioGestionImplementation;
-import interfaces.UsuarioGestion;
+import factorias.GestionFactoria;
+import interfaces.*;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
@@ -281,8 +280,8 @@ public class UIAlumnoController {
     /**
      * Entidad Usuario del lado cliente.
      */
-    private ObservableList<Usuario> alumnos;
-    
+    private ObservableList<Alumno> alumnos;
+
     /**
      * Variable de tipo stage que se usa para visualizar la ventana.
      */
@@ -295,7 +294,7 @@ public class UIAlumnoController {
      */
     public void setStage(Stage primaryStage) {
         LOGGER.info("Alumno Controlador: Estableciendo stage");
-        
+
         stage = primaryStage;
     }
 
@@ -306,7 +305,7 @@ public class UIAlumnoController {
      */
     public void initStage(Parent root) {
         LOGGER.info("Alumno Controlador: Iniciando stage");
-        
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
@@ -315,18 +314,17 @@ public class UIAlumnoController {
 
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
-                
+
         //Falta lo de jony
-        
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
         emailCL.setCellValueFactory(new PropertyValueFactory<>("email"));
-            
-        /*UsuarioGestion usuarioGestion = new UsuarioGestionImplementation();
-        alumnos=FXCollections.observableArrayList(usuarioGestion.consultarTodosAlumnos());
-        tablaAlumnos.setItems(alumnos);*/
-        
+
+        AlumnoGestion usuarioGestion = GestionFactoria.getAlumnoGestion();
+        alumnos = FXCollections.observableArrayList(usuarioGestion.buscarTodosLosAlumnos());
+        tablaAlumnos.setItems(alumnos);
+
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
         btnAnadir.setDisable(true);
@@ -549,13 +547,13 @@ public class UIAlumnoController {
      */
     private void botonAnadirPulsado(ActionEvent event) {
         LOGGER.info("Alumno Controlador: Comprobando errores");
-        
+
         boolean errorPatrones = comprobarPatrones();
         boolean errorDatePicker = datePickerVacio();
 
         if (!errorPatrones || !errorDatePicker) {
             LOGGER.info("Alumno Controlador: Añadiendo alumno a la base de datos");
-        
+
             //CREATE
         }
     }

@@ -137,10 +137,44 @@ public class UsuarioRESTClient {
     }
 
     /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param <T> Clase de tipo generico.
+     * @param responseType La clase objeto de la instancia de retorno.
+     * @param login El login de la instancia del lado servidor.
+     * @param contrasenia La contraseña de la instancia del lado servidor.
+     * @return Coleccion de objetos con los datos.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public <T> T buscarUsuarioPorLoginYContrasenia(GenericType<T> responseType, String login, String contrasenia) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("login/{0}", new Object[]{login}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param <T> Clase de tipo generico.
+     * @param responseType La clase objeto de la instancia de retorno.
+     * @return Coleccion de objetos con los datos.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public <T> T buscarTodosLosUsuarios(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    /**
      * Cierra el servicio web RESTful del cliente.
      */
     public void close() {
         client.close();
     }
-
 }

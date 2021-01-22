@@ -7,8 +7,10 @@ package implementaciones;
 
 import entidad.Alumno;
 import interfaces.AlumnoGestion;
+import java.util.Collection;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import rest.AlumnoRESTClient;
 
 /**
@@ -105,4 +107,46 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
         return alumno;
     }
 
+    /**
+     * Manda una petición REST para que busque un alumno por nombre al servidor.
+     *
+     * @param fullName el nombre del alumno que se buscará.
+     * @return la colección de usuarios que encuentra.
+     */
+    @Override
+    public Collection<Alumno> buscarAlumnoPorNombre(String fullName) {
+        Collection<Alumno> usuario = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
+
+            usuario = webClient.buscarAlumnoPorNombre(new GenericType<Collection<Alumno>>() {
+            }, fullName);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
+    }
+
+    /**
+     * Manda una petición REST para que busque todos los alumnos al servidor.
+     *
+     * @return la colección de todos los alumnos.
+     */
+    @Override
+    public Collection<Alumno> buscarTodosLosAlumnos() {
+        Collection<Alumno> usuario = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando todos los alumnos");
+
+            usuario = webClient.buscarTodosLosAlumnos(new GenericType<Collection<Alumno>>() {
+            });
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
+    }
 }

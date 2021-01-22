@@ -71,16 +71,16 @@
                <children>
                   <TableView fx:id="tablaAlumnos" layoutX="255.0" layoutY="23.0" prefHeight="277.0" prefWidth="585.0">
                     <columns>
-                      <TableColumn fx:id="dniCL" prefWidth="75.99999487400055" text="DNI" />
-                        <TableColumn fx:id="nombreCompletoCL" prefWidth="170.66668701171875" text="Nombre completo" />
-                        <TableColumn fx:id="fechaNacimientoCL" prefWidth="147.3333740234375" text="Fecha de nacimiento" />
-                        <TableColumn fx:id="emailCL" prefWidth="148.66668701171875" text="Email" />
+                      <TableColumn fx:id="dniCL" prefWidth="74.40003967285156" text="DNI" />
+                        <TableColumn fx:id="nombreCompletoCL" prefWidth="172.79998779296875" text="Nombre completo" />
+                        <TableColumn fx:id="fechaNacimientoCL" prefWidth="137.5999755859375" text="Fecha de nacimiento" />
+                        <TableColumn fx:id="emailCL" prefWidth="200.800048828125" text="Email" />
                     </columns>
                   </TableView>
                   <TableView fx:id="tablaGrupos" layoutX="2.0" layoutY="23.0" prefHeight="275.0" prefWidth="243.0">
                      <columns>
-                        <TableColumn fx:id="nombreGrupoCL" prefWidth="117.33333837985992" text="Grupo" />
-                        <TableColumn fx:id="numeroAlumnosCL" prefWidth="118.66668701171875" text="Nº alumnos" />
+                        <TableColumn fx:id="nombreGrupoCL" prefWidth="125.60000228881836" text="Grupo" />
+                        <TableColumn fx:id="numeroAlumnosCL" prefWidth="116.79998779296875" text="Nº alumnos" />
                      </columns>
                   </TableView>
                   <Label fx:id="lblListaGrupos" layoutX="14.0" layoutY="6.0" prefHeight="17.0" prefWidth="146.0" text="LISTA DE GRUPOS" />
