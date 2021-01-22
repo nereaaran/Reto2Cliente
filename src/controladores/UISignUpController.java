@@ -442,7 +442,7 @@ public class UISignUpController {
             try {
                 UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
-                //Comprueba si existe el login
+                //Comprueba si existe el email
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
 
                 usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
@@ -480,8 +480,6 @@ public class UISignUpController {
                 UIGrupoController controller = ((UIGrupoController) loader.getController());
                 controller.setStage(stage);
                 controller.initStage(root);
-
-                lblNumeroTelefonoError.setText("");
             } catch (EmailExisteException ee) {
                 LOGGER.severe(ee.getMessage());
                 lblNumeroTelefonoError.setText("El email ya existe");
