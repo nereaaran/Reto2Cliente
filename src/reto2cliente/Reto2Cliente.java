@@ -9,11 +9,13 @@ import controladores.UIAlumnoController;
 import controladores.UISignInController;
 import entidad.Alumno;
 import entidad.Libro;
+import entidad.Profesor;
 import entidad.TipoUsuario;
 import entidad.UserPrivilege;
 import entidad.UserStatus;
 import implementaciones.AlumnoGestionImplementation;
 import implementaciones.LibroGestionImplementation;
+import implementaciones.ProfesorGestionImplementation;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
@@ -48,12 +50,10 @@ public class Reto2Cliente extends Application {
             LOGGER.info("Reto2Cliente: Iniciando pantalla principal");
 
             // Carga el archivo fxml
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
             Parent ventana = (Parent) loader.load();
             // Enlaza el controlador con el archivo fxml
-            //UISignInController controlador = (UISignInController) loader.getController();
-            UIAlumnoController controlador = (UIAlumnoController) loader.getController();
+            UISignInController controlador = (UISignInController) loader.getController();
             // Prepara el escenario principal donde se ejecutara la ventana 
             controlador.setStage(primaryStage);
             // Inicializa la ventana de SignIn
@@ -69,10 +69,10 @@ public class Reto2Cliente extends Application {
      */
     public static void main(String[] args) {
         
-        AlumnoGestionImplementation agi = new AlumnoGestionImplementation();
-        Alumno alumno = new Alumno();
+        ProfesorGestionImplementation agi = new ProfesorGestionImplementation();
+        Profesor alumno = new Profesor();
         
-        alumno = agi.find(15);
+        alumno = agi.find(2);
         alumno.setPassword("abcd*1234");
         alumno.setFullName("PRueba");
         

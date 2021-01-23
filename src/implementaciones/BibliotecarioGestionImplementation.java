@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.GenericType;
 import rest.BibliotecarioRESTClient;
+import seguridad.CifradoAsimetrico;
 
 /**
  * Clase que implementa la interfaz BibliotecarioGestion usando un cliente web
@@ -46,6 +47,8 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion 
      */
     @Override
     public void create(Bibliotecario bibliotecario) {
+        bibliotecario.setPassword(cifrarContrasena(bibliotecario.getPassword()));
+        
         try {
             LOGGER.info("BibliotecarioGestionImplementation: Creando bibliotecario");
 
@@ -63,6 +66,8 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion 
      */
     @Override
     public void edit(Bibliotecario bibliotecario) {
+        bibliotecario.setPassword(cifrarContrasena(bibliotecario.getPassword()));
+        
         try {
             LOGGER.info("BibliotecarioGestionImplementation: Editando bibliotecario");
 
@@ -129,5 +134,17 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion 
         }
 
         return bibliotecario;
+    }
+
+    /**
+     * Cifra la contraseña con la clave publica.
+     *
+     * @param contrasena La contraseña del usuario.
+     * @return La contraseña cifrada y en hexadecimal.
+     */
+    private String cifrarContrasena(String contrasena) {
+        LOGGER.info("BibliotecarioGestionImplementation: Cifrando contraseña");
+        CifradoAsimetrico cifrar = new CifradoAsimetrico();
+        return cifrar.cifrarConClavePublica(contrasena);
     }
 }

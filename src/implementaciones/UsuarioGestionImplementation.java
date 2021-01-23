@@ -49,6 +49,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public void create(Usuario usuario) {
         usuario.setPassword(cifrarContrasena(usuario.getPassword()));
+        
         try {
             LOGGER.info("UsuarioGestionImplementation: Creando usuario");
 
@@ -66,6 +67,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public void edit(Usuario usuario) {
         usuario.setPassword(cifrarContrasena(usuario.getPassword()));
+        
         try {
             LOGGER.info("UsuarioGestionImplementation: Editando usuario");
 
@@ -175,6 +177,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Collection<Usuario> buscarUsuarioPorLoginYContrasenia(String login, String contrasenia) {
         Collection<Usuario> usuario = null;
+        contrasenia = cifrarContrasena(contrasenia);
 
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login y contrasenia");
@@ -213,10 +216,10 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * Cifra la contraseña con la clave publica.
      *
      * @param contrasena La contraseña del usuario.
-     * @return La contraseña cifra y en hexadecimal.
+     * @return La contraseña cifrada y en hexadecimal.
      */
     private String cifrarContrasena(String contrasena) {
-        LOGGER.info("AlumnoGestionImplementation: Cifrando contraseña");
+        LOGGER.info("UsuarioGestionImplementation: Cifrando contraseña");
         CifradoAsimetrico cifrar = new CifradoAsimetrico();
         return cifrar.cifrarConClavePublica(contrasena);
     }
