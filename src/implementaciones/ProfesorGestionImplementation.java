@@ -7,10 +7,11 @@ package implementaciones;
 
 import entidad.Profesor;
 import interfaces.ProfesorGestion;
+import java.util.Collection;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import rest.ProfesorRESTClient;
-import seguridad.CifradoAsimetrico;
 
 /**
  * Clase que implementa la interfaz ProfesorGestion usando un cliente web
@@ -45,7 +46,6 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
      */
     @Override
     public void create(Profesor profesor) {
-        profesor.setPassword(cifrarContrasena(profesor.getPassword()));
         try {
             LOGGER.info("ProfesorGestionImplementation: Creando profesor");
 
@@ -62,7 +62,6 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
      */
     @Override
     public void edit(Profesor profesor) {
-        profesor.setPassword(cifrarContrasena(profesor.getPassword()));
         try {
             LOGGER.info("ProfesorGestionImplementation: Editando profesor");
 
@@ -110,14 +109,24 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
     }
 
     /**
-     * Cifra la contraseña con la clave publica.
+     * Manda una petición REST para que busque todos los profesores al servidor.
      *
-     * @param contrasena La contraseña del usuario.
-     * @return La contraseña cifra y en hexadecimal.
+     * @return la colección de todos los profesores.
      */
-    private String cifrarContrasena(String contrasena) {
-        LOGGER.info("AlumnoGestionImplementation: Cifrando contraseña");
-        CifradoAsimetrico cifrar = new CifradoAsimetrico();
-        return cifrar.cifrarConClavePublica(contrasena);
+    @Override
+    public Collection<Profesor> buscarTodosLosProfesores() {
+        Collection<Profesor> profesor = null;
+
+        try {
+            LOGGER.info("ProfesorGestionImplementation: Buscando todos los profesores");
+
+            profesor = webClient.buscarTodosLosProfesores(new GenericType<Collection<Profesor>>() {
+            });
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return profesor;
     }
+
 }

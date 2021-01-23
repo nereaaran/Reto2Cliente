@@ -173,31 +173,40 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Usuario> buscarUsuarioPorLoginYContrasenia(String login, String contrasenia) {
+        Collection<Usuario> usuario = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login y contrasenia");
+
+            usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
+            }, login);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
     }
 
     /**
-     * Manda una petición REST para que busque todos los usuarios de tipo alumno
-     * al servidor y busca el usuario.
+     * Manda una petición REST para que busque todos los usuarios al servidor.
      *
-     * @return la colección de usuarios que encuentra.
+     * @return la colección de todos los usuarios.
      */
     @Override
-    public Collection<Usuario> consultarTodosAlumnos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public Collection<Usuario> buscarTodosLosUsuarios() {
+        Collection<Usuario> usuario = null;
 
-    /**
-     * Manda una petición REST para que busque un usuario de tipo alumno por el
-     * nombre al servidor y busca el usuario.
-     *
-     * @param nombre el nombre del alumno.
-     * @return la colección de usuarios que encuentra.
-     */
-    @Override
-    public Collection<Usuario> buscarAlumnoPorNombre(String nombre) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando todos los usuarios");
+
+            usuario = webClient.buscarTodosLosUsuarios(new GenericType<Collection<Usuario>>() {
+            });
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
     }
 
     /**

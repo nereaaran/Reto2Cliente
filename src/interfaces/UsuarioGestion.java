@@ -71,23 +71,14 @@ public interface UsuarioGestion {
      *
      * @param login El login del usuario.
      * @param contrasenia La contraseña del usuario.
-     * @return Colección de usuario con el login y contraseña buscada.
+     * @return Colección de usuarios con el login y contraseña buscada.
      */
-    public Collection<Usuario> buscarLoginYContrasenia(String login, String contrasenia);
-
+    public Collection<Usuario> buscarUsuarioPorLoginYContrasenia(String login, String contrasenia);
+    
     /**
-     * Método que busca todos los alumnos.
+     * Método que busca todos los usuarios.
      *
-     * @return Colección de todos los alumnos.
+     * @return Colección de usuarios.
      */
-    public Collection<Usuario> consultarTodosAlumnos();
-
-    /**
-     * Método que busca todos los alumnos por nombre.
-     *
-     * @param nombre El nombre por el que se quire buscar.
-     * @return Colección de todos los alumnos con el nombre buscado.
-     */
-    public Collection<Usuario> buscarAlumnoPorNombre(String nombre);
-
+    public Collection<Usuario> buscarTodosLosUsuarios();
 }

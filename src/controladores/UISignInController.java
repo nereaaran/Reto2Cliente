@@ -5,7 +5,7 @@
  */
 package controladores;
 
-import implementaciones.UsuarioGestionImplementacion;
+import implementaciones.UsuarioGestionImplementation;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Optional;

@@ -6,6 +6,7 @@
 package interfaces;
 
 import entidad.Alumno;
+import java.util.Collection;
 
 /**
  * Interfaz lógica que declara los métodos para la gestión de los alumnos.
@@ -42,4 +43,19 @@ public interface AlumnoGestion {
      * @return Objeto Alumno con la información del alumno. buscado.
      */
     public Alumno find(Integer id);
+
+    /**
+     * Método que busca un alumno por su nombre.
+     *
+     * @param fullName El nombre del alumno.
+     * @return Colección de alumnos con el nombre buscado.
+     */
+    public Collection<Alumno> buscarAlumnoPorNombre(String fullName);
+
+    /**
+     * Método que busca todos los alumnos.
+     *
+     * @return Colección de alumnos.
+     */
+    public Collection<Alumno> buscarTodosLosAlumnos();
 }

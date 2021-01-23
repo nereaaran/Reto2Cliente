@@ -8,6 +8,7 @@ package rest;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 
 /**
  * Jersey REST client generated for REST resource:AlumnoFacadeREST
@@ -100,10 +101,43 @@ public class AlumnoRESTClient {
     }
 
     /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Alumno del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param <T> Clase de tipo generico.
+     * @param responseType La clase objeto de la instancia de retorno.
+     * @param fullName El nombre de la instancia del lado servidor.
+     * @return Coleccion de objetos con los datos.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public <T> T buscarAlumnoPorNombre(GenericType<T> responseType, String fullName) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("fullName/{0}", new Object[]{fullName}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Alumno del
+     * servicio web profesor RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param <T> Clase de tipo generico.
+     * @param responseType La clase objeto de la instancia de retorno.
+     * @return Coleccion de objetos con los datos.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public <T> T buscarTodosLosAlumnos(GenericType<T> responseType) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    /**
      * Cierra el servicio web RESTful del cliente.
      */
     public void close() {
         client.close();
     }
-
 }

@@ -6,6 +6,7 @@
 package interfaces;
 
 import entidad.Profesor;
+import java.util.Collection;
 
 /**
  * Interfaz lógica que declara los métodos para la gestión de los profesores.
@@ -42,4 +43,11 @@ public interface ProfesorGestion {
      * @return Objeto Profesor con la información del profesor. buscado.
      */
     public Profesor find(Integer id);
+
+    /**
+     * Método que busca todos los profesores.
+     *
+     * @return Colección de profesores.
+     */
+    public Collection<Profesor> buscarTodosLosProfesores();
 }
