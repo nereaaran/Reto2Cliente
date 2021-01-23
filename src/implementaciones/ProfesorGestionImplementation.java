@@ -7,8 +7,10 @@ package implementaciones;
 
 import entidad.Profesor;
 import interfaces.ProfesorGestion;
+import java.util.Collection;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
 import rest.ProfesorRESTClient;
 
 /**
@@ -99,6 +101,27 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
             LOGGER.info("ProfesorGestionImplementation: Buscando profesor por id");
 
             profesor = webClient.find(Profesor.class, id);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return profesor;
+    }
+
+    /**
+     * Manda una petición REST para que busque todos los profesores al servidor.
+     *
+     * @return la colección de todos los profesores.
+     */
+    @Override
+    public Collection<Profesor> buscarTodosLosProfesores() {
+        Collection<Profesor> profesor = null;
+
+        try {
+            LOGGER.info("ProfesorGestionImplementation: Buscando todos los profesores");
+
+            profesor = webClient.buscarTodosLosProfesores(new GenericType<Collection<Profesor>>() {
+            });
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

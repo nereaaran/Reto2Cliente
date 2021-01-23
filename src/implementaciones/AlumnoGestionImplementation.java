@@ -118,7 +118,7 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
         Collection<Alumno> usuario = null;
 
         try {
-            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
+            LOGGER.info("AlumnoGestionImplementation: Buscando alumno por nombre");
 
             usuario = webClient.buscarAlumnoPorNombre(new GenericType<Collection<Alumno>>() {
             }, fullName);
@@ -136,17 +136,17 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
      */
     @Override
     public Collection<Alumno> buscarTodosLosAlumnos() {
-        Collection<Alumno> usuario = null;
+        Collection<Alumno> alumno = null;
 
         try {
-            LOGGER.info("UsuarioGestionImplementation: Buscando todos los alumnos");
+            LOGGER.info("AlumnoGestionImplementation: Buscando todos los alumnos");
 
-            usuario = webClient.buscarTodosLosAlumnos(new GenericType<Collection<Alumno>>() {
+            alumno = webClient.buscarTodosLosAlumnos(new GenericType<Collection<Alumno>>() {
             });
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
 
-        return usuario;
+        return alumno;
     }
 }
