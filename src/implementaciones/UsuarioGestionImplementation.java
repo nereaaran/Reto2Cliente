@@ -117,17 +117,23 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      * @throws excepcion.LoginExisteException si el usuario ya existe en la base
      * de datos.
+     * @throws excepcion.LoginNoExisteException si el usuario no existe en la
+     * base de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException {
+    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException, LoginNoExisteException {
         Collection<Usuario> usuario = null;
 
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login");
 
-            if (!webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
-            }, login).isEmpty()) {
+            usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
+            }, login);
+
+            if (!usuario.isEmpty()) {
                 throw new LoginExisteException();
+            } else {
+                throw new LoginNoExisteException();
             }
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
@@ -150,8 +156,10 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
 
-            if (!webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
-            }, email).isEmpty()) {
+            usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
+            }, email);
+
+            if (!usuario.isEmpty()) {
                 throw new EmailExisteException();
             }
         } catch (ClientErrorException e) {
@@ -168,16 +176,22 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @param login el login del usuario por el que se buscará.
      * @param contrasenia la contraseña del usuario por el que se buscará.
      * @return la colección de usuarios que encuentra.
+     * @throws excepcion.UsuarioNoExisteException si el usuario no existe en la
+     * base de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorLoginYContrasenia(String login, String contrasenia) {
+    public Collection<Usuario> buscarUsuarioPorLoginYContrasenia(String login, String contrasenia) throws UsuarioNoExisteException {
         Collection<Usuario> usuario = null;
 
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login y contrasenia");
 
-            usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
-            }, login);
+            usuario = webClient.buscarUsuarioPorLoginYContrasenia(new GenericType<Collection<Usuario>>() {
+            }, login, contrasenia);
+
+            if (!usuario.isEmpty()) {
+                throw new UsuarioNoExisteException();
+            }
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

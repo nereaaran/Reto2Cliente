@@ -34,7 +34,7 @@ public interface AlumnoGestion {
      *
      * @param id El id del alumno que se va a eliminar.
      */
-    public void remove(Integer id);
+    public void remove(Alumno alumno);
 
     /**
      * Método que obtiene información de un alumno existente por id.
@@ -43,7 +43,7 @@ public interface AlumnoGestion {
      * @return Objeto Alumno con la información del alumno. buscado.
      */
     public Alumno find(Integer id);
-
+    
     /**
      * Método que busca un alumno por su nombre.
      *

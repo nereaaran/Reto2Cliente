@@ -481,12 +481,14 @@ public class UISignUpController {
                 controller.initStage(root);
             } catch (EmailExisteException ee) {
                 LOGGER.severe(ee.getMessage());
-                lblNumeroTelefonoError.setText("El email ya existe");
-                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+                lblEmailError.setText("El email ya existe");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
             } catch (LoginExisteException le) {
                 LOGGER.severe(le.getMessage());
-                lblNumeroTelefonoError.setText("El login ya existe");
-                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+                lblUsuarioError.setText("El login ya existe");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+            } catch (LoginNoExisteException lne) {
+                //Si el login no existe no hace nada
             } catch (IOException ie) {
                 LOGGER.severe(ie.getMessage());
             }

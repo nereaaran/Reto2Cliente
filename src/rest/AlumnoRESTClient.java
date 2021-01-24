@@ -96,7 +96,7 @@ public class AlumnoRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void remove(Integer id) throws ClientErrorException {
+    public void remove(String id) throws ClientErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 

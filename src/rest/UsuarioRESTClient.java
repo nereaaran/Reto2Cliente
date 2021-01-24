@@ -151,7 +151,7 @@ public class UsuarioRESTClient {
      */
     public <T> T buscarUsuarioPorLoginYContrasenia(GenericType<T> responseType, String login, String contrasenia) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("login/{0}", new Object[]{login}));
+        resource = resource.path(java.text.MessageFormat.format("loginYPassword/{0}/{1}", new Object[]{login, contrasenia}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

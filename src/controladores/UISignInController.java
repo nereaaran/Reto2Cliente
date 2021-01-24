@@ -5,10 +5,16 @@
  */
 package controladores;
 
+import entidad.Usuario;
+import excepcion.*;
+import factorias.GestionFactoria;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,7 +30,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UISignIn que contiene los metodos para definir y
@@ -58,9 +66,9 @@ public class UISignInController {
     @FXML
     private TextField txtUsuario;
     @FXML
-    private Label lblContraseña;
+    private Label lblContrasenia;
     @FXML
-    private PasswordField txtContraseña;
+    private PasswordField txtContrasenia;
     @FXML
     private Button btnIniciarSesion;
     @FXML
@@ -70,11 +78,11 @@ public class UISignInController {
     @FXML
     private Label lblNoTienesCuenta;
     @FXML
-    private Label lblContraseñaError;
+    private Label lblContraseniaError;
     @FXML
     private Label lblUsuarioError;
     @FXML
-    private Hyperlink linkContraseñaOlvidada;
+    private Hyperlink linkContraseniaOlvidada;
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -104,30 +112,78 @@ public class UISignInController {
         stage.setTitle("Sign In");
         stage.setResizable(false);
 
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
+
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
 
         btnIniciarSesion.setOnAction(this::handleBotonIniciarSesion);
         btnRegistrate.setOnAction(this::handleBotonRegistro);
-        linkContraseñaOlvidada.setOnAction(this::handleBotonContraseñaOlvidada);
+        linkContraseniaOlvidada.setOnAction(this::handleBotonContraseniaOlvidada);
 
         txtUsuario.textProperty().addListener(this::handleTextoCambiado);
-        txtContraseña.textProperty().addListener(this::handleTextoCambiado);
+        txtContrasenia.textProperty().addListener(this::handleTextoCambiado);
 
         stage.show();
     }
 
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
-        
-        
-        
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
+            UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
+
+            //Comprueba si existe el login
+            LOGGER.info("SignIn Controlador: Comprobando si existe el login");
+
+            Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+
+            //Comprueba si el login y la contraseña están bien
+            LOGGER.info("SignIn Controlador: Comprobando login y contraseña");
+
+            usuarioGestion.buscarUsuarioPorLoginYContrasenia(txtUsuario.getText(), txtContrasenia.getText());
+
+            for (Usuario u : usuario) {
+                u.getPrivilege();
+
+                if (u.getTipoUsuario().equals("BIBLIOTECARIO")) {
+                    //Abre la vista de UILibro
+                    LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+                    Parent root = (Parent) loader.load();
+                    UILibroController controller = ((UILibroController) loader.getController());
+                    controller.setStage(stage);
+                    controller.initStage(root);
+                } else if (u.getTipoUsuario().equals("PROFESOR")) {
+                    //Abre la vista de UIGrupo
+                    LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                    Parent root = (Parent) loader.load();
+                    UIGrupoController controller = ((UIGrupoController) loader.getController());
+                    controller.setStage(stage);
+                    controller.initStage(root);
+                } else {
+                    lblContraseniaError.setText("No estás autorizado para realizar esta acción");
+                }
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIgrupo.fxml"));
             Parent root = (Parent) loader.load();
-            UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
-            controller.setStage();
+            UILibroController controller = ((UILibroController) loader.getController());
+            controller.setStage(stage);
             controller.initStage(root);
+        } catch (LoginNoExisteException lne) {
+            LOGGER.severe(lne.getMessage());
+            lblUsuarioError.setText("Usuario no encontrado");
+            lblUsuarioError.setTextFill(Color.web("#FF0000"));
+        } catch (LoginExisteException le) {
+            //Si el login existe no hace nada
+        } catch (UsuarioNoExisteException une) {
+            LOGGER.severe(une.getMessage());
+            lblContraseniaError.setText("Contrasenia incorrecta");
+            lblContraseniaError.setTextFill(Color.web("#FF0000"));
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
@@ -149,7 +205,7 @@ public class UISignInController {
         // Guarda el textField
         TextField changedTextField = (TextField) textProperty.getBean();
 
-        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContraseña.getText().isEmpty()) {
+        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContrasenia.getText().isEmpty()) {
             btnIniciarSesion.setDisable(false);
         } else {
             btnIniciarSesion.setDisable(true);
@@ -179,8 +235,8 @@ public class UISignInController {
      *
      * @param event El evento de acción.
      */
-    private void handleBotonContraseñaOlvidada(ActionEvent event) {
-        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+    private void handleBotonContraseniaOlvidada(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contrasenia");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIRestaurarContrasenia.fxml"));
@@ -212,25 +268,28 @@ public class UISignInController {
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Ventana de alerta que sale para confirmar o negar el cambio de pantalla.
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
      *
-     * @return Devuelve el resultado de la elección.
+     * @param event El evento de acción.
      */
-    private boolean mostrarAlertConfirmation() {
-        boolean confirm = false;
-
+    private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
         alert.setHeaderText(null);
-        alert.setTitle("Sign In");
-        alert.setContentText("Seguro que quieres cerrar la ventana?");
-        Optional<ButtonType> respuesta = alert.showAndWait();
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
 
-        if (respuesta.get() == ButtonType.OK) {
-            confirm = true;
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
-
-        return confirm;
     }
 }
