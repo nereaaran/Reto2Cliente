@@ -38,7 +38,7 @@ import javafx.stage.WindowEvent;
  * Controlador de la vista UISignIn que contiene los metodos para definir y
  * controlar su comportamiento.
  *
- * @author Nerea Aranguren
+ * @author Nerea Aranguren y Cristina Milea
  */
 public class UISignInController {
 
@@ -57,30 +57,63 @@ public class UISignInController {
      */
     public static final Pattern VALID_PASSWORD = Pattern.compile("^[a-zA-Z0-9]+$");
     /**
-     * Lista de elementos importados de la vista FXML que representan objetos.
+     * Elemento tipo pane importado de la vista FXML.
      */
     @FXML
     private Pane paneSignIn;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Usuario.
+     */
     @FXML
     private Label lblUsuario;
+    /**
+     * Elemento tipo TextField importado del FXML que referencia a Usuario.
+     */
     @FXML
     private TextField txtUsuario;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Contraseña.
+     */
     @FXML
     private Label lblContrasenia;
+    /**
+     * Elemento tipo passwordField importado del FXML que referencia a Contraseña.
+     */
     @FXML
     private PasswordField txtContrasenia;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a IniciarSesion.
+     */
     @FXML
     private Button btnIniciarSesion;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Registrate.
+     */
     @FXML
     private Button btnRegistrate;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Título.
+     */
     @FXML
     private Label lblTitulo;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NoTienesCuenta.
+     */
     @FXML
     private Label lblNoTienesCuenta;
+    /**
+     * Elemento tipo label importado del FXML que referencia a ContraseniaError.
+     */
     @FXML
     private Label lblContraseniaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a UsuarioError.
+     */
     @FXML
     private Label lblUsuarioError;
+    /**
+     * Elemento tipo hyperlink importado del FXML que referencia a ContraseniaOlvidada.
+     */
     @FXML
     private Hyperlink linkContraseniaOlvidada;
     /**
