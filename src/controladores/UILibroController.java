@@ -11,6 +11,7 @@ import interfaces.LibroGestion;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -78,7 +79,7 @@ public class UILibroController {
     /*
      * Atributo estático y constante que guarda el patron correcto de titulo.
      */
-    public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9\\s]+$", Pattern.CASE_INSENSITIVE);
 
     /**
      * Atributo estático y constante que guarda el patron correcto de autor,
@@ -167,7 +168,7 @@ public class UILibroController {
     @FXML
     private AnchorPane paneInferiorLibro;
     @FXML
-    private TableView<Libro> tablaLibros;
+    private TableView<Libro> tablaLibro;
     @FXML
     private TableColumn<Libro, String> tituloCL;
     @FXML
@@ -186,12 +187,12 @@ public class UILibroController {
     private TableColumn<Libro, Boolean> descargableCL;
     @FXML
     private TableColumn<Libro, String> linkdescargaCL;
-    
+
     /**
      * Lista observable de Libro para la tabla.
      */
     private ObservableList<Libro> librosObservableList;
-    
+
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -230,7 +231,7 @@ public class UILibroController {
         btnLimpiar.setDisable(true);
         btnBuscar.setDisable(true);
         txtTitulo.requestFocus();
-        
+
         // Añade listeners a propiedades de cambio de texto
         txtBuscarLibro.textProperty().addListener(this::handleTextoCambiado);
         txtTitulo.textProperty().addListener(this::handleTextoCambiado);
@@ -240,7 +241,7 @@ public class UILibroController {
         txtCantidadTotal.textProperty().addListener(this::handleTextoCambiado);
         txtIsbn.textProperty().addListener(this::handleTextoCambiado);
         txtLinkDescarga.textProperty().addListener(this::handleTextoCambiado);
-        
+
         // Añade acciones a los botones
         btnLimpiar.setOnAction(this::handleBtnLimpiar);
         btnAnadir.setOnAction(this::handleBtnAnadir);
@@ -248,8 +249,8 @@ public class UILibroController {
         btnEliminar.setOnAction(this::handleBtnEliminar);
         btnBuscar.setOnAction(this::handleBtnBuscar);
         mnCerrarSesion.setOnAction(this::handleCerrarSesion);
-        
-        // 
+
+        // //////////////////////////////////////////////////////////////////////////////////////////////////////
         tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         autorCL.setCellValueFactory(new PropertyValueFactory<>("autor"));
         editorialCL.setCellValueFactory(new PropertyValueFactory<>("editorial"));
@@ -259,27 +260,76 @@ public class UILibroController {
         cantidadDisponibleCL.setCellValueFactory(new PropertyValueFactory<>("cantidadDisponible"));
         descargableCL.setCellValueFactory(new PropertyValueFactory<>("descargable"));
         linkdescargaCL.setCellValueFactory(new PropertyValueFactory<>("linkDescarga"));
-        
+
         LibroGestion libroGestion = new LibroGestionImplementation();
-        librosObservableList = FXCollections.observableArrayList(new ArrayList<>(libroGestion.buscarTodosLosLibros()));
-        if(librosObservableList.isEmpty())
-            System.out.println("VACIO");
-        else 
-            System.out.println("ELSE");
-        tablaLibros.setItems(librosObservableList);
+        librosObservableList = FXCollections.observableArrayList(libroGestion.buscarTodosLosLibros());
+        tablaLibro.setItems(librosObservableList);
+
+        tablaLibro.getSelectionModel().selectedItemProperty().addListener(this::handleTablaSeleccionada);
 
         stage.show();
+    }
+
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del libro y se desactiva el boton "btnAñadir".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
+    private void handleTablaSeleccionada(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null) {
+            Libro libro = (Libro) newValue;
+            txtTitulo.setText(libro.getTitulo());
+            txtAutor.setText(libro.getAutor());
+            txtEditorial.setText(libro.getEditorial());
+            txtGenero.setText(libro.getEditorial());
+            txtIsbn.setText(Long.toString(libro.getIsbn()));
+            txtCantidadTotal.setText(Integer.toString(libro.getCantidadTotal()));
+            cbxDescargable.setSelected(libro.isDescargable());
+            txtLinkDescarga.setText(libro.getLinkDescarga());
+            btnAnadir.setDisable(true);
+        } else {
+            txtTitulo.setText("");
+            txtAutor.setText("");
+            txtEditorial.setText("");
+            txtGenero.setText("");
+            txtIsbn.setText("");
+            txtCantidadTotal.setText("");
+            cbxDescargable.setSelected(false);
+            txtLinkDescarga.setText("");
+            btnAnadir.setDisable(false);
+        }
+    }
+
+    private boolean eliminarLibro(Libro libro) {
+        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+        Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
+
+        if (libros.size() > 0) {
+            for (Libro l : libros) {
+                if (l.getTitulo().equalsIgnoreCase(libro.getTitulo())) {
+                    libroGestionImplementation.remove(l);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBtnEliminar(ActionEvent event) {
         if (eliminarLibroVentana()) {
-            ///////////////////////////////////////////////
+            Libro libroSeleccionado = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
+            eliminarLibro(libroSeleccionado);
+            tablaLibro.getItems().remove(libroSeleccionado);
+            tablaLibro.refresh();
             limpiarCamposTexto();
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBtnModificar(ActionEvent event) {
         if (patronesTextoBien()) {
             ///////////////////////////////////////////////
@@ -287,23 +337,30 @@ public class UILibroController {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Busca un libro en la base de datos a partir del titulo introducido en el
+     * campo de texto "txtBuscarLibro" y muestra los resultados en la tabla.
+     *
+     * @param event El evento de accion.
+     */
     private void handleBtnBuscar(ActionEvent event) {
         LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
         Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(txtBuscarLibro.getText());
-        
-        if(libros.isEmpty()){
+
+        if (libros.isEmpty()) {
             lblBuscarLibroError.setText("El libro no existe");
             lblBuscarLibroError.setTextFill(Color.web("#FF0000"));
         } else {
-            ////////////////////////////////////////////////////////////////////////////////////7
+            lblBuscarLibroError.setText("");
         }
+        librosObservableList = FXCollections.observableArrayList(libros);
+        tablaLibro.setItems(librosObservableList);
     }
 
     /**
      * Se ejecuta cuando se pulsa el boton Añadir. Si los datos son correctos y
-     * el libro no existe se añade. Si ya existe se suma uno a la cantidad total
-     * del libro encontrado.
+     * el libro no existe se añade a la base de datos y se actualiza la tabla.
+     * Si ya existe se suma uno a la cantidad total del libro encontrado.
      *
      * @param event El evento de acción.
      */
@@ -327,6 +384,7 @@ public class UILibroController {
             } else {
                 LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
                 libroGestionImplementation.create(libroNuevo);
+                tablaLibro.getItems().add(libroNuevo);
                 lblInformacion.setText("Libro añadido");
                 lblInformacion.setTextFill(Color.web("#008000"));
             }
