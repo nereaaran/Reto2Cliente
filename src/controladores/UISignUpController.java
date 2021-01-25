@@ -444,7 +444,7 @@ public class UISignUpController {
                 //Comprueba si existe el email
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
 
-                usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+                usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
 
                 //Comprueba si existe el login
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el login");

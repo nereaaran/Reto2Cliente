@@ -173,9 +173,11 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      *
      * @param email el email del usuario por el que se buscará.
      * @return la colección de usuarios que encuentra.
+     * @throws excepcion.EmailExisteException si el email existe en la base de
+     * datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorEmail(String email) throws EmailExisteException {
+    public Collection<Usuario> buscarUsuarioPorEmailSignUp(String email) throws EmailExisteException {
         Collection<Usuario> usuario = null;
 
         try {
@@ -192,6 +194,59 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
         }
 
         return usuario;
+    }
+    
+    /**
+     * Manda una petición REST para que busque un usuario por email al servidor
+     * y busca el usuario.
+     *
+     * @param email el email del usuario por el que se buscará.
+     * @return la colección de usuarios que encuentra.
+     * @throws excepcion.EmailNoExisteException si el email no existe en la base de
+     * datos.
+     */
+    @Override
+    public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException {
+        Collection<Usuario> usuario = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email");
+
+            usuario = webClient.buscarUsuarioPorEmail(new GenericType<Collection<Usuario>>() {
+            }, email);
+
+            if (usuario.isEmpty()) {
+                throw new EmailNoExisteException();
+            }
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
+    }
+    
+    
+    /**
+     * Manda una petición REST para que busque un usuario por email al servidor
+     * y busca el usuario.
+     *
+     * @param usuario el usuario que se buscará.
+     * @return la colección de usuarios que encuentra.
+     */
+    @Override
+    public Collection <Usuario> buscarEmailParaEnviarMailContraseniaOlvidada(Collection <Usuario> usuario) {
+        Collection<Usuario> usuarioCol = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de contraseña olvidada");
+
+            usuarioCol = webClient.buscarEmailParaEnviarMailContraseniaOlvidada(new GenericType<Collection<Usuario>>() {
+            }, usuario);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuarioCol;
     }
 
     /**

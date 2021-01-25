@@ -5,6 +5,8 @@
  */
 package rest;
 
+import entidad.Usuario;
+import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -133,6 +135,24 @@ public class UsuarioRESTClient {
     public <T> T buscarUsuarioPorEmail(GenericType<T> responseType, String email) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("email/{0}", new Object[]{email}));
+        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    }
+
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param <T> Clase de tipo generico.
+     * @param responseType La clase objeto de la instancia de retorno.
+     * @param usuario la entidad Usuario.
+     * @return Coleccion de objetos con los datos.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public <T> T buscarEmailParaEnviarMailContraseniaOlvidada(GenericType<T> responseType, Collection <Usuario> usuario) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(java.text.MessageFormat.format("enviarMail/{0}", new Object[]{usuario}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

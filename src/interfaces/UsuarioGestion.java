@@ -72,8 +72,26 @@ public interface UsuarioGestion {
      * @throws excepcion.EmailExisteException si el email ya existe en la base
      * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorEmail(String email) throws EmailExisteException;
+    public Collection<Usuario> buscarUsuarioPorEmailSignUp(String email) throws EmailExisteException;
 
+    /**
+     * Método que busca un usuario por su email.
+     *
+     * @param email El email del usuario.
+     * @return Colección de usuario con el email buscado.
+     * @throws excepcion.EmailNoExisteException si el email no existe en la base
+     * de datos.
+     */
+    public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException;
+    
+    /**
+     * Método que busca un usuario por su email.
+     *
+     * @param usuario la entidad Usuario.
+     * @return Colección de usuario con el email buscado.
+     */
+    public Collection<Usuario> buscarEmailParaEnviarMailContraseniaOlvidada(Collection <Usuario> usuario);
+    
     /**
      * Método que busca un usuario por su login y contraseña.
      *

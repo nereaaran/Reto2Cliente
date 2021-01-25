@@ -602,7 +602,7 @@ public class UIAlumnoController {
                 //Comprueba si existe el email
                 LOGGER.info("Alumno Controlador: Comprobando si existe el email");
 
-                usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+                usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
 
                 //Se crea el alumno
                 LOGGER.info("Alumno Controlador: Creando alumno");
@@ -655,7 +655,7 @@ public class UIAlumnoController {
 
                 if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText()) && !alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
                     usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
-                    usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+                    usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
                     alumnoSeleccionado.setLogin(txtUsuario.getText());
                     alumnoSeleccionado.setEmail(txtEmail.getText());
                 }
