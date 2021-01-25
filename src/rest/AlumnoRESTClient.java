@@ -90,14 +90,14 @@ public class AlumnoRESTClient {
 
     /**
      * Manda al servicio web alumno RESTful una petición para eliminar un alumno
-     * identificado por el id.
+     * identificado por el login.
      *
-     * @param id El id de la entidad alumno que se eliminará.
+     * @param login El login de la entidad alumno que se eliminará.
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void remove(String id) throws ClientErrorException {
-        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
+    public void remove(String login) throws ClientErrorException {
+        webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{login})).request().delete();
     }
 
     /**

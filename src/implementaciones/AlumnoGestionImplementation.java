@@ -72,16 +72,16 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
 
     /**
      * Manda una petición REST de tipo remove al servidor y elimina el alumno
-     * por el id.
+     * por el login.
      *
-     * @param alumno el alumno que se eliminará.
+     * @param login el login del alumno que se eliminará.
      */
     @Override
-    public void remove(Alumno alumno) {
+    public void remove(String login) {
         try {
             LOGGER.info("AlumnoGestionImplementation: Borrando alumno");
 
-            webClient.remove(alumno.getLogin());
+            webClient.remove(login);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

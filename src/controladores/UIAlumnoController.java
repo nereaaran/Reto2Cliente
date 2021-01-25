@@ -282,9 +282,14 @@ public class UIAlumnoController {
     private Label lblAlumnosAsignados;
 
     /**
-     * Entidad Usuario del lado cliente.
+     * Entidad Alumno del lado cliente.
      */
     private ObservableList<Alumno> alumnos;
+
+    /**
+     * Entidad Grupo del lado cliente.
+     */
+    private ObservableList<Grupo> grupos;
 
     /**
      * Variable que hace una llamada al método que gestiona los usuarios de la
@@ -297,6 +302,12 @@ public class UIAlumnoController {
      * factoría.
      */
     AlumnoGestion alumnoGestion = GestionFactoria.getAlumnoGestion();
+
+    /**
+     * Variable que hace una llamada al método que gestiona los grupos de la
+     * factoría.
+     */
+    GrupoGestion grupoGestion = GestionFactoria.getGrupoGestion();
 
     /**
      * Variable de tipo stage que se usa para visualizar la ventana.
@@ -328,10 +339,12 @@ public class UIAlumnoController {
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
 
+        /*grupos = FXCollections.observableArrayList(grupoGestion.buscarTodosLosGruposGrupo());
+        tablaGrupos.setItems(grupos);
+        
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
+        numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));*/
 
-        //Falta lo de jony
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
@@ -390,6 +403,14 @@ public class UIAlumnoController {
             //datePickerFechaNacimiento.setValue(alumno.getFechaNacimiento());
 
             btnAnadir.setDisable(true);
+        } else {
+            txtNombreCompleto.clear();
+            txtDni.clear();
+            txtUsuario.clear();
+            txtEmail.clear();
+            datePickerFechaNacimiento.getEditor().clear();
+
+            btnAnadir.setDisable(false);
         }
     }
 
@@ -716,8 +737,6 @@ public class UIAlumnoController {
      * @param event El evento de acción.
      */
     private void botonEliminarPulsado(ActionEvent event) {
-        Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Eliminar");
         alert.setHeaderText(null);
@@ -728,7 +747,9 @@ public class UIAlumnoController {
         ButtonType button = result.orElse(ButtonType.CANCEL);
 
         if (button == ButtonType.OK) {
-            alumnoGestion.remove(alumnoSeleccionado);
+            Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
+
+            alumnoGestion.remove(txtUsuario.getText());
 
             tablaAlumnos.getItems().remove(alumnoSeleccionado);
             tablaAlumnos.refresh();
@@ -779,7 +800,7 @@ public class UIAlumnoController {
      * @param event El evento de acción.
      */
     private void limpiarCampos() {
-        txtNombreCompleto.setText("");
+        txtNombreCompleto.clear();
         txtDni.clear();
         txtUsuario.clear();
         txtEmail.clear();

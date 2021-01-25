@@ -105,7 +105,6 @@ public class UIRestaurarContraseniaController {
         try {
             LOGGER.info("RestaurarContrasenia Controlador: Restaurando contraseña");
 
-            Usuario usuario=new Usuario();
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
             
             Collection <Usuario> usuarioCol=usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
