@@ -9,9 +9,7 @@ import entidad.Libro;
 import implementaciones.LibroGestionImplementation;
 import interfaces.LibroGestion;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -332,8 +330,32 @@ public class UILibroController {
 //////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBtnModificar(ActionEvent event) {
         if (patronesTextoBien()) {
-            ///////////////////////////////////////////////
-            limpiarCamposTexto();
+            System.out.println("1");
+            Libro selectedLibro = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
+            if (!selectedLibro.getTitulo().equals(txtTitulo.getText())) {
+            System.out.println("2");
+                if (comprobarLibroExistePorTitulo(txtTitulo.getText())) {
+            System.out.println("3");
+                    lblInformacion.setText("El libro ya existe");
+                    lblInformacion.setTextFill(Color.web("#FF0000"));
+                }
+            } else {
+            System.out.println("4");
+                selectedLibro.setTitulo(txtTitulo.getText());
+                selectedLibro.setAutor(txtAutor.getText());
+                selectedLibro.setEditorial(txtEditorial.getText());
+                selectedLibro.setIsbn(new Long(txtIsbn.getText()));
+                selectedLibro.setGenero(txtGenero.getText());
+                selectedLibro.setCantidadTotal(Integer.parseInt(txtCantidadTotal.getText()));
+                selectedLibro.setDescargable(cbxDescargable.isSelected());
+                selectedLibro.setLinkDescarga(txtLinkDescarga.getText());
+
+                LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+                libroGestionImplementation.edit(selectedLibro);
+                tablaLibro.getSelectionModel().clearSelection();
+                limpiarCamposTexto();
+            }
+
         }
     }
 
@@ -378,7 +400,7 @@ public class UILibroController {
             libroNuevo.setDescargable(cbxDescargable.isSelected());
             libroNuevo.setLinkDescarga(txtLinkDescarga.getText());
 
-            if (comprobarLibroExiste(libroNuevo)) {
+            if (comprobarLibroExisteAnadir(libroNuevo)) {
                 lblInformacion.setText("Libro existente. Se ha sumado a cantidad total");
                 lblInformacion.setTextFill(Color.web("#008000"));
             } else {
@@ -392,13 +414,28 @@ public class UILibroController {
         }
     }
 
+    private boolean comprobarLibroExistePorTitulo(String titulo) {
+        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
+        Collection<Libro> libros = null;
+        libros = libroGestionImplementation.buscarLibrosPorTitulo(titulo);
+
+        if (libros.size() > 0) {
+            for (Libro l : libros) {
+                if (l.getTitulo().equals(titulo)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Comprueba si el libro que se va a añadir existe en la base de datos.
      *
      * @param libro El libro que se quiere añadir.
      * @return Variable que indica si existe o no el libro.
      */
-    private boolean comprobarLibroExiste(Libro libro) {
+    private boolean comprobarLibroExisteAnadir(Libro libro) {
         LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
         Collection<Libro> libros = null;
         libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
@@ -584,7 +621,7 @@ public class UILibroController {
      * @param changedTextFieldName El id del campo modificado.
      */
     private void textFieldOverMaxLength(TextField changedTextField, String changedTextFieldName) {
-        int maxLenght = 0;
+        int maxLenght = 200;
 
         switch (changedTextFieldName) {
             case "txtBuscarLibro":
