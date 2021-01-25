@@ -7,7 +7,7 @@ package seguridad;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +16,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -40,12 +41,13 @@ public class CifradoAsimetrico {
     /**
      * Ruta absoluta del proyecto.
      */
-    private static final String filePath = new File("").getAbsolutePath();
+    private static final String filePath = new File("").getAbsolutePath();////////////////////////////////
 
     /**
-     * Atributo que lee la ruta de la clave del archivo de propiedades.
+     * Atributo que guarda la ruta de la clave publica del archivo de
+     * propiedades.
      */
-    private static final ResourceBundle RB = ResourceBundle.getBundle("archivos.Paths");
+    private final static String PUBLIC_KEY_PATH = ResourceBundle.getBundle("archivos.Paths").getString("ASIMETRIC_KEY_PUBLIC");
 
     /**
      * Metodo que cifra la contraseña del usuario con una clave publica.
@@ -60,7 +62,8 @@ public class CifradoAsimetrico {
         try {
             LOGGER.info("CifradoAsimetrico: Cifrando con clave publica");
 
-            byte fileKey[] = fileReader(filePath + RB.getString("ASIMETRIC_KEY_PUBLIC"));
+            byte fileKey[] = null;
+            fileKey = getPublicFileKey(PUBLIC_KEY_PATH);
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(fileKey);
@@ -102,7 +105,7 @@ public class CifradoAsimetrico {
      * @param path Path del fichero.
      * @return El texto del fichero.
      */
-    private byte[] fileReader(String path) {
+    /*private byte[] fileReader(String path) {
         byte ret[] = null;
         File file = new File(path);
         try {
@@ -113,5 +116,21 @@ public class CifradoAsimetrico {
             LOGGER.severe(e.getMessage());
         }
         return ret;
+    }*/
+
+
+    public byte[] getPublicFileKey(String path) {
+        byte[] publicKeyBytes = null;
+        try {
+            LOGGER.info("CifradoAsimetrico: Leyendo archivo");
+
+            InputStream inputStream = CifradoAsimetrico.class.getClassLoader().getResourceAsStream(path);
+            publicKeyBytes = new byte[inputStream.available()];
+            inputStream.read(publicKeyBytes);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return publicKeyBytes;
     }
+
 }
