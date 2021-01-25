@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -21,13 +23,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
  *
  * @author nerea
  */
-public class UIAlumnoController implements Initializable {
+public class UIAlumnoController {
 
     @FXML
     private AnchorPane paneGeneralAlumno;
@@ -113,12 +116,41 @@ public class UIAlumnoController implements Initializable {
     private Label lblListaGrupos;
     @FXML
     private Label lblAlumnosAsignados;
+ private Stage stage;
 
     /**
-     * Initializes the controller class.
+     * Método que establece el escenario como escenario principal.
+     *
+     * @param primaryStage El escenario de Sign Up.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }        
+    public void setStage(Stage primaryStage) {
+
+        stage = primaryStage;
+    }
+
+    /**
+     * Método que inicializa el escenario y los componentes de la vista.
+     *
+     * @param root El objeto padre que representa el nodo root.
+     */
+    public void initStage(Parent root) {
+
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.setTitle("Gestion de alumnos");
+        stage.setResizable(false);
+
+
+        btnAnadir.setDisable(true);
+        btnModificar.setDisable(true);
+        btnEliminar.setDisable(true);
+        btnBuscar.setDisable(true);
+        btnLimpiar.setDisable(true);
+
+        stage.show();
+
+        txtNombreCompleto.requestFocus();
+    }
+
 }
