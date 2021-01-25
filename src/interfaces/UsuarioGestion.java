@@ -52,10 +52,17 @@ public interface UsuarioGestion {
      * @return Colección de usuario con el login buscado.
      * @throws excepcion.LoginExisteException si el usuario ya existe en la base
      * de datos.
+     */
+    public Collection<Usuario> buscarUsuarioPorLoginSignUp(String login) throws LoginExisteException;
+    /**
+     * Método que busca un usuario por su login.
+     *
+     * @param login El login del usuario.
+     * @return Colección de usuario con el login buscado.
      * @throws excepcion.LoginNoExisteException si el usuario no existe en la
      * base de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException, LoginNoExisteException;
+    public Collection<Usuario> buscarUsuarioPorLoginSignIn(String login) throws LoginNoExisteException;
 
     /**
      * Método que busca un usuario por su email.

@@ -117,11 +117,9 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      * @throws excepcion.LoginExisteException si el usuario ya existe en la base
      * de datos.
-     * @throws excepcion.LoginNoExisteException si el usuario no existe en la
-     * base de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorLogin(String login) throws LoginExisteException, LoginNoExisteException {
+    public Collection<Usuario> buscarUsuarioPorLoginSignUp(String login) throws LoginExisteException {
         Collection<Usuario> usuario = null;
 
         try {
@@ -132,7 +130,34 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
 
             if (!usuario.isEmpty()) {
                 throw new LoginExisteException();
-            } else {
+            }
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return usuario;
+    }
+
+    /**
+     * Manda una petición REST para que busque un usuario por login al servidor
+     * y busca el usuario.
+     *
+     * @param login el login del usuario por el que se buscará.
+     * @return la colección de usuarios que encuentra.
+     * @throws excepcion.LoginNoExisteException si el usuario no existe en la
+     * base de datos.
+     */
+    @Override
+    public Collection<Usuario> buscarUsuarioPorLoginSignIn(String login) throws LoginNoExisteException {
+        Collection<Usuario> usuario = null;
+
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por login");
+
+            usuario = webClient.buscarUsuarioPorLogin(new GenericType<Collection<Usuario>>() {
+            }, login);
+
+            if (usuario.isEmpty()) {
                 throw new LoginNoExisteException();
             }
         } catch (ClientErrorException e) {
@@ -189,7 +214,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
             usuario = webClient.buscarUsuarioPorLoginYContrasenia(new GenericType<Collection<Usuario>>() {
             }, login, contrasenia);
 
-            if (!usuario.isEmpty()) {
+            if (usuario.isEmpty()) {
                 throw new UsuarioNoExisteException();
             }
         } catch (ClientErrorException e) {

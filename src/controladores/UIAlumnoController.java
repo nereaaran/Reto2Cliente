@@ -597,7 +597,7 @@ public class UIAlumnoController {
                 //Comprueba si existe el login
                 LOGGER.info("Alumno Controlador: Comprobando si existe el login");
 
-                usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+                usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
 
                 //Comprueba si existe el email
                 LOGGER.info("Alumno Controlador: Comprobando si existe el email");
@@ -632,8 +632,6 @@ public class UIAlumnoController {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
-            } catch (LoginNoExisteException lne) {
-                //Si el login no existe no hace nada
             } catch (EmailExisteException ee) {
                 LOGGER.severe(ee.getMessage());
                 lblEmailError.setText("El email ya existe");
@@ -656,7 +654,7 @@ public class UIAlumnoController {
                 Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
 
                 if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText()) && !alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
-                    usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+                    usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
                     usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
                     alumnoSeleccionado.setLogin(txtUsuario.getText());
                     alumnoSeleccionado.setEmail(txtEmail.getText());
@@ -704,8 +702,6 @@ public class UIAlumnoController {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
-            } catch (LoginNoExisteException lne) {
-                //Si el login no existe no hace nada
             } catch (EmailExisteException ee) {
                 LOGGER.severe(ee.getMessage());
                 lblEmailError.setText("El email ya existe");

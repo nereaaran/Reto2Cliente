@@ -5,12 +5,14 @@
  */
 package controladores;
 
+import static entidad.TipoUsuario.*;
 import entidad.Usuario;
 import excepcion.*;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -77,7 +79,8 @@ public class UISignInController {
     @FXML
     private Label lblContrasenia;
     /**
-     * Elemento tipo passwordField importado del FXML que referencia a Contraseña.
+     * Elemento tipo passwordField importado del FXML que referencia a
+     * Contraseña.
      */
     @FXML
     private PasswordField txtContrasenia;
@@ -91,6 +94,16 @@ public class UISignInController {
      */
     @FXML
     private Button btnRegistrate;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Bibliotecario.
+     */
+    @FXML
+    private Button btnBibliotecario;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Profesor.
+     */
+    @FXML
+    private Button btnProfesor;
     /**
      * Elemento tipo label importado del FXML que referencia a Título.
      */
@@ -112,7 +125,8 @@ public class UISignInController {
     @FXML
     private Label lblUsuarioError;
     /**
-     * Elemento tipo hyperlink importado del FXML que referencia a ContraseniaOlvidada.
+     * Elemento tipo hyperlink importado del FXML que referencia a
+     * ContraseniaOlvidada.
      */
     @FXML
     private Hyperlink linkContraseniaOlvidada;
@@ -150,6 +164,9 @@ public class UISignInController {
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
 
+        btnBibliotecario.setOnAction(this::handleBotonBibliotecario);
+        btnProfesor.setOnAction(this::handleBotonProfesor);
+
         btnIniciarSesion.setOnAction(this::handleBotonIniciarSesion);
         btnRegistrate.setOnAction(this::handleBotonRegistro);
         linkContraseniaOlvidada.setOnAction(this::handleBotonContraseniaOlvidada);
@@ -160,6 +177,50 @@ public class UISignInController {
         stage.show();
     }
 
+    /**
+     * Método que abre la venta UILibro.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonBibliotecario(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista UILibro");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+            Parent root = (Parent) loader.load();
+            UILibroController controller = ((UILibroController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Método que abre la venta UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonProfesor(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista UIGrupo");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+            Parent root = (Parent) loader.load();
+            UIGrupoController controller = ((UIGrupoController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Método que comprueba los errores posibles y si no hay ninguno carga y
+     * abre la venta UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
 
@@ -169,53 +230,58 @@ public class UISignInController {
             //Comprueba si existe el login
             LOGGER.info("SignIn Controlador: Comprobando si existe el login");
 
-            Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+            Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLoginSignIn(txtUsuario.getText());
 
             //Comprueba si el login y la contraseña están bien
             LOGGER.info("SignIn Controlador: Comprobando login y contraseña");
 
             usuarioGestion.buscarUsuarioPorLoginYContrasenia(txtUsuario.getText(), txtContrasenia.getText());
 
+            Date date = new Date(System.currentTimeMillis());
+
             for (Usuario u : usuario) {
                 u.getPrivilege();
 
-                if (u.getTipoUsuario().equals("BIBLIOTECARIO")) {
-                    //Abre la vista de UILibro
-                    LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
+                switch (u.getTipoUsuario()) {
+                    case BIBLIOTECARIO: {
+                        //Abre la vista de UILibro
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UILibroController controller = ((UILibroController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
 
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
-                    Parent root = (Parent) loader.load();
-                    UILibroController controller = ((UILibroController) loader.getController());
-                    controller.setStage(stage);
-                    controller.initStage(root);
-                } else if (u.getTipoUsuario().equals("PROFESOR")) {
-                    //Abre la vista de UIGrupo
-                    LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        break;
+                    }
+                    case PROFESOR: {
+                        //Abre la vista de UIGrupo
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
 
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                    Parent root = (Parent) loader.load();
-                    UIGrupoController controller = ((UIGrupoController) loader.getController());
-                    controller.setStage(stage);
-                    controller.initStage(root);
-                } else {
-                    lblContraseniaError.setText("No estás autorizado para realizar esta acción");
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        break;
+                    }
+                    default:
+                        lblContraseniaError.setText("No estás autorizado para realizar esta acción");
+                        lblContraseniaError.setTextFill(Color.web("#FF0000"));
+                        break;
                 }
             }
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIgrupo.fxml"));
-            Parent root = (Parent) loader.load();
-            UILibroController controller = ((UILibroController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
         } catch (LoginNoExisteException lne) {
             LOGGER.severe(lne.getMessage());
             lblUsuarioError.setText("Usuario no encontrado");
             lblUsuarioError.setTextFill(Color.web("#FF0000"));
-        } catch (LoginExisteException le) {
-            //Si el login existe no hace nada
         } catch (UsuarioNoExisteException une) {
             LOGGER.severe(une.getMessage());
-            lblContraseniaError.setText("Contrasenia incorrecta");
+            lblContraseniaError.setText("Contraseña incorrecta");
             lblContraseniaError.setTextFill(Color.web("#FF0000"));
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());

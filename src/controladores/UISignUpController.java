@@ -449,7 +449,7 @@ public class UISignUpController {
                 //Comprueba si existe el login
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
 
-                usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+                usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
 
                 //Se crea el profesor
                 LOGGER.info("Sign Up Controlador: Creando profesor");
@@ -487,8 +487,6 @@ public class UISignUpController {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
                 lblUsuarioError.setTextFill(Color.web("#FF0000"));
-            } catch (LoginNoExisteException lne) {
-                //Si el login no existe no hace nada
             } catch (IOException ie) {
                 LOGGER.severe(ie.getMessage());
             }
