@@ -74,12 +74,6 @@ public class UIMenuBarController {
         stage.setScene(scene);
         stage.setTitle("Menu principal");
         stage.setResizable(false);
-
-        
-        
-        mbMiPerfil.setOnAction(this::handleMiPerfilPresionado);
-        mbCerrarSesion.setOnAction(this::handleCerrarSesionPresionado);
-
     }
 
     /**
@@ -87,6 +81,7 @@ public class UIMenuBarController {
      *
      * @param event El evento de acción.
      */
+    @FXML
     private void handleMiPerfilPresionado(ActionEvent event) {
         LOGGER.info("UIMenuBarControlador: Iniciando vista MiPerfil");
 
@@ -108,16 +103,18 @@ public class UIMenuBarController {
      *
      * @param event El evento de acción.
      */
+    @FXML
     private void handleCerrarSesionPresionado(ActionEvent event) {
         if (cerrarSesionVentana()) {
-            try {
-                LOGGER.info("UIMenuBarControlador: Iniciando vista SignIn");
+            LOGGER.info("UIMenuBarControlador: Iniciando vista SignIn");
 
+            try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UISignIn.fxml"));
                 Parent root = (Parent) loader.load();
                 UISignInController controller = ((UISignInController) loader.getController());
-                controller.setStage(stage);
+                controller.setStage(new Stage());
                 controller.initStage(root);
+                stage.close();
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
             }

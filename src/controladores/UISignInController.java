@@ -126,11 +126,20 @@ public class UISignInController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
-
+/*
         try {///////////////////// ESTO NO VA AQUI///////////////////////////////////////////////////////7
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
             Parent root = (Parent) loader.load();
             UILibroController controller = ((UILibroController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }*/
+        try {///////////////////// ESTO NO VA AQUI///////////////////////////////////////////////////////7
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
+            Parent root = (Parent) loader.load();
+            UIAlumnoController controller = ((UIAlumnoController) loader.getController());
             controller.setStage(stage);
             controller.initStage(root);
         } catch (IOException e) {
