@@ -43,7 +43,7 @@ public interface AlumnoGestion {
      * @return Objeto Alumno con la información del alumno. buscado.
      */
     public Alumno find(Integer id);
-    
+
     /**
      * Método que busca un alumno por su nombre.
      *

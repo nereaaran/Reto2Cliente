@@ -344,7 +344,6 @@ public class UIAlumnoController {
         
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));*/
-
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
@@ -489,6 +488,7 @@ public class UIAlumnoController {
         if (txtBuscarAlumno.getText().isEmpty()) {
             alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
             tablaAlumnos.setItems(alumnos);
+
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
