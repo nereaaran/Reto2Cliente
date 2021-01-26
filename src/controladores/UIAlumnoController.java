@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -384,7 +385,7 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que coloca el los campos de texto Nombre COmpleto, Dni, Usuario,
+     * Método que coloca el los campos de texto Nombre Completo, Dni, Usuario,
      * Email y Fecha de nacimiento los valores de la línes seleccionada de la
      * tabla.
      *
@@ -394,13 +395,13 @@ public class UIAlumnoController {
      */
     private void seleccionTabla(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
-            Alumno alumno = (Alumno) newValue;
-            txtNombreCompleto.setText(alumno.getFullName());
-            txtDni.setText(alumno.getDni());
-            txtUsuario.setText(alumno.getLogin());
-            txtEmail.setText(alumno.getEmail());
-            //datePickerFechaNacimiento.setValue(alumno.getFechaNacimiento());
-
+            Alumno alumnoSeleccionado = (Alumno) newValue;
+            txtNombreCompleto.setText(alumnoSeleccionado.getFullName());
+            txtDni.setText(alumnoSeleccionado.getDni());
+            txtUsuario.setText(alumnoSeleccionado.getLogin());
+            txtEmail.setText(alumnoSeleccionado.getEmail());
+            //datePickerFechaNacimiento.setValue(alumnoSeleccionado.getFechaNacimiento());
+            
             btnAnadir.setDisable(true);
         } else {
             txtNombreCompleto.clear();
@@ -486,9 +487,6 @@ public class UIAlumnoController {
         }
 
         if (txtBuscarAlumno.getText().isEmpty()) {
-            alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
-            tablaAlumnos.setItems(alumnos);
-
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
@@ -527,6 +525,15 @@ public class UIAlumnoController {
         if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
             String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
             txtBuscarAlumno.setText(buscar);
+        }
+
+        StringProperty textProperty = (StringProperty) observable;
+        TextField changedTextField = (TextField) textProperty.getBean();
+        String changedTextFieldName = changedTextField.getId();
+
+        if (changedTextFieldName.equals("txtBuscarAlumno") && newValue.isEmpty()) {
+            alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
+            tablaAlumnos.setItems(alumnos);
         }
 
         habilitarBotones();
@@ -673,12 +680,12 @@ public class UIAlumnoController {
         if (!errorPatrones || !errorDatePicker) {
             try {
                 Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
-
-                if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText()) && !alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
+                if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
                     usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
+                }
+
+                if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
                     usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
-                    alumnoSeleccionado.setLogin(txtUsuario.getText());
-                    alumnoSeleccionado.setEmail(txtEmail.getText());
                 }
 
                 alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
@@ -691,34 +698,6 @@ public class UIAlumnoController {
                 tablaAlumnos.refresh();
 
                 limpiarCampos();
-
-                //Comprueba si existe el login
-                /*LOGGER.info("Alumno Controlador: Comprobando si existe el login");
-
-                usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
-
-                //Comprueba si existe el email
-                LOGGER.info("Alumno Controlador: Comprobando si existe el email");
-
-                usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());*/
-                //Se modifica el alumno
-                //LOGGER.info("Alumno Controlador: Modificando alumno");
-
-                /*Alumno alumno = new Alumno();
-                
-                alumno=(Alumno)tablaAlumnos.getSelectionModel().getSelectedItem();
-                alumno.setFullName(txtNombreCompleto.getText());
-                alumno.setDni(txtDni.getText());
-                alumno.setLogin(txtUsuario.getText());
-                alumno.setEmail(txtEmail.getText());
-                //nuevoAlumno.setFechaNacimiento(datePickerFechaNacimiento.getValue());
-                
-                alumnoGestion.edit(alumno);
-                
-                
-                tablaAlumnos.refresh();
-                
-                limpiarCampos();*/
             } catch (LoginExisteException le) {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
@@ -749,7 +728,7 @@ public class UIAlumnoController {
         if (button == ButtonType.OK) {
             Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
 
-            alumnoGestion.remove(txtUsuario.getText());
+            alumnoGestion.remove(alumnoSeleccionado);
 
             tablaAlumnos.getItems().remove(alumnoSeleccionado);
             tablaAlumnos.refresh();
@@ -816,6 +795,7 @@ public class UIAlumnoController {
 
         tablaAlumnos.getSelectionModel().clearSelection();
 
+        btnAnadir.setDisable(true);
         btnLimpiar.setDisable(true);
 
         txtNombreCompleto.requestFocus();
