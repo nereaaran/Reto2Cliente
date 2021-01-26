@@ -248,7 +248,6 @@ public class UILibroController {
         btnBuscar.setOnAction(this::handleBtnBuscar);
         mnCerrarSesion.setOnAction(this::handleCerrarSesion);
 
-        // //////////////////////////////////////////////////////////////////////////////////////////////////////
         tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         autorCL.setCellValueFactory(new PropertyValueFactory<>("autor"));
         editorialCL.setCellValueFactory(new PropertyValueFactory<>("editorial"));
@@ -301,6 +300,12 @@ public class UILibroController {
         }
     }
 
+    /**
+     * Busca un libro por el titulo y lo elimina de la base de datos.
+     *
+     * @param libro El libro que quiere borrar.
+     * @return Variable que indica si lo ha borrado o no.
+     */
     private boolean eliminarLibro(Libro libro) {
         LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
         Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
@@ -316,7 +321,13 @@ public class UILibroController {
         return false;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Cuando se pulsa el boton de Eliminar se abre una ventana emergente para
+     * confirmar si se quiere eliminar el libro. En caso afirmativo se elimina
+     * el libro de la base de datos y de la tabla.
+     *
+     * @param event El evento de accion.
+     */
     private void handleBtnEliminar(ActionEvent event) {
         if (eliminarLibroVentana()) {
             Libro libroSeleccionado = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
@@ -327,20 +338,22 @@ public class UILibroController {
         }
     }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Cuando se pulsa el boton Modificar comprueba que los patrones son
+     * correctos, y si el titulo no existe en la base de datos se modifica el
+     * libro selecconado.
+     *
+     * @param event El evento de accion.
+     */
     private void handleBtnModificar(ActionEvent event) {
         if (patronesTextoBien()) {
-            System.out.println("1");
             Libro selectedLibro = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
             if (!selectedLibro.getTitulo().equals(txtTitulo.getText())) {
-            System.out.println("2");
                 if (comprobarLibroExistePorTitulo(txtTitulo.getText())) {
-            System.out.println("3");
                     lblInformacion.setText("El libro ya existe");
                     lblInformacion.setTextFill(Color.web("#FF0000"));
                 }
             } else {
-            System.out.println("4");
                 selectedLibro.setTitulo(txtTitulo.getText());
                 selectedLibro.setAutor(txtAutor.getText());
                 selectedLibro.setEditorial(txtEditorial.getText());
@@ -355,7 +368,6 @@ public class UILibroController {
                 tablaLibro.getSelectionModel().clearSelection();
                 limpiarCamposTexto();
             }
-
         }
     }
 

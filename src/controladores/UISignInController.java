@@ -246,9 +246,6 @@ public class UISignInController {
     
     private void handleIniciarSesion(ActionEvent event) {
         
-        UsuarioGestion usuarioGestion= new UsuarioGestionImplementacion();
-        
-        usuarioGestion.find(4);
         
         
     }
