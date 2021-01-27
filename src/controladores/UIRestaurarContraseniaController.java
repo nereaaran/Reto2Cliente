@@ -10,7 +10,6 @@ import excepcion.EmailNoExisteException;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -107,23 +106,24 @@ public class UIRestaurarContraseniaController {
      * @param event El evento de acción.
      */
     private void handleBotonRestaurarContrasenia(ActionEvent event) {
-        //try {
+        try {
             LOGGER.info("RestaurarContrasenia Controlador: Restaurando contraseña");
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
             Usuario usuario=new Usuario();
             usuario.setEmail(txtEmail.getText());
-            //usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
-            usuarioGestion.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
+            
+            usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
+            usuarioGestion.buscarUsuarioParaEnviarMail(usuario);
 
-            lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
+            lblContraseniaRestaurada.setText("Contraseña restaurada. Revisa tu email");
             lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
-        /*} catch (EmailNoExisteException ene) {
+        } catch (EmailNoExisteException ene) {
             LOGGER.severe(ene.getMessage());
             lblEmailError.setText("Email no encontrado");
             lblEmailError.setTextFill(Color.web("#FF0000"));
-        }*/
+        }
     }
 
     /**

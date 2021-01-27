@@ -54,7 +54,7 @@ public interface UsuarioGestion {
      * de datos.
      */
     public Collection<Usuario> buscarUsuarioPorLoginCrear(String login) throws LoginExisteException;
-    
+
     /**
      * Método que busca un usuario por su login.
      *
@@ -79,19 +79,19 @@ public interface UsuarioGestion {
      * Método que busca un usuario por su email.
      *
      * @param email El email del usuario.
+     * @return una colección de usuarios.
      * @throws excepcion.EmailNoExisteException si el email no existe en la base
      * de datos.
      */
     public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException;
-    
+
     /**
      * Método que busca un usuario por su email.
      *
      * @param usuario la entidad Usuario.
-     * @return Colección de usuario con el email buscado.
      */
-    public void buscarEmailParaEnviarMailContraseniaOlvidada(Usuario usuario);
-    
+    public void buscarUsuarioParaEnviarMail(Usuario usuario);
+
     /**
      * Método que busca un usuario por su login y contraseña.
      *
