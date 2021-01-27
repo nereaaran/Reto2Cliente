@@ -98,6 +98,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Usuario find(Integer id) {
         Usuario usuario = null;
+        
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por id");
 
@@ -119,7 +120,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorLoginSignUp(String login) throws LoginExisteException {
+    public Collection<Usuario> buscarUsuarioPorLoginCrear(String login) throws LoginExisteException {
         Collection<Usuario> usuario = null;
 
         try {
@@ -177,7 +178,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorEmailSignUp(String email) throws EmailExisteException {
+    public Collection<Usuario> buscarUsuarioPorEmailCrear(String email) throws EmailExisteException {
         Collection<Usuario> usuario = null;
 
         try {

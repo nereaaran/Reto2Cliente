@@ -107,8 +107,8 @@ public class UIRestaurarContraseniaController {
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
             
-            Collection <Usuario> usuarioCol=usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
-            usuarioGestion.buscarEmailParaEnviarMailContraseniaOlvidada(usuarioCol);
+            Collection <Usuario> usuario=usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
+            usuarioGestion.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
 
             lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
             lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
