@@ -308,7 +308,7 @@ public class UIAlumnoController {
     /**
      * Método que establece el escenario como escenario principal.
      *
-     * @param primaryStage El escenario de Sign Up.
+     * @param primaryStage El escenario de UIAlumno.
      */
     public void setStage(Stage primaryStage) {
         LOGGER.info("Alumno Controlador: Estableciendo stage");
@@ -329,11 +329,7 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Usuario u = (Usuario) stage.getUserData();
-
-        System.out.println("Ha llegado el usuario a alumno-----------" + u.getEmail());
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         cargarDatosEnMenuGrupos();
 
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());

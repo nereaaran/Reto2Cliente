@@ -22,7 +22,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -242,6 +241,7 @@ public class UISignInController {
 
             for (Usuario u : usuario) {
                 u.getPrivilege();
+                
                 switch (u.getTipoUsuario()) {
                     case BIBLIOTECARIO: {
                         //Abre la vista de UILibro
@@ -257,20 +257,17 @@ public class UISignInController {
                         break;
                     }
                     case PROFESOR: {
-                        //Abre la vista de UIGrupo
-                        LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
-                        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
-                        Parent root = (Parent) loader.load();
-                        //UIGrupoController controller = ((UIGrupoController) loader.getController());
-                        UIAlumnoController controller = ((UIAlumnoController) loader.getController());
-                        controller.setStage(stage);
-                        controller.initStage(root);
-                        
-                        stage.setUserData(u);
-
                         u.setLastAccess(date);
                         usuarioGestion.edit(u);
+                        
+                        //Abre la vista de UIGrupo
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
+
                         break;
                     }
                     default:

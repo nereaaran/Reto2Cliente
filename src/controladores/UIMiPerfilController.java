@@ -129,11 +129,7 @@ public class UIMiPerfilController {
         stage.setScene(scene);
         stage.setTitle("Mi perfil");
         stage.setResizable(false);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Usuario u = (Usuario) stage.getUserData();
-
-        System.out.println("Ha llegado el usuario a perfil-----------" + u.getEmail());
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         txtNombreProfesor.setDisable(true);
         txtEmailProfesor.setDisable(true);
         txtUsuarioProfesor.setDisable(true);
