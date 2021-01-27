@@ -6,7 +6,8 @@
 package controladores;
 
 import entidad.Libro;
-import implementaciones.LibroGestionImplementation;
+import excepcion.LibroNoExisteException;
+import factorias.GestionFactoria;
 import interfaces.LibroGestion;
 import java.io.IOException;
 import java.util.Collection;
@@ -77,13 +78,13 @@ public class UILibroController {
     /*
      * Atributo estático y constante que guarda el patron correcto de titulo.
      */
-    public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9\\s]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9.:\\s]+$", Pattern.CASE_INSENSITIVE);
 
     /**
      * Atributo estático y constante que guarda el patron correcto de autor,
      * genero y editorial.
      */
-    public static final Pattern VALID_AUTOR_GENERO = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_AUTOR_GENERO = Pattern.compile("^[A-Z.\\s]+$", Pattern.CASE_INSENSITIVE);
     /**
      * Atributo estático y constante que guarda el patron correcto de isbn y
      * cantidad total.
@@ -192,6 +193,12 @@ public class UILibroController {
     private ObservableList<Libro> librosObservableList;
 
     /**
+     * Variable que hace una llamada al método que gestiona los libros de la
+     * factoría.
+     */
+    LibroGestion libroGestion = GestionFactoria.getLibroGestion();
+
+    /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
     private Stage stage;
@@ -258,7 +265,6 @@ public class UILibroController {
         descargableCL.setCellValueFactory(new PropertyValueFactory<>("descargable"));
         linkdescargaCL.setCellValueFactory(new PropertyValueFactory<>("linkDescarga"));
 
-        LibroGestion libroGestion = new LibroGestionImplementation();
         librosObservableList = FXCollections.observableArrayList(libroGestion.buscarTodosLosLibros());
         tablaLibro.setItems(librosObservableList);
 
@@ -301,27 +307,6 @@ public class UILibroController {
     }
 
     /**
-     * Busca un libro por el titulo y lo elimina de la base de datos.
-     *
-     * @param libro El libro que quiere borrar.
-     * @return Variable que indica si lo ha borrado o no.
-     */
-    private boolean eliminarLibro(Libro libro) {
-        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-        Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
-
-        if (libros.size() > 0) {
-            for (Libro l : libros) {
-                if (l.getTitulo().equalsIgnoreCase(libro.getTitulo())) {
-                    libroGestionImplementation.remove(l);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Cuando se pulsa el boton de Eliminar se abre una ventana emergente para
      * confirmar si se quiere eliminar el libro. En caso afirmativo se elimina
      * el libro de la base de datos y de la tabla.
@@ -331,10 +316,24 @@ public class UILibroController {
     private void handleBtnEliminar(ActionEvent event) {
         if (eliminarLibroVentana()) {
             Libro libroSeleccionado = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
-            eliminarLibro(libroSeleccionado);
-            tablaLibro.getItems().remove(libroSeleccionado);
-            tablaLibro.refresh();
-            limpiarCamposTexto();
+            try {
+                Collection<Libro> libros = libroGestion.buscarLibrosPorTitulo(libroSeleccionado.getTitulo());
+
+                for (Libro l : libros) {
+                    if (l.getTitulo().equalsIgnoreCase(libroSeleccionado.getTitulo())) {
+                        libroGestion.remove(l);
+                        tablaLibro.getItems().remove(libroSeleccionado);
+                        tablaLibro.refresh();
+                        lblInformacion.setText("Libro eliminado");
+                        lblInformacion.setTextFill(Color.web("#008000"));
+                        limpiarCamposTexto();
+                    }
+                }
+            } catch (LibroNoExisteException ex) {
+                LOGGER.severe(ex.getMessage());
+                lblInformacion.setText("Libro no eliminado");
+                lblInformacion.setTextFill(Color.web("#FF0000"));
+            }
         }
     }
 
@@ -349,9 +348,29 @@ public class UILibroController {
         if (patronesTextoBien()) {
             Libro selectedLibro = (Libro) tablaLibro.getSelectionModel().getSelectedItem();
             if (!selectedLibro.getTitulo().equals(txtTitulo.getText())) {
-                if (comprobarLibroExistePorTitulo(txtTitulo.getText())) {
-                    lblInformacion.setText("El libro ya existe");
-                    lblInformacion.setTextFill(Color.web("#FF0000"));
+
+                try {
+                    Collection<Libro> libros = libroGestion.buscarLibrosPorTitulo(txtTitulo.getText());
+                    for (Libro l : libros) {
+                        if (l.getTitulo().equals(txtTitulo.getText())) {
+                            lblInformacion.setText("El libro ya existe");
+                            lblInformacion.setTextFill(Color.web("#FF0000"));
+                        }
+                    }
+                } catch (LibroNoExisteException ex) {
+                    LOGGER.severe(ex.getMessage());
+                    selectedLibro.setTitulo(txtTitulo.getText());
+                    selectedLibro.setAutor(txtAutor.getText());
+                    selectedLibro.setEditorial(txtEditorial.getText());
+                    selectedLibro.setIsbn(new Long(txtIsbn.getText()));
+                    selectedLibro.setGenero(txtGenero.getText());
+                    selectedLibro.setCantidadTotal(Integer.parseInt(txtCantidadTotal.getText()));
+                    selectedLibro.setDescargable(cbxDescargable.isSelected());
+                    selectedLibro.setLinkDescarga(txtLinkDescarga.getText());
+
+                    libroGestion.edit(selectedLibro);
+                    tablaLibro.getSelectionModel().clearSelection();
+                    limpiarCamposTexto();
                 }
             } else {
                 selectedLibro.setTitulo(txtTitulo.getText());
@@ -363,8 +382,7 @@ public class UILibroController {
                 selectedLibro.setDescargable(cbxDescargable.isSelected());
                 selectedLibro.setLinkDescarga(txtLinkDescarga.getText());
 
-                LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-                libroGestionImplementation.edit(selectedLibro);
+                libroGestion.edit(selectedLibro);
                 tablaLibro.getSelectionModel().clearSelection();
                 limpiarCamposTexto();
             }
@@ -378,17 +396,18 @@ public class UILibroController {
      * @param event El evento de accion.
      */
     private void handleBtnBuscar(ActionEvent event) {
-        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-        Collection<Libro> libros = libroGestionImplementation.buscarLibrosPorTitulo(txtBuscarLibro.getText());
+        try {
+            Collection<Libro> libros = libroGestion.buscarLibrosPorTitulo(txtBuscarLibro.getText());
 
-        if (libros.isEmpty()) {
+            lblBuscarLibroError.setText("");
+            librosObservableList = FXCollections.observableArrayList(libros);
+            tablaLibro.setItems(librosObservableList);
+
+        } catch (LibroNoExisteException ex) {
+            LOGGER.severe(ex.getMessage());
             lblBuscarLibroError.setText("El libro no existe");
             lblBuscarLibroError.setTextFill(Color.web("#FF0000"));
-        } else {
-            lblBuscarLibroError.setText("");
         }
-        librosObservableList = FXCollections.observableArrayList(libros);
-        tablaLibro.setItems(librosObservableList);
     }
 
     /**
@@ -412,56 +431,25 @@ public class UILibroController {
             libroNuevo.setDescargable(cbxDescargable.isSelected());
             libroNuevo.setLinkDescarga(txtLinkDescarga.getText());
 
-            if (comprobarLibroExisteAnadir(libroNuevo)) {
-                lblInformacion.setText("Libro existente. Se ha sumado a cantidad total");
-                lblInformacion.setTextFill(Color.web("#008000"));
-            } else {
-                LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-                libroGestionImplementation.create(libroNuevo);
+            try {
+                Collection<Libro> libros = libroGestion.buscarLibrosPorTitulo(libroNuevo.getTitulo());
+                for (Libro l : libros) {
+                    if (l.getTitulo().equalsIgnoreCase(libroNuevo.getTitulo())) {
+                        l.setCantidadTotal(l.getCantidadTotal() + 1);
+                        libroGestion.edit(l);
+                        lblInformacion.setText("Libro existente. Se ha sumado a cantidad total");
+                        lblInformacion.setTextFill(Color.web("#008000"));
+                    }
+                }
+            } catch (LibroNoExisteException ex) {
+                LOGGER.severe(ex.getMessage());
+                libroGestion.create(libroNuevo);
                 tablaLibro.getItems().add(libroNuevo);
                 lblInformacion.setText("Libro añadido");
                 lblInformacion.setTextFill(Color.web("#008000"));
             }
             limpiarCamposTexto();
         }
-    }
-
-    private boolean comprobarLibroExistePorTitulo(String titulo) {
-        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-        Collection<Libro> libros = null;
-        libros = libroGestionImplementation.buscarLibrosPorTitulo(titulo);
-
-        if (libros.size() > 0) {
-            for (Libro l : libros) {
-                if (l.getTitulo().equals(titulo)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Comprueba si el libro que se va a añadir existe en la base de datos.
-     *
-     * @param libro El libro que se quiere añadir.
-     * @return Variable que indica si existe o no el libro.
-     */
-    private boolean comprobarLibroExisteAnadir(Libro libro) {
-        LibroGestionImplementation libroGestionImplementation = new LibroGestionImplementation();
-        Collection<Libro> libros = null;
-        libros = libroGestionImplementation.buscarLibrosPorTitulo(libro.getTitulo());
-
-        if (libros.size() > 0) {
-            for (Libro l : libros) {
-                if (l.getTitulo().equalsIgnoreCase(libro.getTitulo())) {
-                    l.setCantidadTotal(l.getCantidadTotal() + 1);
-                    libroGestionImplementation.edit(l);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -651,8 +639,8 @@ public class UILibroController {
             case "txtIsbn":
                 maxLenght = MAX_LENGHT_ISBN;
                 break;
-            default:
-                maxLenght = 200;
+            case "linkDescarga":
+                maxLenght = 300;
                 break;
         }
         if (changedTextField.getText().length() > maxLenght) {
