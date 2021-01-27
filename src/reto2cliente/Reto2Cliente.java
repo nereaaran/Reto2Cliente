@@ -63,8 +63,8 @@ public class Reto2Cliente extends Application {
         Profesor alumno = new Profesor();
         
         alumno = agi.find(2);
-        alumno.setPassword("11");
-        alumno.setFullName("66");
+        alumno.setPassword("abcd*1234");
+        alumno.setFullName("11");
         
         agi.edit(alumno);
         

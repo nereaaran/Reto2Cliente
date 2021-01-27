@@ -5,6 +5,7 @@
  */
 package seguridad;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -35,11 +37,6 @@ public class CifradoAsimetrico {
      * Atributo estático y constante que guarda los loggers de la clase.
      */
     private static final Logger LOGGER = Logger.getLogger("seguridad.CifradoAsimetrico");
-
-    /**
-     * Ruta absoluta del proyecto.
-     */
-    private static final String filePath = new File("").getAbsolutePath();////////////////////////////////
 
     /**
      * Atributo que guarda la ruta de la clave publica del archivo de
@@ -85,7 +82,7 @@ public class CifradoAsimetrico {
      */
     private String byteToHexadecimal(byte[] bytes) {
         LOGGER.info("CifradoAsimetrico: Convirtiendo bytes a hexadecimal");
-
+        
         String HEX = "";
         for (int i = 0; i < bytes.length; i++) {
             String h = Integer.toHexString(bytes[i] & 0xFF);
@@ -97,42 +94,29 @@ public class CifradoAsimetrico {
         return HEX.toUpperCase();
     }
 
-    /**
-     * Metodo que devuelve el contenido de un fichero.
-     *
-     * @param path Path del fichero.
-     * @return El texto del fichero.
-     *//*
-    private byte[] getPublicFileKey(String path) {
-        
-        
-        System.out.println(path);
-        
-        
-        byte ret[] = null;
-        File file = new File(path);
-        try {
-            LOGGER.info("CifradoAsimetrico: Leyendo archivo");
-
-            ret = Files.readAllBytes(file.toPath());
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
-        }
-        return ret;
-    }*/
-
     public byte[] getPublicFileKey() {
         byte[] publicKeyBytes = null;
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             LOGGER.info("CifradoAsimetrico: Leyendo archivo");
 
             InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream(PUBLIC_KEY_PATH);
             //InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream("/archivos/ComicSansAsimetricPublic.key");///////////////////////////////////7
-            publicKeyBytes = new byte[inputStream.available()];
-            inputStream.read(publicKeyBytes);
+            /*publicKeyBytes = new byte[inputStream.available()];
+            inputStream.read(publicKeyBytes);*/
+
+            byte[] buffer = new byte[1024];
+            int len;
+            // read bytes from the input stream and store them in buffer
+            while ((len = inputStream.read(buffer)) != -1) {
+                // write bytes from the buffer into output stream
+                os.write(buffer, 0, len);
+            }
+
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
         }
-        return publicKeyBytes;
+        //System.out.println("public" + os);//////////////////////////////////////////////////////////////////////////////////
+        return os.toByteArray();
     }
 }
