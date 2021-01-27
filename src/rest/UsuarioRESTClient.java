@@ -146,7 +146,20 @@ public class UsuarioRESTClient {
      * va envuelto en una respuesta de error de HTTP.
      */
     public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Object requestEntity) throws ClientErrorException {
-        webTarget.path("enviarMail").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+        webTarget.path("enviarMailRecuperacion").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+    
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param requestEntity Objeto con los datos del usuario.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public void buscarUsuarioParaEnviarMailCambiarContrasenia(Object requestEntity) throws ClientErrorException {
+        webTarget.path("enviarMailCambio").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     /**

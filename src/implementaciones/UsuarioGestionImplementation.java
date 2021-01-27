@@ -242,6 +242,23 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
             LOGGER.severe(e.getMessage());
         }
     }
+    
+    /**
+     * Manda una petición REST para que busque un usuario por email al servidor
+     * para enviar el mail de cambio de contraseña.
+     *
+     * @param usuario el usuario que se buscará.
+     */
+    @Override
+    public void buscarUsuarioParaEnviarMailCambiarContrasenia(Usuario usuario) {
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de cambio de contraseña");
+
+            webClient.buscarUsuarioParaEnviarMailCambiarContrasenia(usuario);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
 
     /**
      * Manda una petición REST para que busque un usuario por login y contraseña

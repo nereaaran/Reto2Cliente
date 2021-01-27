@@ -112,9 +112,6 @@ public class UIRestaurarContraseniaController {
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
-            //Usuario usuario = new Usuario();
-            //usuario.setEmail(txtEmail.getText());
-
             Collection<Usuario> usuarioCol = usuarioGestion.buscarUsuarioPorEmailContrasenia(txtEmail.getText());
 
             for (Usuario u : usuarioCol) {

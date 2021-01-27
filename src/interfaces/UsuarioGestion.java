@@ -93,6 +93,13 @@ public interface UsuarioGestion {
     public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Usuario usuario);
 
     /**
+     * Método que busca un usuario por su email para cambiar la contraseña.
+     *
+     * @param usuario la entidad Usuario.
+     */
+    public void buscarUsuarioParaEnviarMailCambiarContrasenia(Usuario usuario);
+
+    /**
      * Método que busca un usuario por su login y contraseña.
      *
      * @param login El login del usuario.
