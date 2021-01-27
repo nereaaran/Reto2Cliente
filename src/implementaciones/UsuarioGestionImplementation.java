@@ -235,19 +235,14 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * @return la colección de usuarios que encuentra.
      */
     @Override
-    public Collection <Usuario> buscarEmailParaEnviarMailContraseniaOlvidada(Collection <Usuario> usuario) {
-        Collection<Usuario> usuarioCol = null;
-
+    public void buscarEmailParaEnviarMailContraseniaOlvidada(Usuario usuario) {
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de contraseña olvidada");
 
-            usuarioCol = webClient.buscarEmailParaEnviarMailContraseniaOlvidada(new GenericType<Collection<Usuario>>() {
-            }, usuario);
+            webClient.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
-
-        return usuarioCol;
     }
 
     /**

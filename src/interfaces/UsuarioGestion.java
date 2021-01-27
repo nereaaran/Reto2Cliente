@@ -79,7 +79,6 @@ public interface UsuarioGestion {
      * Método que busca un usuario por su email.
      *
      * @param email El email del usuario.
-     * @return Colección de usuario con el email buscado.
      * @throws excepcion.EmailNoExisteException si el email no existe en la base
      * de datos.
      */
@@ -91,7 +90,7 @@ public interface UsuarioGestion {
      * @param usuario la entidad Usuario.
      * @return Colección de usuario con el email buscado.
      */
-    public Collection<Usuario> buscarEmailParaEnviarMailContraseniaOlvidada(Collection <Usuario> usuario);
+    public void buscarEmailParaEnviarMailContraseniaOlvidada(Usuario usuario);
     
     /**
      * Método que busca un usuario por su login y contraseña.

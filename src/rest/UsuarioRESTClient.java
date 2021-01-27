@@ -150,10 +150,8 @@ public class UsuarioRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarEmailParaEnviarMailContraseniaOlvidada(GenericType<T> responseType, Collection <Usuario> usuario) throws ClientErrorException {
-        WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("enviarMail/{0}", new Object[]{usuario}));
-        return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
+    public void buscarEmailParaEnviarMailContraseniaOlvidada(Object requestEntity) throws ClientErrorException {
+        webTarget.path("enviarMail").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     /**
