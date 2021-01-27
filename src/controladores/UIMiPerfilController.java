@@ -5,6 +5,7 @@
  */
 package controladores;
 
+import entidad.Usuario;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.util.logging.Logger;
@@ -14,6 +15,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -128,6 +130,10 @@ public class UIMiPerfilController {
         stage.setTitle("Mi perfil");
         stage.setResizable(false);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Usuario u = (Usuario) stage.getUserData();
+
+        System.out.println("Ha llegado el usuario a perfil-----------" + u.getEmail());
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         txtNombreProfesor.setDisable(true);
         txtEmailProfesor.setDisable(true);
         txtUsuarioProfesor.setDisable(true);
@@ -165,7 +171,7 @@ public class UIMiPerfilController {
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
             usuarioGestion.buscarEmailParaEnviarMailCambiarContrasenia("kristina.s.milea@gmail.com");
-            
+
             lblContrasenaCambiada.setText("La contraseña se ha cambiado");
             lblContrasenaCambiada.setTextFill(Color.web("#008000"));
 

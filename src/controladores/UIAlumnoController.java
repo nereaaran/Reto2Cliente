@@ -329,7 +329,11 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Usuario u = (Usuario) stage.getUserData();
 
+        System.out.println("Ha llegado el usuario a alumno-----------" + u.getEmail());
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         cargarDatosEnMenuGrupos();
 
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
