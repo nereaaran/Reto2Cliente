@@ -7,18 +7,11 @@ package controladores;
 
 import entidad.Grupo;
 import entidad.GrupoLibro;
-import entidad.Libro;
 import factorias.GestionFactoria;
 import implementaciones.GrupoGestionImplementation;
 import interfaces.GrupoGestion;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,16 +22,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -47,8 +39,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.ws.rs.core.GenericType;
-import rest.GrupoRESTClient;
 
 /**
  * FXML Controller class
@@ -108,21 +98,21 @@ public class UIGrupoController {
     @FXML
     private AnchorPane paneInferiorGrupo;
     @FXML
-    private TableView<Grupo> tablaGrupo;
+    private TableView<Grupo> tablaGrupos;
     @FXML
-    private TableColumn<Grupo, String> nombreGrupoCL;
+     private TableColumn<Grupo, String> nombreGrupoCL;
     @FXML
     private TableColumn<Grupo, String> descripcionCL;
     @FXML
     private TableColumn<Grupo, Integer> numAlumnosCL;
     @FXML
-    private TableView<?> tablaLibro1;
+    private TableView<GrupoLibro> tablaGrupoLibro;
     @FXML
-    private TableColumn<?, ?> tituloCL;
+    private TableColumn<GrupoLibro, String> tituloCL;
     @FXML
-    private TableColumn<?, ?> fechaInicioCL;
+    private TableColumn<GrupoLibro, Date> fechaInicioCL;
     @FXML
-    private TableColumn<?, ?> fechaFinCL;
+    private TableColumn<GrupoLibro, Date> fechaFinCL;
     @FXML
     private Label lblListaGrupos;
     @FXML
@@ -131,11 +121,15 @@ public class UIGrupoController {
     private Button btnAnadirLibro;
     @FXML
     private Button btnEliminarLibro;
+    @FXML
+    private DatePicker dpFechaInicio;
+    @FXML
+    private DatePicker dpFechaFin;   
 
-    private GrupoGestionImplementation gestionImplementation;
-    private GrupoGestion grupoGestion = GestionFactoria.getGrupoGestion();
-    private ObservableList<Grupo> listarGrupos;
-    private ObservableList<GrupoLibro> listarGrupoLibro;
+    //private GrupoGestionImplementation gestionImplementation;
+     GrupoGestion grupoGestion ;
+    ObservableList<Grupo> GrupoObservableList ;
+    ObservableList<GrupoLibro> GrupoLibroObservableList;
 
     //ObservableList listaGrupos = FXCollections.observableArrayList();
     private static final Logger LOGGER = Logger.getLogger(UIGrupoController.class.getName());
@@ -168,19 +162,30 @@ public class UIGrupoController {
         stage.setTitle("Gestion de grupos");
         stage.setResizable(false);
         stage.onCloseRequestProperty().set(this::cerrarVentana);
-
+       
         //Iniciando las columnas de la tabla Grupo
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         descripcionCL.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         numAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
-
+        
+        tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        fechaInicioCL.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
+        fechaFinCL.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
+        
+        grupoGestion=  GestionFactoria.getGrupoGestion();
+        GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
+        tablaGrupos.setItems(GrupoObservableList);
+        tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
+       
+        
+        
+        //grupoGestion = new GrupoLibroGestionImplementation();
+        
         //Propiedades de cambio de texto
         txtNombreGrupo.textProperty().addListener(this::handleTextoCambiado);
         txtDescripcion.textProperty().addListener(this::handleTextoCambiado);
 
-        GrupoGestion grupoGestion = new GrupoGestionImplementation();
-        listarGrupos = FXCollections.observableArrayList(new ArrayList<>(grupoGestion.listarGrupos()));
-        tablaGrupo.setItems(listarGrupos);
+       
 
         txtNombreGrupo.requestFocus();
         btnAnadir.setDisable(false);
@@ -206,6 +211,20 @@ public class UIGrupoController {
 
         stage.show();
     }
+    
+    
+    private void tablaGrupoSeleccionado(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null) {
+            Grupo grupo = (Grupo) newValue;
+            txtNombreGrupo.setText(grupo.getNombre());
+            txtDescripcion.setText(grupo.getDescripcion());
+            btnAnadir.setDisable(true);
+        } else {
+            txtNombreGrupo.setText("");
+            txtDescripcion.setText("");
+            btnAnadir.setDisable(false);
+        }
+    }
 
     public GrupoGestionImplementation getGestionImplementation() {
         return this.getGestionImplementation();
@@ -218,9 +237,9 @@ public class UIGrupoController {
             nuevoGrupo.setDescripcion(txtDescripcion.getText());
             nuevoGrupo.setNumAlumno(0);
 
-            grupoGestion.create(nuevoGrupo);
-            tablaGrupo.getItems().add(nuevoGrupo);
-            tablaGrupo.refresh();
+           // grupoGestion.create(nuevoGrupo);
+            tablaGrupos.getItems().add(nuevoGrupo);
+            tablaGrupos.refresh();
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
         }
@@ -356,8 +375,8 @@ public class UIGrupoController {
         }
 
         if (txtBuscarGrupo.getText().isEmpty()) {
-            listarGrupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
-            tablaGrupo.setItems(listarGrupos);
+         //   listarGrupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
+          //  tablaGrupo.setItems(listarGrupos);
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);

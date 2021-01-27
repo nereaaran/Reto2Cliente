@@ -18,7 +18,7 @@ import rest.GrupoRESTClient;
  *
  * @author nerea
  */
-public class GrupoGestionImplementation implements GrupoGestion {
+public class GrupoGestionImplementation implements GrupoGestion{
 
     private GrupoRESTClient webClient;
     private static final Logger LOGGER = Logger.getLogger("GrupoGestionImplementation");
@@ -73,7 +73,7 @@ public class GrupoGestionImplementation implements GrupoGestion {
     }
 
     @Override
-    public Collection<Grupo> buscarGrupoPorNombre(String nombre) throws ClientErrorException {
+    public Collection<Grupo> listarGrupoPorNombre(String nombre) throws ClientErrorException {
         Collection<Grupo> grupo = null;
         try {
             LOGGER.info("GrupoGestionImplementation: Buscando grupos por el nombre");
@@ -86,24 +86,19 @@ public class GrupoGestionImplementation implements GrupoGestion {
     }
 
     @Override
-    public Collection<Grupo> buscarTodosLosGruposGrupo() throws ClientErrorException {
+    public Collection<Grupo> listarGrupos()throws ClientErrorException{
         Collection<Grupo> grupo = null;
 
         try {
-            LOGGER.info("GrupoGestionImplementation: Buscando todos los grupos");
+            LOGGER.info("GrupoGestionImplementation: Buscandoo todos los grupos");
 
-            grupo = this.webClient.buscarTodosLosGruposGrupo(new GenericType<Collection<Grupo>>() {
+            grupo = webClient.listarGrupos(new GenericType<Collection<Grupo>>() {
             });
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
 
         return grupo;
-    }
-
-    @Override
-    public Collection<Grupo> getGrupo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

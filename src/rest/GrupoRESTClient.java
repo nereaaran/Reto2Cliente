@@ -6,6 +6,8 @@
 package rest;
 
 import entidad.Grupo;
+import factorias.GestionFactoria;
+import interfaces.GrupoGestion;
 import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
@@ -25,7 +27,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author nerea
  */
-public class GrupoRESTClient {
+    public class GrupoRESTClient implements GrupoGestion{
 
     private WebTarget webTarget;
     private Client client;
@@ -33,7 +35,7 @@ public class GrupoRESTClient {
 
     public GrupoRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(BASE_URI).path("entidad.grupo");
+        webTarget = client.target(BASE_URI).path("grupo");
     }
 
     public void edit(Object requestEntity) throws ClientErrorException {
@@ -55,7 +57,7 @@ public class GrupoRESTClient {
     }
 
    
-    public <T> T buscarTodosLosGruposGrupo(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T listarGrupos(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
@@ -66,8 +68,33 @@ public class GrupoRESTClient {
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
    
-    public void close() {
+     public void close() {
         client.close();
+    }  
+
+    @Override
+    public void create(Grupo grupo) throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void edit(Grupo grupo) throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Grupo find(Integer id) throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<Grupo> listarGrupos() throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Collection<Grupo> listarGrupoPorNombre(String nombre) throws ClientErrorException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
