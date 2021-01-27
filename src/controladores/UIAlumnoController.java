@@ -13,6 +13,7 @@ import excepcion.*;
 import factorias.GestionFactoria;
 import interfaces.*;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -31,11 +32,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -176,16 +176,6 @@ public class UIAlumnoController {
      */
     @FXML
     private MenuButton menuGrupos;
-    /**
-     * Elemento tipo menuitem importado de la vista FXML.
-     */
-    @FXML
-    private MenuItem lbNombreGrupo;
-    /**
-     * Elemento tipo checkbox importado de la vista FXML.
-     */
-    @FXML
-    private CheckBox cbxNomberGrupo;
     /**
      * Elemento tipo botón importado de la vista FXML.
      */
@@ -340,12 +330,14 @@ public class UIAlumnoController {
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
 
+        cargarDatosEnMenuGrupos();
+
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
         tablaGrupos.setItems(grupos);
-        
+
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
-        
+
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
@@ -402,7 +394,7 @@ public class UIAlumnoController {
             txtUsuario.setText(alumnoSeleccionado.getLogin());
             txtEmail.setText(alumnoSeleccionado.getEmail());
             //datePickerFechaNacimiento.setValue(alumnoSeleccionado.getFechaNacimiento());
-            
+
             btnAnadir.setDisable(true);
         } else {
             txtNombreCompleto.clear();
@@ -412,6 +404,18 @@ public class UIAlumnoController {
             datePickerFechaNacimiento.getEditor().clear();
 
             btnAnadir.setDisable(false);
+        }
+    }
+
+    /**
+     * Método que carga en el menú de grupos todos los grupos que existen.
+     */
+    private void cargarDatosEnMenuGrupos() {
+        Collection<Grupo> grupo = grupoGestion.listarGrupos();
+
+        for (Grupo g : grupo) {
+            CheckMenuItem checkMenuItem = new CheckMenuItem(g.getNombre());
+            menuGrupos.getItems().add(checkMenuItem);
         }
     }
 
@@ -681,14 +685,17 @@ public class UIAlumnoController {
         if (!errorPatrones || !errorDatePicker) {
             try {
                 Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
+                
+                //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
                 if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
                     usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
                 }
-
+                //Comprueba si se ha modificado el email para comprobar si ya existe en la base de datos o no.
                 if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
                     usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
                 }
-
+                
+                //Modifica el alumno
                 alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
                 alumnoSeleccionado.setDni(txtDni.getText());
                 alumnoSeleccionado.setLogin(txtUsuario.getText());
