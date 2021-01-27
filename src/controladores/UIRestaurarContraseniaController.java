@@ -5,7 +5,12 @@
  */
 package controladores;
 
+import entidad.Usuario;
+import excepcion.EmailNoExisteException;
+import factorias.GestionFactoria;
+import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -103,14 +108,31 @@ public class UIRestaurarContraseniaController {
         stage.show();
     }
 
-    
+    /**
+     * Método que envia un correo para restaurar la contraseña.
+     *
+     * @param event El evento de acción.
+     */
     private void handleBotonRestaurarContrasenia(ActionEvent event) {
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
-        lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
+        //try {
+            LOGGER.info("RestaurarContrasenia Controlador: Restaurando contraseña");
+
+            UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
+
+            Usuario usuario=new Usuario();
+            usuario.setEmail(txtEmail.getText());
+            //usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
+            usuarioGestion.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
+
+            lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
+            lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
+        /*} catch (EmailNoExisteException ene) {
+            LOGGER.severe(ene.getMessage());
+            lblEmailError.setText("Email no encontrado");
+            lblEmailError.setTextFill(Color.web("#FF0000"));
+        }*/
     }
 
-    
     /**
      * Se ejecuta cuando un campo de texto ha sido editado. Comprueba que el
      * campo de texto no esta vacio, no supera los 50 caracteres y sigue el

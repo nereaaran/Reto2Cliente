@@ -55,12 +55,28 @@ public class Usuario implements Serializable {
     /**
      * Fecha del último acceso del usuario.
      */
-    private String lastAccess;
+    private Date lastAccess;
     /**
      * Fecha de la última vez en la que se ha modificado la contraseña del
      * usuario.
      */
-    private String lastPasswordChange;
+    private Date lastPasswordChange;
+
+    /**
+     * Constructor vacío.
+     */
+    public Usuario() {
+        this.idUsuario = null;
+        this.login = null;
+        this.email = null;
+        this.fullName = null;
+        this.status = null;
+        this.privilege = null;
+        this.tipoUsuario = null;
+        this.password = null;
+        this.lastAccess = null;
+        this.lastPasswordChange = null;
+    }
 
     /**
      * Método que obtiene el id del usuario.
@@ -211,7 +227,7 @@ public class Usuario implements Serializable {
      *
      * @return el último acceso que se va a mostrar.
      */
-    public String getLastAccess() {
+    public Date getLastAccess() {
         return lastAccess;
     }
 
@@ -220,7 +236,7 @@ public class Usuario implements Serializable {
      *
      * @param lastAccess el último acceso que se va a guardar.
      */
-    public void setLastAccess(String lastAccess) {
+    public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
     }
 
@@ -229,7 +245,7 @@ public class Usuario implements Serializable {
      *
      * @return la fecha del último cambio de contraseña que se va a mostrar.
      */
-    public String getLastPasswordChange() {
+    public Date getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -239,7 +255,7 @@ public class Usuario implements Serializable {
      * @param lastPasswordChange la fecha del último cambio de contraseña que se
      * va a guardar.
      */
-    public void setLastPasswordChange(String lastPasswordChange) {
+    public void setLastPasswordChange(Date lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 
@@ -248,7 +264,7 @@ public class Usuario implements Serializable {
      *
      * @return el código hash del objeto.
      */
-    @Override    
+    @Override
     public int hashCode() {
         int hash = 7;
         hash = 97 * hash + Objects.hashCode(this.idUsuario);
@@ -314,7 +330,7 @@ public class Usuario implements Serializable {
         }
         return true;
     }
-    
+
     /**
      * Método que devuelve un String con los atributos del usuario.
      *
@@ -323,5 +339,5 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "Usuario{" + "idUsuario=" + idUsuario + ", login=" + login + ", email=" + email + ", fullName=" + fullName + ", status=" + status + ", privilege=" + privilege + ", tipoUsuario=" + tipoUsuario + ", password=" + password + ", lastAccess=" + lastAccess + ", lastPasswordChange=" + lastPasswordChange + '}';
-    }    
+    }
 }

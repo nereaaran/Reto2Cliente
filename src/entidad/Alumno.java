@@ -6,7 +6,6 @@
 package entidad;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.Collection;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,6 +38,17 @@ public class Alumno extends Usuario implements Serializable {
      * Relación N:M de la entidad "Alumno" con "Grupo".
      */
     private Collection<Grupo> grupos;
+
+    /**
+     * Constructor vacío que hereda los atributos de la clase Usuario.
+     */
+    public Alumno() {
+        super();
+        this.dni = null;
+        this.fechaNacimiento = null;
+        this.alumnoLibros = null;
+        this.grupos = null;
+    }
 
     /**
      * Método que obtiene el DNI del alumno.
@@ -117,13 +127,13 @@ public class Alumno extends Usuario implements Serializable {
      *
      * @return el código hash del objeto.
      */
-    @Override    
+    @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 83 * hash + Objects.hashCode(this.dni);
-        hash = 83 * hash + Objects.hashCode(this.fechaNacimiento);
-        hash = 83 * hash + Objects.hashCode(this.alumnoLibros);
-        hash = 83 * hash + Objects.hashCode(this.grupos);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.dni);
+        hash = 29 * hash + Objects.hashCode(this.fechaNacimiento);
+        hash = 29 * hash + Objects.hashCode(this.alumnoLibros);
+        hash = 29 * hash + Objects.hashCode(this.grupos);
         return hash;
     }
 
@@ -133,7 +143,7 @@ public class Alumno extends Usuario implements Serializable {
      * @param obj cualquier tipo de objeto.
      * @return un "false" si los objetos noson iguales y un "true" si lo son.
      */
-    @Override    
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -167,6 +177,7 @@ public class Alumno extends Usuario implements Serializable {
      */
     @Override
     public String toString() {
-        return "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
-    }    
+        String toString = super.toString();
+        return toString + "\n" + "Alumno{" + "dni=" + dni + ", fechaNacimiento=" + fechaNacimiento + ", alumnoLibros=" + alumnoLibros + ", grupos=" + grupos + '}';
+    }
 }

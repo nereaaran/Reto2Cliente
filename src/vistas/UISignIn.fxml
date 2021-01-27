@@ -49,5 +49,7 @@
       <Label fx:id="lblContraseniaError" layoutX="141.0" layoutY="238.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblUsuarioError" layoutX="141.0" layoutY="151.0" prefHeight="17.0" prefWidth="309.0" />
       <Hyperlink fx:id="linkContraseniaOlvidada" layoutX="141.0" layoutY="255.0" text="¿Has olvidado la contraseña?" underline="true" />
+      <Button fx:id="btnBibliotecario" layoutX="35.0" layoutY="287.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="120.0" text="Botón para entrar&#10;como bibliotecario" />
+      <Button fx:id="btnProfesor" layoutX="434.0" layoutY="287.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="120.0" text="Botón para entrar&#10;como profesor" />
    </children>
 </Pane>

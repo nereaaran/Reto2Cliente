@@ -5,6 +5,7 @@
  */
 package reto2cliente;
 
+import controladores.UIAlumnoController;
 import controladores.UISignInController;
 import java.io.IOException;
 import java.util.logging.Logger;
