@@ -53,7 +53,8 @@ public interface UsuarioGestion {
      * @throws excepcion.LoginExisteException si el usuario ya existe en la base
      * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorLoginSignUp(String login) throws LoginExisteException;
+    public Collection<Usuario> buscarUsuarioPorLoginCrear(String login) throws LoginExisteException;
+    
     /**
      * Método que busca un usuario por su login.
      *
@@ -72,7 +73,7 @@ public interface UsuarioGestion {
      * @throws excepcion.EmailExisteException si el email ya existe en la base
      * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorEmailSignUp(String email) throws EmailExisteException;
+    public Collection<Usuario> buscarUsuarioPorEmailCrear(String email) throws EmailExisteException;
 
     /**
      * Método que busca un usuario por su email.
