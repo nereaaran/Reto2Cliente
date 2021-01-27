@@ -8,19 +8,13 @@ package seguridad;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -67,8 +61,7 @@ public class CifradoAsimetrico {
             LOGGER.info("CifradoAsimetrico: Cifrando con clave publica");
 
             byte fileKey[] = null;
-            //fileKey = getPublicFileKey(PUBLIC_KEY_PATH);
-            fileKey = getPublicFileKey(filePath + PUBLIC_KEY_PATH);
+            fileKey = getPublicFileKey();
 
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(fileKey);
@@ -81,7 +74,6 @@ public class CifradoAsimetrico {
         } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             LOGGER.severe(e.getMessage());
         }
-        System.out.println(Arrays.toString(encodedMessage));
         return byteToHexadecimal(encodedMessage);
     }
 
@@ -110,7 +102,7 @@ public class CifradoAsimetrico {
      *
      * @param path Path del fichero.
      * @return El texto del fichero.
-     */
+     *//*
     private byte[] getPublicFileKey(String path) {
         
         
@@ -127,34 +119,20 @@ public class CifradoAsimetrico {
             LOGGER.severe(e.getMessage());
         }
         return ret;
-    }
-    /*
-    public byte[] getPublicFileKey(String path) {
+    }*/
+
+    public byte[] getPublicFileKey() {
         byte[] publicKeyBytes = null;
         try {
             LOGGER.info("CifradoAsimetrico: Leyendo archivo");
 
-            InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream("ComicSansAsimetricPublic.key");
+            InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream(PUBLIC_KEY_PATH);
+            //InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream("/archivos/ComicSansAsimetricPublic.key");///////////////////////////////////7
             publicKeyBytes = new byte[inputStream.available()];
             inputStream.read(publicKeyBytes);
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
+        } catch (IOException ex) {
+            LOGGER.severe(ex.getMessage());
         }
         return publicKeyBytes;
-    }*/
-
-    /*
-    public byte[] getPublicFileKey(String path) {
-        byte[] publicKeyBytes = null;
-        try {
-            try {
-                publicKeyBytes = Files.readAllBytes(Paths.get(CifradoAsimetrico.class.getResource("ComicSansAsimetricPublic.key").toURI()));
-            } catch (IOException ex) {
-                Logger.getLogger(CifradoAsimetrico.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(CifradoAsimetrico.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return publicKeyBytes;
-    }*/
+    }
 }
