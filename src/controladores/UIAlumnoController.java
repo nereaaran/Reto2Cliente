@@ -340,11 +340,12 @@ public class UIAlumnoController {
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
 
-        /*grupos = FXCollections.observableArrayList(grupoGestion.buscarTodosLosGruposGrupo());
+        grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
         tablaGrupos.setItems(grupos);
         
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));*/
+        numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
+        
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
@@ -353,7 +354,7 @@ public class UIAlumnoController {
         alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
         tablaAlumnos.setItems(alumnos);
 
-        tablaAlumnos.getSelectionModel().selectedItemProperty().addListener(this::seleccionTabla);
+        tablaAlumnos.getSelectionModel().selectedItemProperty().addListener(this::seleccionTablaAlumnos);
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
@@ -393,7 +394,7 @@ public class UIAlumnoController {
      * @param oldValue El valor antiguo del observable.
      * @param newValue El valor nuevo del observable.
      */
-    private void seleccionTabla(ObservableValue observable, Object oldValue, Object newValue) {
+    private void seleccionTablaAlumnos(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
             Alumno alumnoSeleccionado = (Alumno) newValue;
             txtNombreCompleto.setText(alumnoSeleccionado.getFullName());

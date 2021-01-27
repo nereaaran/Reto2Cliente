@@ -52,13 +52,13 @@ public interface GrupoGestion {
      * información.
      * @return Objeto grupo con la información del grupo buscado.
      */
-    public Collection<Grupo> buscarGrupoPorNombre(String nombre) throws ClientErrorException;
+    public Collection<Grupo> listarGrupoPorNombre(String nombre) throws ClientErrorException;
 
     /**
      * Método que obtiene todos los grupos existentes.
      *
      * @return Colección de todos los grupos.
      */
-    public Collection<Grupo> buscarTodosLosGruposGrupo() throws ClientErrorException;
+    public Collection<Grupo> listarGrupos() throws ClientErrorException;
 
 }

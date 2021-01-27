@@ -8,42 +8,97 @@ package implementaciones;
 import entidad.Grupo;
 import interfaces.GrupoGestion;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.core.GenericType;
+import rest.GrupoRESTClient;
 
 /**
  *
  * @author nerea
  */
-public class GrupoGestionImplementation implements GrupoGestion {
+public class GrupoGestionImplementation implements GrupoGestion{
+
+    private GrupoRESTClient webClient;
+    private static final Logger LOGGER = Logger.getLogger("GrupoGestionImplementation");
+
+    public GrupoGestionImplementation() {
+        webClient = new GrupoRESTClient();
+    }
 
     @Override
     public void create(Grupo grupo) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.log(Level.INFO, "GRUPO: Creando un grupo");
+            //Send user data to web client for creation. 
+            webClient.create(grupo);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     @Override
     public void edit(Grupo grupo) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.info("GrupoGestionImplementation: Editando grupo");
+
+            this.webClient.edit(grupo);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     @Override
     public void remove(Integer id) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            LOGGER.info("GeupoGestionImplementation: Eliminando grupo");
+
+            this.webClient.remove(id);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
 
     @Override
     public Grupo find(Integer id) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Grupo grupos = null;
+        try {
+            LOGGER.info("Grupo: buscando grupo por id");
+            //grupos = this.webClient.find(responseType, id);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return grupos;
     }
 
     @Override
-    public Collection<Grupo> buscarGrupoPorNombre(String nombre) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Grupo> listarGrupoPorNombre(String nombre) throws ClientErrorException {
+        Collection<Grupo> grupo = null;
+        try {
+            LOGGER.info("GrupoGestionImplementation: Buscando grupos por el nombre");
+            grupo = this.webClient.listarGrupoPorNombre(new GenericType<Collection<Grupo>>() {
+            }, nombre);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+        return grupo;
     }
 
     @Override
-    public Collection<Grupo> buscarTodosLosGruposGrupo() throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Collection<Grupo> listarGrupos()throws ClientErrorException{
+        Collection<Grupo> grupo = null;
+
+        try {
+            LOGGER.info("GrupoGestionImplementation: Buscandoo todos los grupos");
+
+            grupo = webClient.listarGrupos(new GenericType<Collection<Grupo>>() {
+            });
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+
+        return grupo;
     }
 
 }
