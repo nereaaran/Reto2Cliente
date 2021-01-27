@@ -127,7 +127,7 @@ public class UIMiPerfilController {
         stage.setScene(scene);
         stage.setTitle("Mi perfil");
         stage.setResizable(false);
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         txtNombreProfesor.setDisable(true);
         txtEmailProfesor.setDisable(true);
         txtUsuarioProfesor.setDisable(true);
@@ -164,6 +164,8 @@ public class UIMiPerfilController {
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
+            usuarioGestion.buscarEmailParaEnviarMailCambiarContrasenia("kristina.s.milea@gmail.com");
+            
             lblContrasenaCambiada.setText("La contraseña se ha cambiado");
             lblContrasenaCambiada.setTextFill(Color.web("#008000"));
 

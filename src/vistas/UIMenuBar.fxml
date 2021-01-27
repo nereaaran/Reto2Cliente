@@ -5,14 +5,14 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="849.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIMenuBarController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="849.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controladores.UIMenuBarController">
    <children>
       <MenuBar fx:id="menuBar" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="847.0">
         <menus>
           <Menu mnemonicParsing="false" text="Ajustes">
             <items>
-              <MenuItem fx:id="mbMiPefil" mnemonicParsing="false" text="Mi perfil" />
-                  <MenuItem mnemonicParsing="false" text="Cerrar sesion" />
+              <MenuItem fx:id="mbMiPerfil" mnemonicParsing="false" onAction="#handleMiPerfilPresionado" text="Mi perfil" />
+                  <MenuItem fx:id="mbCerrarSesion" mnemonicParsing="false" onAction="#handleCerrarSesionPresionado" text="Cerrar sesion" />
             </items>
           </Menu>
         </menus>

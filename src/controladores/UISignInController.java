@@ -259,9 +259,11 @@ public class UISignInController {
                     case PROFESOR: {
                         //Abre la vista de UIGrupo
                         LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
                         Parent root = (Parent) loader.load();
-                        UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        //UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        UIAlumnoController controller = ((UIAlumnoController) loader.getController());
                         controller.setStage(stage);
                         controller.initStage(root);
 
