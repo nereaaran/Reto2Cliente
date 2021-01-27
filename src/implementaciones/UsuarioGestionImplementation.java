@@ -207,7 +207,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      * de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException {
+    public Collection<Usuario> buscarUsuarioPorEmailContrasenia(String email) throws EmailNoExisteException {
         Collection<Usuario> usuario = null;
 
         try {
@@ -228,16 +228,16 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
 
     /**
      * Manda una petición REST para que busque un usuario por email al servidor
-     * para enviar el mail.
+     * para enviar el mail de recuperación de contraseña.
      *
      * @param usuario el usuario que se buscará.
      */
     @Override
-    public void buscarUsuarioParaEnviarMail(Usuario usuario) {
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Usuario usuario) {
         try {
-            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de contraseña olvidada");
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de recuperación de contraseña");
 
-            webClient.buscarUsuarioParaEnviarMail(usuario);
+            webClient.buscarUsuarioParaEnviarMailRecuperarContrasenia(usuario);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

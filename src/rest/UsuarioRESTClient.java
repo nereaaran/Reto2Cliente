@@ -145,7 +145,7 @@ public class UsuarioRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void buscarUsuarioParaEnviarMail(Object requestEntity) throws ClientErrorException {
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Object requestEntity) throws ClientErrorException {
         webTarget.path("enviarMail").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 

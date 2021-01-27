@@ -83,14 +83,14 @@ public interface UsuarioGestion {
      * @throws excepcion.EmailNoExisteException si el email no existe en la base
      * de datos.
      */
-    public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException;
+    public Collection<Usuario> buscarUsuarioPorEmailContrasenia(String email) throws EmailNoExisteException;
 
     /**
-     * Método que busca un usuario por su email.
+     * Método que busca un usuario por su email para recuperar la contraseña.
      *
      * @param usuario la entidad Usuario.
      */
-    public void buscarUsuarioParaEnviarMail(Usuario usuario);
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Usuario usuario);
 
     /**
      * Método que busca un usuario por su login y contraseña.

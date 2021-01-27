@@ -10,6 +10,7 @@ import excepcion.EmailNoExisteException;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,11 +112,14 @@ public class UIRestaurarContraseniaController {
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
-            Usuario usuario=new Usuario();
-            usuario.setEmail(txtEmail.getText());
-            
-            usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
-            usuarioGestion.buscarUsuarioParaEnviarMail(usuario);
+            //Usuario usuario = new Usuario();
+            //usuario.setEmail(txtEmail.getText());
+
+            Collection<Usuario> usuarioCol = usuarioGestion.buscarUsuarioPorEmailContrasenia(txtEmail.getText());
+
+            for (Usuario u : usuarioCol) {
+                usuarioGestion.buscarUsuarioParaEnviarMailRecuperarContrasenia(u);
+            }
 
             lblContraseniaRestaurada.setText("Contraseña restaurada. Revisa tu email");
             lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
