@@ -630,12 +630,12 @@ public class UIAlumnoController {
                 //Comprueba si existe el login
                 LOGGER.info("Alumno Controlador: Comprobando si existe el login");
 
-                usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
+                usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
 
                 //Comprueba si existe el email
                 LOGGER.info("Alumno Controlador: Comprobando si existe el email");
 
-                usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
+                usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
 
                 //Se crea el alumno
                 LOGGER.info("Alumno Controlador: Creando alumno");
@@ -688,11 +688,11 @@ public class UIAlumnoController {
                 
                 //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
                 if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
-                    usuarioGestion.buscarUsuarioPorLoginSignUp(txtUsuario.getText());
+                    usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
                 }
                 //Comprueba si se ha modificado el email para comprobar si ya existe en la base de datos o no.
                 if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
-                    usuarioGestion.buscarUsuarioPorEmailSignUp(txtEmail.getText());
+                    usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
                 }
                 
                 //Modifica el alumno
