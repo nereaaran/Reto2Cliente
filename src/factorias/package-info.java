@@ -1,5 +1,5 @@
 /**
- * Este paquete contiene las factorías correspondientes a la lógica de la
+ * Este paquete contiene la factoría correspondiente a la lógica de la
  * aplicación JavaFX.
  *
  */
