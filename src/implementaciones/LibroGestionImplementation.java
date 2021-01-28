@@ -46,7 +46,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public void create(Libro libro) throws ClientErrorException {
+    public void create(Libro libro) {
         try {
             LOGGER.info("LibroGestionImplementation: Creando libro");
 
@@ -63,7 +63,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public void edit(Libro libro) throws ClientErrorException {
+    public void edit(Libro libro) {
         try {
             LOGGER.info("LibroGestionImplementation: Editando libro");
 
@@ -80,7 +80,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public void remove(Libro libro) throws ClientErrorException {
+    public void remove(Libro libro) {
         try {
             LOGGER.info("LibroGestionImplementation: Eliminando libro");
 
@@ -98,7 +98,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public Libro find(Integer id) throws ClientErrorException {
+    public Libro find(Integer id) {
         Libro libro = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando libro por id");
@@ -118,7 +118,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public Collection<Libro> buscarTodosLosLibros() throws ClientErrorException {
+    public Collection<Libro> buscarTodosLosLibros() {
         Collection<Libro> libros = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando todos los libros");
@@ -139,7 +139,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public Collection<Libro> buscarLibrosPorTitulo(String titulo) throws ClientErrorException {
+    public Collection<Libro> buscarLibrosPorTitulo(String titulo) {
         Collection<Libro> libros = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando libros por titulo");
@@ -160,7 +160,7 @@ public class LibroGestionImplementation implements LibroGestion {
      * @throws ClientErrorException Si hay algun error durante el proceso.
      */
     @Override
-    public Collection<Libro> buscarLibrosPorAutor(String autor) throws ClientErrorException {
+    public Collection<Libro> buscarLibrosPorAutor(String autor) {
         Collection<Libro> libros = null;
         try {
             LOGGER.info("LibroGestionImplementation: Buscando libros por autor");

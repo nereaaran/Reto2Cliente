@@ -8,9 +8,7 @@ package controladores;
 import entidad.Grupo;
 import entidad.GrupoLibro;
 import factorias.GestionFactoria;
-import implementaciones.GrupoGestionImplementation;
 import interfaces.GrupoGestion;
-import interfaces.GrupoLibroGestion;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
@@ -42,6 +40,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.ClientErrorException;
 
 /**
  * FXML Controller class
@@ -50,10 +49,25 @@ import javafx.stage.WindowEvent;
  */
 public class UIGrupoController {
 
+    /**
+     * Variable que guarda los carácteres máximos del nombre del grupo.
+     */
     private static final int MAX_LENGHT_NOMBRE_GRUPO = 100;
+    /**
+     * Variable que guarda los carácteres máximos de la descripción del grupo.
+     */
     private static final int MAX_LENGHT_DESCRIPCION = 200;
+    /**
+     * Variable que guarda los carácteres máximos de la cantidad total.
+     */
     private static final int MAX_LENGHT_CANTIDAD_TOTAL = 2;
+    /**
+     * Atributo estático y constante que guarda un patron alfanumerico.
+     */
     public static final Pattern VALIDAR_ALFANUMERICO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda un patron numerico.
+     */
     public static final Pattern VALIDAR_ES_NUMERO = Pattern.compile("^[0-9]", Pattern.CASE_INSENSITIVE);
 
     @FXML
@@ -103,7 +117,7 @@ public class UIGrupoController {
     @FXML
     private TableView<Grupo> tablaGrupos;
     @FXML
-     private TableColumn<Grupo, String> nombreGrupoCL;
+    private TableColumn<Grupo, String> nombreGrupoCL;
     @FXML
     private TableColumn<Grupo, String> descripcionCL;
     @FXML
@@ -127,15 +141,12 @@ public class UIGrupoController {
     @FXML
     private DatePicker dpFechaInicio;
     @FXML
-    private DatePicker dpFechaFin;   
+    private DatePicker dpFechaFin;
 
-    //private GrupoGestionImplementation gestionImplementation;
-    GrupoGestion grupoGestion ;
-    GrupoLibroGestion grupoLibroGestion;
-    ObservableList<Grupo> GrupoObservableList ;
+    GrupoGestion grupoGestion;
+    ObservableList<Grupo> GrupoObservableList;
     ObservableList<GrupoLibro> GrupoLibroObservableList;
 
-    //ObservableList listaGrupos = FXCollections.observableArrayList();
     private static final Logger LOGGER = Logger.getLogger(UIGrupoController.class.getName());
 
     /**
@@ -166,22 +177,21 @@ public class UIGrupoController {
         stage.setTitle("Gestion de grupos");
         stage.setResizable(false);
         stage.onCloseRequestProperty().set(this::cerrarVentana);
-       
+
         //Iniciando las columnas de la tabla Grupo
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         descripcionCL.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         numAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
-        
+
         tituloCL.setCellValueFactory(new PropertyValueFactory<>("libro"));
         fechaInicioCL.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         fechaFinCL.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
         RellenarTabla();
-        
-           
+
         //Propiedades de cambio de texto
         txtNombreGrupo.textProperty().addListener(this::comprobarLongitud);
         txtDescripcion.textProperty().addListener(this::comprobarLongitud);
-        
+
         //Propiedades al iniar los botones
         txtNombreGrupo.requestFocus();
         btnAnadir.setDisable(false);
@@ -199,17 +209,23 @@ public class UIGrupoController {
         btnModificar.setOnAction(this::modificarGrupo);
         //btnEliminar.setOnAction(this::eliminarGrupo);
         btnLimpiar.setOnAction(this::limpiarCamposTexto);
-       
+
         btnBuscar.setDisable(true);
         btnEliminarLibro.setDisable(true);
-        btnGestionarAlumno.setDisable(false);
-        btnConsultarLibros.setDisable(false);
+        btnGestionarAlumno.setOnAction(this::vistaGestionarAlumno);
         btnConsultarLibros.setOnAction(this::vistaVerLibros);
 
         stage.show();
     }
-    
-    
+
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del grupo y se desactiva el boton "btnAñadir".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
     private void tablaGrupoSeleccionado(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
             Grupo grupo = (Grupo) newValue;
@@ -223,23 +239,33 @@ public class UIGrupoController {
         }
     }
 
-    private void RellenarTabla(){
+    /**
+     * Metodo que rellena en la tabla de datos del los grupos
+     */
+    private void RellenarTabla() {
         try {
-            grupoGestion=  GestionFactoria.getGrupoGestion();
+            grupoGestion = GestionFactoria.getGrupoGestion();
             GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
-             tablaGrupos.setItems(GrupoObservableList);
-             tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
-             tablaGrupos.refresh();
-        } catch (Exception e) {
+            tablaGrupos.setItems(GrupoObservableList);
+            tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
+            tablaGrupos.refresh();
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
         }
     }
 
+    /**
+     * Se ejecuta cuando se pulsa el boton Añadir. Si los datos son correctos y
+     * el grupo no existe se añade a la base de datos y se actualiza la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void btnAnadirGrupos(ActionEvent event) {
         LOGGER.info("Alumno Controlador: Comprobando errores");
 
         boolean errorCampos = comprobarCampos();
 
-        if(!errorCampos) {
+        if (!errorCampos) {
             try {
                 //Comprueba si existe el login
                 LOGGER.info("Alumno Controlador: Comprobando si existe el login");
@@ -248,7 +274,7 @@ public class UIGrupoController {
 
                 //Se crea el grupo
                 LOGGER.info("Alumno Controlador: Creando alumno");
-                
+
                 Grupo grupoNew = new Grupo();
                 grupoNew.setNombre(txtNombreGrupo.getText());
                 grupoNew.setDescripcion(txtDescripcion.getText());
@@ -266,29 +292,25 @@ public class UIGrupoController {
                 LOGGER.severe(le.getMessage());
                 lblNombreGrupoError.setText("El login ya existe");
                 lblNombreGrupoError.setTextFill(Color.web("#FF0000"));
-            } 
+            }
         }
-        /*try {
-            Grupo nuevoGrupo = new Grupo();
-            nuevoGrupo.setNombre(txtNombreGrupo.getText());
-            nuevoGrupo.setDescripcion(txtDescripcion.getText());
-            nuevoGrupo.setNumAlumno(0);
-
-           // grupoGestion.create(nuevoGrupo);
-            tablaGrupos.getItems().add(nuevoGrupo);
-            tablaGrupos.refresh();
-        } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
-        }*/
     }
 
+    /**
+     * Metodo para modificar los datas de un grupo existe
+     */
     private void modificarGrupo(ActionEvent event) {
-        if (comprobarCampos()) {
-            ///////////////////////////////////////////////
-            //limpiarCamposTexto();
-        }
+
     }
 
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del grupo ".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
     private void seleccionDatoTabla(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
             Grupo grupo = (Grupo) newValue;
@@ -298,6 +320,12 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -318,7 +346,13 @@ public class UIGrupoController {
         }
     }
 
-    private void vistaGestionarAlumno(ActionEvent event){
+    /**
+     * Cuando se pulse el boton de gestionar alumno se dirigira a la vista de
+     * gestion de grupo
+     *
+     * @param event El evento de acción.
+     */
+    private void vistaGestionarAlumno(ActionEvent event) {
         try {
             LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Alumno");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
@@ -330,9 +364,15 @@ public class UIGrupoController {
             LOGGER.severe(e.getMessage());
         }
     }
-    
-    private void vistaVerLibros(ActionEvent event){ 
-        try{
+
+    /**
+     * Cuando se pulse el boton de consultar libros se dirigira a la vista de
+     * gestion de libros
+     *
+     * @param event El evento de acción.
+     */
+    private void vistaVerLibros(ActionEvent event) {
+        try {
             LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Libro");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
             Parent root = (Parent) loader.load();
@@ -343,7 +383,13 @@ public class UIGrupoController {
             LOGGER.severe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Comprueba que los patrone de nombre_Grupo , descripcion total e isbn son
+     * correctos.
+     *
+     * @return Variable indicando si todos los patrones son correctos.
+     */
     private boolean comprobarCampos() {
         boolean error = false;
 
@@ -379,7 +425,10 @@ public class UIGrupoController {
 
     }
 
-   private void eliminarGrupo() {
+    /**
+     * Se eliminar un grupo de la base de datos
+     */
+    private void eliminarGrupo() {
         Grupo SeleccionadoGrupo = ((Grupo) tablaGrupos.getSelectionModel().getSelectedItem());
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -391,21 +440,34 @@ public class UIGrupoController {
         Optional<ButtonType> result = alert.showAndWait();
         ButtonType button = result.orElse(ButtonType.CANCEL);
         if (button == ButtonType.OK) {
-            grupoGestion.remove(SeleccionadoGrupo.getIdUsuario());
+            grupoGestion.remove(SeleccionadoGrupo.getIdGrupo());
 
             tablaGrupos.getItems().remove(SeleccionadoGrupo);
             tablaGrupos.refresh();
 
             limpiarCampos();
         }
-   }
-   
+    }
+
+    /**
+     * Quita en los campos txtNombreGrupo, txtDescripcion lo que esta escrito
+     *
+     * @param event El evento de acción.
+     */
     private void limpiarCamposTexto(ActionEvent event) {
         txtNombreGrupo.setText("");
         txtDescripcion.setText("");
         txtBuscarGrupo.setText("");
     }
-    
+
+    /**
+     * Método que comprueba la longitud de los campos de texto. Si exceden el
+     * maximo permitido no recoge el resto de carácteres.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreGrupo.getText().length() > MAX_LENGHT_NOMBRE_GRUPO) {
             String nombreCompleto = txtNombreGrupo.getText().substring(0, MAX_LENGHT_NOMBRE_GRUPO);
@@ -429,6 +491,10 @@ public class UIGrupoController {
         habilitarBotones();
     }
 
+    /**
+     * Método que habilita o deshabilita los botones Añadir, Modificar y
+     * Eliminar dependiendo si los campos están vacíos o no.
+     */
     private void habilitarBotones() {
         if (camposVacios()) {
             btnAnadir.setDisable(true);
@@ -447,13 +513,18 @@ public class UIGrupoController {
         }
 
         if (txtBuscarGrupo.getText().isEmpty()) {
-      
+
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
         }
     }
 
+    /**
+     * Se comprueba que los campos estan vacios
+     *
+     * @return un booleas
+     */
     private boolean camposVacios() {
         boolean vacio = false;
 
@@ -464,6 +535,11 @@ public class UIGrupoController {
         return vacio;
     }
 
+    /**
+     * Se comprueba que los campos estan no esta vacios
+     *
+     * @return un booleas
+     */
     private boolean camposNoVacios() {
         boolean vacio = false;
 
@@ -474,8 +550,13 @@ public class UIGrupoController {
         return vacio;
     }
 
+    /**
+     * Metodo q se utiliza para limpiar los datos despues de cada accion de los
+     * boones btnanadir, btnmodificar
+     */
     private void limpiarCampos() {
         txtNombreGrupo.setText("");
-        txtDescripcion.setText(""); }
+        txtDescripcion.setText("");
+    }
 
 }

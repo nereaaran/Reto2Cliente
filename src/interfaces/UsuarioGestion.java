@@ -5,7 +5,6 @@
  */
 package interfaces;
 
-import entidad.Alumno;
 import entidad.Usuario;
 import excepcion.*;
 import java.util.Collection;

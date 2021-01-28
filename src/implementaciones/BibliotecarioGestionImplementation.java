@@ -48,7 +48,7 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion 
     @Override
     public void create(Bibliotecario bibliotecario) {
         bibliotecario.setPassword(cifrarContrasena(bibliotecario.getPassword()));
-        
+
         try {
             LOGGER.info("BibliotecarioGestionImplementation: Creando bibliotecario");
 
@@ -67,7 +67,7 @@ public class BibliotecarioGestionImplementation implements BibliotecarioGestion 
     @Override
     public void edit(Bibliotecario bibliotecario) {
         bibliotecario.setPassword(cifrarContrasena(bibliotecario.getPassword()));
-        
+
         try {
             LOGGER.info("BibliotecarioGestionImplementation: Editando bibliotecario");
 

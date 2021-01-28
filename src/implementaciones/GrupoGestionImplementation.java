@@ -15,14 +15,19 @@ import javax.ws.rs.core.GenericType;
 import rest.GrupoRESTClient;
 
 /**
+ * Clase que implementa la interfaz GrupoGestion usando un cliente web RESTful.
  *
- * @author nerea
+ * @author Jonathan Viñan.
  */
-public class GrupoGestionImplementation implements GrupoGestion{
+public class GrupoGestionImplementation implements GrupoGestion {
 
     private GrupoRESTClient webClient;
     private static final Logger LOGGER = Logger.getLogger("GrupoGestionImplementation");
 
+    /**
+     * Constructor que sirve para acceder al servicio REST del lado servidor.
+     *
+     */
     public GrupoGestionImplementation() {
         webClient = new GrupoRESTClient();
     }
@@ -86,7 +91,7 @@ public class GrupoGestionImplementation implements GrupoGestion{
     }
 
     @Override
-    public Collection<Grupo> listarGrupos()throws ClientErrorException{
+    public Collection<Grupo> listarGrupos() throws ClientErrorException {
         Collection<Grupo> grupo = null;
 
         try {

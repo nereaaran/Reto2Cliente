@@ -5,7 +5,6 @@
  */
 package controladores;
 
-import implementaciones.UsuarioGestionImplementation;
 import static entidad.TipoUsuario.*;
 import entidad.Usuario;
 import excepcion.*;
@@ -242,7 +241,7 @@ public class UISignInController {
 
             for (Usuario u : usuario) {
                 u.getPrivilege();
-                
+
                 switch (u.getTipoUsuario()) {
                     case BIBLIOTECARIO: {
                         //Abre la vista de UILibro
@@ -252,15 +251,9 @@ public class UISignInController {
                         UILibroController controller = ((UILibroController) loader.getController());
                         controller.setStage(stage);
                         controller.initStage(root);
-
-                        u.setLastAccess(date);
-                        usuarioGestion.edit(u);
                         break;
                     }
                     case PROFESOR: {
-                        u.setLastAccess(date);
-                        usuarioGestion.edit(u);
-                        
                         //Abre la vista de UIGrupo
                         LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
@@ -268,7 +261,6 @@ public class UISignInController {
                         UIGrupoController controller = ((UIGrupoController) loader.getController());
                         controller.setStage(stage);
                         controller.initStage(root);
-
                         break;
                     }
                     default:

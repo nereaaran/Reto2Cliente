@@ -329,7 +329,7 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
-        
+
         cargarDatosEnMenuGrupos();
 
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
@@ -471,8 +471,8 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que habilita o deshabilita los botones Añadir,
-     * Modificar y Eliminar dependiendo si los campos están vacíos o no.
+     * Método que habilita o deshabilita los botones Añadir, Modificar y
+     * Eliminar dependiendo si los campos están vacíos o no.
      */
     private void habilitarBotones() {
         if (camposVacios()) {
@@ -685,27 +685,32 @@ public class UIAlumnoController {
         if (!errorPatrones || !errorDatePicker) {
             try {
                 Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
-                
-                //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
-                if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
-                    usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
+
+                if (alumnoSeleccionado != null) {
+                    //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
+                    if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
+                        usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
+                    }
+                    //Comprueba si se ha modificado el email para comprobar si ya existe en la base de datos o no.
+                    if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
+                        usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
+                    }
+
+                    //Modifica el alumno
+                    alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
+                    alumnoSeleccionado.setDni(txtDni.getText());
+                    alumnoSeleccionado.setLogin(txtUsuario.getText());
+                    alumnoSeleccionado.setEmail(txtEmail.getText());
+
+                    alumnoGestion.edit(alumnoSeleccionado);
+
+                    tablaAlumnos.refresh();
+
+                    limpiarCampos();
+                } else {
+                    lblBuscarAlumnoError.setText("No se ha podido modificar ningún alumno");
+                    lblBuscarAlumnoError.setTextFill(Color.web("#FF0000"));
                 }
-                //Comprueba si se ha modificado el email para comprobar si ya existe en la base de datos o no.
-                if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
-                    usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
-                }
-                
-                //Modifica el alumno
-                alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
-                alumnoSeleccionado.setDni(txtDni.getText());
-                alumnoSeleccionado.setLogin(txtUsuario.getText());
-                alumnoSeleccionado.setEmail(txtEmail.getText());
-
-                alumnoGestion.edit(alumnoSeleccionado);
-
-                tablaAlumnos.refresh();
-
-                limpiarCampos();
             } catch (LoginExisteException le) {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
@@ -736,12 +741,17 @@ public class UIAlumnoController {
         if (button == ButtonType.OK) {
             Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
 
-            alumnoGestion.remove(alumnoSeleccionado);
+            if (alumnoSeleccionado != null) {
+                alumnoGestion.remove(alumnoSeleccionado);
 
-            tablaAlumnos.getItems().remove(alumnoSeleccionado);
-            tablaAlumnos.refresh();
+                tablaAlumnos.getItems().remove(alumnoSeleccionado);
+                tablaAlumnos.refresh();
 
-            limpiarCampos();
+                limpiarCampos();
+            } else {
+                lblBuscarAlumnoError.setText("No se ha podido eliminar ningún alumno");
+                lblBuscarAlumnoError.setTextFill(Color.web("#FF0000"));
+            }
         }
     }
 

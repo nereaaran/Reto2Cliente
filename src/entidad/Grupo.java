@@ -11,118 +11,179 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Clase entidad de Grupo con sus respectivos atributos.
+ *
  * @author Jonathan Viñan
- * 
+ *
  */
-
-@XmlRootElement(name="grupo")
+@XmlRootElement(name = "grupo")
 public class Grupo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * Id del grupo
      */
-    private Integer idUsuario;
+    private Integer idGrupo;
     /**
      * Nombre del grupo
      */
-   
+
     private String nombre;
     /**
      * Una descripcion al grupo
      */
-   
+
     private String descripcion;
     /**
      * La cantidad de alumnos que estan en el grupo
      */
-    
-    private Integer numAlumno; 
-   
-    private Profesor profesor;
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    private Integer numAlumno;
     
     
     private GrupoLibro grupoLibros;
-    private Alumno alumnos; 
+    /**
+     * Relacion con la entidad Alumno
+     */
+    private Alumno alumnos;
+    /**
+     * Relacion con la entidad Profesor
+     */
+    private Profesor profesor;
 
+    /**
+     * Obtine el id del Grupo
+     *
+     * @return El valor del id del Grupo
+     */
+    public Integer getIdGrupo() {
+        return idGrupo;
+    }
+
+    /**
+     * Establece el id para el Grupo
+     *
+     * @param idGrupo el id del grupo.
+     */
+    public void setIdGrupo(Integer idGrupo) {
+        this.idGrupo = idGrupo;
+    }
+
+    /**
+     * Obtiene el Profesor.
+     *
+     * @return El profesor.
+     */
+    public Profesor getProfesor() {
+        return profesor;
+    }
+
+    /**
+     * Establece el Profesor.
+     *
+     * @param profesor El profesor.
+     */
+    public void setProfesor(Profesor profesor) {
+        this.profesor = profesor;
+    }
+
+    /**
+     * Obtiene la coleccion de grupoLibro.
+     *
+     * @return Coleccion de grupoLibro.
+     */
     public GrupoLibro getGrupoLibros() {
         return grupoLibros;
     }
 
+    /**
+     * Establece un grupoLibro
+     *
+     * @param grupoLibros una coleccion de grupoLibro.
+     */
     public void setGrupoLibros(GrupoLibro grupoLibros) {
         this.grupoLibros = grupoLibros;
     }
 
+    /**
+     * Obtiene un alumno
+     *
+     * @return Coleccion de alumno
+     */
     public Alumno getAlumnos() {
         return alumnos;
     }
 
+    /**
+     * Establece un alumno
+     *
+     * @param alumnos los alumnos.
+     */
     public void setAlumnos(Alumno alumnos) {
         this.alumnos = alumnos;
     }
-    
-    
+
     /**
      * Obtine el nombre del Grupo
+     *
      * @return nombre
      */
     public String getNombre() {
         return nombre;
     }
+
     /**
      * Establece el nombre del grupo
-     * @param nombre
+     *
+     * @param nombre el nombre del grupo.
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     /**
      * Obtiene la dscripcion del Grupo
+     *
      * @return description
      */
     public String getDescripcion() {
         return descripcion;
     }
+
     /**
      * Establece la descripcion del grupo
-     * @param descripcion
+     *
+     * @param descripcion la descripcion del grupo.
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
     /**
      * Establece numAlumno del grupo
-     * @param numAlumno
+     *
+     * @param numAlumno el numero de alumnos.
      */
     public void setNumAlumno(Integer numAlumno) {
         this.numAlumno = numAlumno;
     }
-    
+
     /**
      * Obtine la numAlumno del Grupo
+     *
      * @return numAlumno
      */
     public Integer getNumAlumno() {
         return numAlumno;
     }
-    
+
     /**
      * Implemantacion del metodo hasCode para la entidad.
+     *
      * @return Valor integer dej hasCode del objeto.
      */
-   @Override
+    @Override
     public int hashCode() {
         int hash = 5;
-        hash = 59 * hash + Objects.hashCode(this.idUsuario);
+        hash = 59 * hash + Objects.hashCode(this.idGrupo);
         hash = 59 * hash + Objects.hashCode(this.nombre);
         hash = 59 * hash + Objects.hashCode(this.descripcion);
         hash = 59 * hash + Objects.hashCode(this.numAlumno);
@@ -131,14 +192,13 @@ public class Grupo implements Serializable {
         hash = 59 * hash + Objects.hashCode(this.alumnos);
         return hash;
     }
-    
 
     /**
      * Metodo qur comprueba el idGrupo de dos entidades de grupo por igualdad
+     *
      * @param obj Objeto para comprobar
      * @return True si todos los objetos son iguales
      */
-    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -163,15 +223,4 @@ public class Grupo implements Serializable {
         return true;
     }
 
-    
-
-    public Profesor getProfesor() {
-        return profesor;
-    }
-
-    public void setProfesor(Profesor profesor) {
-        this.profesor = profesor;
-    }
-    
-   
 }

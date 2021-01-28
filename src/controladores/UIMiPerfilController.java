@@ -6,7 +6,6 @@
 package controladores;
 
 import java.util.Optional;
-import entidad.Usuario;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.util.logging.Logger;
@@ -17,7 +16,6 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -136,7 +134,7 @@ public class UIMiPerfilController {
         stage.setResizable(false);
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
-        
+
         txtNombreProfesor.setDisable(true);
         txtEmailProfesor.setDisable(true);
         txtUsuarioProfesor.setDisable(true);
@@ -154,17 +152,6 @@ public class UIMiPerfilController {
         btnCambiarContraseña.setOnAction(this::handleBotonCambiarContrasena);
         stage.show();
     }
-  
-    /**
-     * Cierra la ventana MiPerfil.
-     *
-     * @param event El evento de acción.
-     */
-    private void handleBotonVolver(ActionEvent event) {
-        LOGGER.info("MiPerfil Controlador: Cerrando MiPerfil");
-
-        stage.close();
-    }
 
     private void handleBotonCambiarContrasena(ActionEvent event) {
         LOGGER.info("MiPerfil Controlador: Pulsado boton Cambiar Contraseña");
@@ -173,7 +160,7 @@ public class UIMiPerfilController {
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
-            usuarioGestion.buscarEmailParaEnviarMailCambiarContrasenia("kristina.s.milea@gmail.com");
+            //usuarioGestion.buscarEmailParaEnviarMailCambiarContrasenia(Tu email);
 
             lblContrasenaCambiada.setText("La contraseña se ha cambiado");
             lblContrasenaCambiada.setTextFill(Color.web("#008000"));
@@ -188,7 +175,7 @@ public class UIMiPerfilController {
             lblContraseñaNuevaRepetirError.setTextFill(Color.web("#FF0000"));
         }
     }
-  
+
     /**
      * Cierra la ventana MiPerfil.
      *
@@ -273,7 +260,7 @@ public class UIMiPerfilController {
         }
         return over50;
     }
-    
+
     /**
      * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
      * confirmar si se quiere cerrar la aplicación.
@@ -291,8 +278,7 @@ public class UIMiPerfilController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get().equals(ButtonType.OK)) {
-            stage.close();
-            Platform.exit();
+            this.stage.close();
         } else {
             event.consume();
             alert.close();
