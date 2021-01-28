@@ -471,8 +471,8 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que habilita y deshabilita o habilita los botones Añadir,
-     * Modificar y Eliminar.
+     * Método que habilita o deshabilita los botones Añadir,
+     * Modificar y Eliminar dependiendo si los campos están vacíos o no.
      */
     private void habilitarBotones() {
         if (camposVacios()) {
