@@ -251,15 +251,9 @@ public class UISignInController {
                         UILibroController controller = ((UILibroController) loader.getController());
                         controller.setStage(stage);
                         controller.initStage(root);
-
-                        u.setLastAccess(date);
-                        usuarioGestion.edit(u);
                         break;
                     }
                     case PROFESOR: {
-                        u.setLastAccess(date);
-                        usuarioGestion.edit(u);
-
                         //Abre la vista de UIGrupo
                         LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
@@ -267,7 +261,6 @@ public class UISignInController {
                         UIGrupoController controller = ((UIGrupoController) loader.getController());
                         controller.setStage(stage);
                         controller.initStage(root);
-
                         break;
                     }
                     default:

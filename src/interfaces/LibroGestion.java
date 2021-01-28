@@ -6,7 +6,6 @@
 package interfaces;
 
 import entidad.Libro;
-import excepcion.LibroNoExisteException;
 import java.util.Collection;
 
 /**
@@ -57,10 +56,8 @@ public interface LibroGestion {
      *
      * @param titulo El titulo que se quiere buscar.
      * @return Colección de los libros con el titulo buscado.
-     * @throws excepcion.LibroNoExisteException Si el libro no existe en la base
-     * de datos.
      */
-    public Collection<Libro> buscarLibrosPorTitulo(String titulo) throws LibroNoExisteException;
+    public Collection<Libro> buscarLibrosPorTitulo(String titulo);
 
     /**
      * Método que busca todos los libros por un autor.

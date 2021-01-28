@@ -278,8 +278,7 @@ public class UIMiPerfilController {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get().equals(ButtonType.OK)) {
-            stage.close();
-            Platform.exit();
+            this.stage.close();
         } else {
             event.consume();
             alert.close();
