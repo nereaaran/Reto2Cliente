@@ -28,7 +28,7 @@ public class GrupoLibroId  implements Serializable{
     }
     /**
      * Establece el idGrupo
-     * @param idGrupo
+     * @param idGrupo el id del grupo
      */
     public void setIdGrupo(Integer idGrupo) {
         this.idGrupo = idGrupo;
@@ -42,7 +42,7 @@ public class GrupoLibroId  implements Serializable{
     }
     /**
      * Establece el idLibro
-     * @param idLibro
+     * @param idLibro el id del libro.
      */
    public void setIdLibro(Integer idLibro) {
         this.idLibro = idLibro;

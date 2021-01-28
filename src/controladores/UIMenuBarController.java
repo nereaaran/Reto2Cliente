@@ -49,12 +49,12 @@ public class UIMenuBarController {
     /**
      * Método que establece el escenario del menu bar.
      *
-     * @param primaryStage El escenario principal.
+     * @param stage El escenario principal.
      */
-    public void setStage(Stage primaryStage) {
+    public void setStage(Stage stage) {
         LOGGER.info("UIMenuBarControlador: Estableciendo stage");
 
-        stage = primaryStage;
+        this.stage = stage;
     }
 
     /**
@@ -109,7 +109,7 @@ public class UIMenuBarController {
                 UISignInController controller = ((UISignInController) loader.getController());
                 controller.setStage(new Stage());
                 controller.initStage(root);
-                stage.close();
+                this.stage.close();
             } catch (IOException e) {
                 LOGGER.severe(e.getMessage());
             }
