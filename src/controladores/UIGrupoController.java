@@ -40,6 +40,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.ws.rs.ClientErrorException;
 
 /**
  * FXML Controller class
@@ -217,6 +218,14 @@ public class UIGrupoController {
         stage.show();
     }
 
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del grupo y se desactiva el boton "btnAñadir".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
     private void tablaGrupoSeleccionado(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
             Grupo grupo = (Grupo) newValue;
@@ -230,6 +239,9 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Metodo que rellena en la tabla de datos del los grupos
+     */
     private void RellenarTabla() {
         try {
             grupoGestion = GestionFactoria.getGrupoGestion();
@@ -237,11 +249,17 @@ public class UIGrupoController {
             tablaGrupos.setItems(GrupoObservableList);
             tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
             tablaGrupos.refresh();
-        } catch (Exception e) {
+        } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }
     }
 
+    /**
+     * Se ejecuta cuando se pulsa el boton Añadir. Si los datos son correctos y
+     * el grupo no existe se añade a la base de datos y se actualiza la tabla.
+     *
+     * @param event El evento de acción.
+     */
     private void btnAnadirGrupos(ActionEvent event) {
         LOGGER.info("Alumno Controlador: Comprobando errores");
 
@@ -278,10 +296,21 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Metodo para modificar los datas de un grupo existe
+     */
     private void modificarGrupo(ActionEvent event) {
 
     }
 
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del grupo ".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
     private void seleccionDatoTabla(ObservableValue observable, Object oldValue, Object newValue) {
         if (newValue != null) {
             Grupo grupo = (Grupo) newValue;
@@ -291,6 +320,12 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -311,6 +346,12 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Cuando se pulse el boton de gestionar alumno se dirigira a la vista de
+     * gestion de grupo
+     *
+     * @param event El evento de acción.
+     */
     private void vistaGestionarAlumno(ActionEvent event) {
         try {
             LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Alumno");
@@ -324,6 +365,12 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Cuando se pulse el boton de consultar libros se dirigira a la vista de
+     * gestion de libros
+     *
+     * @param event El evento de acción.
+     */
     private void vistaVerLibros(ActionEvent event) {
         try {
             LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Libro");
@@ -337,6 +384,12 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Comprueba que los patrone de nombre_Grupo , descripcion total e isbn son
+     * correctos.
+     *
+     * @return Variable indicando si todos los patrones son correctos.
+     */
     private boolean comprobarCampos() {
         boolean error = false;
 
@@ -372,6 +425,9 @@ public class UIGrupoController {
 
     }
 
+    /**
+     * Se eliminar un grupo de la base de datos
+     */
     private void eliminarGrupo() {
         Grupo SeleccionadoGrupo = ((Grupo) tablaGrupos.getSelectionModel().getSelectedItem());
 
@@ -393,12 +449,25 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Quita en los campos txtNombreGrupo, txtDescripcion lo que esta escrito
+     *
+     * @param event El evento de acción.
+     */
     private void limpiarCamposTexto(ActionEvent event) {
         txtNombreGrupo.setText("");
         txtDescripcion.setText("");
         txtBuscarGrupo.setText("");
     }
 
+    /**
+     * Método que comprueba la longitud de los campos de texto. Si exceden el
+     * maximo permitido no recoge el resto de carácteres.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
     private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
         if (txtNombreGrupo.getText().length() > MAX_LENGHT_NOMBRE_GRUPO) {
             String nombreCompleto = txtNombreGrupo.getText().substring(0, MAX_LENGHT_NOMBRE_GRUPO);
@@ -422,6 +491,10 @@ public class UIGrupoController {
         habilitarBotones();
     }
 
+    /**
+     * Método que habilita o deshabilita los botones Añadir, Modificar y
+     * Eliminar dependiendo si los campos están vacíos o no.
+     */
     private void habilitarBotones() {
         if (camposVacios()) {
             btnAnadir.setDisable(true);
@@ -447,6 +520,11 @@ public class UIGrupoController {
         }
     }
 
+    /**
+     * Se comprueba que los campos estan vacios
+     *
+     * @return un booleas
+     */
     private boolean camposVacios() {
         boolean vacio = false;
 
@@ -457,6 +535,11 @@ public class UIGrupoController {
         return vacio;
     }
 
+    /**
+     * Se comprueba que los campos estan no esta vacios
+     *
+     * @return un booleas
+     */
     private boolean camposNoVacios() {
         boolean vacio = false;
 
@@ -467,6 +550,10 @@ public class UIGrupoController {
         return vacio;
     }
 
+    /**
+     * Metodo q se utiliza para limpiar los datos despues de cada accion de los
+     * boones btnanadir, btnmodificar
+     */
     private void limpiarCampos() {
         txtNombreGrupo.setText("");
         txtDescripcion.setText("");
