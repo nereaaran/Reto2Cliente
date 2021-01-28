@@ -52,21 +52,18 @@ import javax.ws.rs.core.GenericType;
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 
-   
     public <T> T listarGrupos(GenericType<T> responseType) throws ClientErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
-     
+      
     public <T> T listarGrupoPorNombre(GenericType<T> responseType, String nombre) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("nombre/{0}", new Object[]{nombre}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
-   
-     public void close() {
+
+    public void close() {
         client.close();
-    }  
-
-
+    }
 }
