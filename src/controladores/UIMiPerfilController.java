@@ -5,12 +5,14 @@
  */
 package controladores;
 
+import java.util.Optional;
 import entidad.Usuario;
 import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,7 +20,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -26,6 +30,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UIMiPerfil que contiene los metodos para definir y
@@ -129,6 +134,8 @@ public class UIMiPerfilController {
         stage.setScene(scene);
         stage.setTitle("Mi perfil");
         stage.setResizable(false);
+
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
         
         txtNombreProfesor.setDisable(true);
         txtEmailProfesor.setDisable(true);
@@ -147,7 +154,7 @@ public class UIMiPerfilController {
         btnCambiarContraseña.setOnAction(this::handleBotonCambiarContrasena);
         stage.show();
     }
-
+  
     /**
      * Cierra la ventana MiPerfil.
      *
@@ -180,6 +187,17 @@ public class UIMiPerfilController {
             lblContraseñaNuevaRepetirError.setText("Las contraseñas no coinciden");
             lblContraseñaNuevaRepetirError.setTextFill(Color.web("#FF0000"));
         }
+    }
+  
+    /**
+     * Cierra la ventana MiPerfil.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonVolver(ActionEvent event) {
+        LOGGER.info("MiPerfil Controlador: Cerrando MiPerfil");
+
+        stage.close();
     }
 
     /**
@@ -254,5 +272,30 @@ public class UIMiPerfilController {
             over50 = true;
         }
         return over50;
+    }
+    
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
+        }
     }
 }

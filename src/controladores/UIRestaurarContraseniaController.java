@@ -11,20 +11,25 @@ import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UIRestaurarContrasenia que contiene los metodos para
@@ -91,6 +96,8 @@ public class UIRestaurarContraseniaController {
         stage.setTitle("Restaurar contraseña");
         stage.setResizable(false);
 
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
+        
         txtEmail.requestFocus();
         btnRestaurarContrasenia.setDisable(true);
         btnVolver.setOnAction(this::handleBotonVolver);
@@ -215,6 +222,31 @@ public class UIRestaurarContraseniaController {
             controller.initStage(root);
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
+        }
+    }
+    
+    /**
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
+     *
+     * @param event El evento de acción.
+     */
+    private void cerrarVentana(WindowEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
+
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
     }
 }
