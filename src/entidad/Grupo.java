@@ -19,7 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Grupo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+    /**
+     * Id del grupo
+     */
+    private Integer idUsuario;
     /**
      * Nombre del grupo
      */
@@ -35,6 +38,36 @@ public class Grupo implements Serializable {
      */
     
     private Integer numAlumno; 
+   
+    private Profesor profesor;
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
+    private GrupoLibro grupoLibros;
+    private Alumno alumnos; 
+
+    public GrupoLibro getGrupoLibros() {
+        return grupoLibros;
+    }
+
+    public void setGrupoLibros(GrupoLibro grupoLibros) {
+        this.grupoLibros = grupoLibros;
+    }
+
+    public Alumno getAlumnos() {
+        return alumnos;
+    }
+
+    public void setAlumnos(Alumno alumnos) {
+        this.alumnos = alumnos;
+    }
     
     
     /**
@@ -86,14 +119,19 @@ public class Grupo implements Serializable {
      * Implemantacion del metodo hasCode para la entidad.
      * @return Valor integer dej hasCode del objeto.
      */
-    @Override
+   @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.nombre);
-        hash = 37 * hash + Objects.hashCode(this.descripcion);
-        hash = 37 * hash + this.numAlumno;
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.idUsuario);
+        hash = 59 * hash + Objects.hashCode(this.nombre);
+        hash = 59 * hash + Objects.hashCode(this.descripcion);
+        hash = 59 * hash + Objects.hashCode(this.numAlumno);
+        hash = 59 * hash + Objects.hashCode(this.profesor);
+        hash = 59 * hash + Objects.hashCode(this.grupoLibros);
+        hash = 59 * hash + Objects.hashCode(this.alumnos);
         return hash;
     }
+    
 
     /**
      * Metodo qur comprueba el idGrupo de dos entidades de grupo por igualdad
@@ -123,6 +161,16 @@ public class Grupo implements Serializable {
             return false;
         }
         return true;
+    }
+
+    
+
+    public Profesor getProfesor() {
+        return profesor;
+    }
+
+    public void setProfesor(Profesor profesor) {
+        this.profesor = profesor;
     }
     
    
