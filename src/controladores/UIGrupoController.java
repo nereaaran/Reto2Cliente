@@ -10,6 +10,8 @@ import entidad.GrupoLibro;
 import factorias.GestionFactoria;
 import implementaciones.GrupoGestionImplementation;
 import interfaces.GrupoGestion;
+import interfaces.GrupoLibroGestion;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -127,7 +130,8 @@ public class UIGrupoController {
     private DatePicker dpFechaFin;   
 
     //private GrupoGestionImplementation gestionImplementation;
-     GrupoGestion grupoGestion ;
+    GrupoGestion grupoGestion ;
+    GrupoLibroGestion grupoLibroGestion;
     ObservableList<Grupo> GrupoObservableList ;
     ObservableList<GrupoLibro> GrupoLibroObservableList;
 
@@ -168,25 +172,17 @@ public class UIGrupoController {
         descripcionCL.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         numAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
         
-        tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        tituloCL.setCellValueFactory(new PropertyValueFactory<>("libro"));
         fechaInicioCL.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         fechaFinCL.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
+        RellenarTabla();
         
-        grupoGestion=  GestionFactoria.getGrupoGestion();
-        GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
-        tablaGrupos.setItems(GrupoObservableList);
-        tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
-       
-        
-        
-        //grupoGestion = new GrupoLibroGestionImplementation();
-        
+           
         //Propiedades de cambio de texto
-        txtNombreGrupo.textProperty().addListener(this::handleTextoCambiado);
-        txtDescripcion.textProperty().addListener(this::handleTextoCambiado);
-
-       
-
+        txtNombreGrupo.textProperty().addListener(this::comprobarLongitud);
+        txtDescripcion.textProperty().addListener(this::comprobarLongitud);
+        
+        //Propiedades al iniar los botones
         txtNombreGrupo.requestFocus();
         btnAnadir.setDisable(false);
         btnModificar.setDisable(true);
@@ -199,15 +195,16 @@ public class UIGrupoController {
         btnConsultarLibros.setDisable(false);
 
         //Acciones de los botnes
-        btnAnadir.setOnAction(this::anadirGrupos);
+        btnAnadir.setOnAction(this::btnAnadirGrupos);
         btnModificar.setOnAction(this::modificarGrupo);
         //btnEliminar.setOnAction(this::eliminarGrupo);
-        btnLimpiar.setDisable(true);
+        btnLimpiar.setOnAction(this::limpiarCamposTexto);
+       
         btnBuscar.setDisable(true);
-        btnGestionarAlumno.setDisable(true);
         btnEliminarLibro.setDisable(true);
         btnGestionarAlumno.setDisable(false);
         btnConsultarLibros.setDisable(false);
+        btnConsultarLibros.setOnAction(this::vistaVerLibros);
 
         stage.show();
     }
@@ -226,12 +223,52 @@ public class UIGrupoController {
         }
     }
 
-    public GrupoGestionImplementation getGestionImplementation() {
-        return this.getGestionImplementation();
+    private void RellenarTabla(){
+        try {
+            grupoGestion=  GestionFactoria.getGrupoGestion();
+            GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
+             tablaGrupos.setItems(GrupoObservableList);
+             tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
+             tablaGrupos.refresh();
+        } catch (Exception e) {
+        }
     }
 
-    private void anadirGrupos(ActionEvent event) {
-        try {
+    private void btnAnadirGrupos(ActionEvent event) {
+        LOGGER.info("Alumno Controlador: Comprobando errores");
+
+        boolean errorCampos = comprobarCampos();
+
+        if(!errorCampos) {
+            try {
+                //Comprueba si existe el login
+                LOGGER.info("Alumno Controlador: Comprobando si existe el login");
+
+                grupoGestion.listarGrupoPorNombre(txtNombreGrupo.getText());
+
+                //Se crea el grupo
+                LOGGER.info("Alumno Controlador: Creando alumno");
+                
+                Grupo grupoNew = new Grupo();
+                grupoNew.setNombre(txtNombreGrupo.getText());
+                grupoNew.setDescripcion(txtDescripcion.getText());
+                grupoNew.setProfesor(null);
+                grupoNew.setAlumnos(null);
+                grupoNew.setGrupoLibros(null);
+
+                grupoGestion.create(grupoNew);
+
+                tablaGrupos.getItems().add(grupoNew);
+                RellenarTabla();
+
+                //limpiarCamposTexto();
+            } catch (Exception le) {
+                LOGGER.severe(le.getMessage());
+                lblNombreGrupoError.setText("El login ya existe");
+                lblNombreGrupoError.setTextFill(Color.web("#FF0000"));
+            } 
+        }
+        /*try {
             Grupo nuevoGrupo = new Grupo();
             nuevoGrupo.setNombre(txtNombreGrupo.getText());
             nuevoGrupo.setDescripcion(txtDescripcion.getText());
@@ -242,13 +279,13 @@ public class UIGrupoController {
             tablaGrupos.refresh();
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
-        }
+        }*/
     }
 
     private void modificarGrupo(ActionEvent event) {
         if (comprobarCampos()) {
             ///////////////////////////////////////////////
-            limpiarCamposTexto();
+            //limpiarCamposTexto();
         }
     }
 
@@ -281,16 +318,32 @@ public class UIGrupoController {
         }
     }
 
-    private void handleTextoCambiado(ObservableValue observable, String oldValue, String newValue) {
-        StringProperty textProperty = (StringProperty) observable;
-        TextField changedTextField = (TextField) textProperty.getBean();
-        String changedTextFieldName = changedTextField.getId();
-
-        textFieldOverMaxLength(changedTextField, changedTextFieldName);
-
-        habilitarBotones();
+    private void vistaGestionarAlumno(ActionEvent event){
+        try {
+            LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Alumno");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIAlumno.fxml"));
+            Parent root = (Parent) loader.load();
+            UIAlumnoController controlador = (UIAlumnoController) loader.getController();
+            controlador.setStage(stage);
+            controlador.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
     }
-
+    
+    private void vistaVerLibros(ActionEvent event){ 
+        try{
+            LOGGER.info("Reto2Cliente: Iniciando pantalla gestionar Libro");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+            Parent root = (Parent) loader.load();
+            UILibroController controlador = (UILibroController) loader.getController();
+            controlador.setStage(stage);
+            controlador.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+    
     private boolean comprobarCampos() {
         boolean error = false;
 
@@ -326,8 +379,8 @@ public class UIGrupoController {
 
     }
 
-    /*private void eliminarGrupo() {
-        Grupo SeleccionadoGrupo = ((Grupo) tablaGrupo.getSelectionModel().getSelectedItem());
+   private void eliminarGrupo() {
+        Grupo SeleccionadoGrupo = ((Grupo) tablaGrupos.getSelectionModel().getSelectedItem());
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Eliminar");
@@ -337,24 +390,43 @@ public class UIGrupoController {
 
         Optional<ButtonType> result = alert.showAndWait();
         ButtonType button = result.orElse(ButtonType.CANCEL);
-
         if (button == ButtonType.OK) {
-            grupoGestion.remove(SeleccionadoGrupo);
+            grupoGestion.remove(SeleccionadoGrupo.getIdUsuario());
 
-            tablaGrupo.getItems().remove(SeleccionadoGrupo);
-            tablaGrupo.refresh();
+            tablaGrupos.getItems().remove(SeleccionadoGrupo);
+            tablaGrupos.refresh();
 
-            limpiarCamposTexto();
+            limpiarCampos();
         }
-    } */
-
-    private void limpiarCamposTexto() {
+   }
+   
+    private void limpiarCamposTexto(ActionEvent event) {
         txtNombreGrupo.setText("");
         txtDescripcion.setText("");
+        txtBuscarGrupo.setText("");
     }
+    
+    private void comprobarLongitud(ObservableValue observable, String oldValue, String newValue) {
+        if (txtNombreGrupo.getText().length() > MAX_LENGHT_NOMBRE_GRUPO) {
+            String nombreCompleto = txtNombreGrupo.getText().substring(0, MAX_LENGHT_NOMBRE_GRUPO);
+            txtNombreGrupo.setText(nombreCompleto);
+        }
 
-    private void textFieldOverMaxLength(TextField changedTextField, String changedTextFieldName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (txtDescripcion.getText().length() > MAX_LENGHT_DESCRIPCION) {
+            String descripcion = txtDescripcion.getText().substring(0, MAX_LENGHT_DESCRIPCION);
+            txtDescripcion.setText(descripcion);
+        }
+
+        StringProperty textProperty = (StringProperty) observable;
+        TextField changedTextField = (TextField) textProperty.getBean();
+        String changedTextFieldName = changedTextField.getId();
+
+        if (changedTextFieldName.equals("txtBuscarGrupo") && newValue.isEmpty()) {
+            GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
+            tablaGrupos.setItems(GrupoObservableList);
+        }
+
+        habilitarBotones();
     }
 
     private void habilitarBotones() {
@@ -375,8 +447,7 @@ public class UIGrupoController {
         }
 
         if (txtBuscarGrupo.getText().isEmpty()) {
-         //   listarGrupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
-          //  tablaGrupo.setItems(listarGrupos);
+      
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
@@ -386,7 +457,7 @@ public class UIGrupoController {
     private boolean camposVacios() {
         boolean vacio = false;
 
-        if (txtNombreGrupo.getText().isEmpty() || txtDescripcion.getText().isEmpty() || txtBuscarGrupo.getText().isEmpty()) {
+        if (txtNombreGrupo.getText().isEmpty() || txtDescripcion.getText().isEmpty()) {
             vacio = true;
         }
 
@@ -396,11 +467,15 @@ public class UIGrupoController {
     private boolean camposNoVacios() {
         boolean vacio = false;
 
-        if (!txtNombreGrupo.getText().isEmpty() || !txtDescripcion.getText().isEmpty() || !txtBuscarGrupo.getText().isEmpty()) {
+        if (!txtNombreGrupo.getText().isEmpty() || !txtDescripcion.getText().isEmpty()) {
             vacio = true;
         }
 
         return vacio;
     }
+
+    private void limpiarCampos() {
+        txtNombreGrupo.setText("");
+        txtDescripcion.setText(""); }
 
 }

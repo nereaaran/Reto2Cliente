@@ -5,10 +5,6 @@
  */
 package rest;
 
-import entidad.Grupo;
-import factorias.GestionFactoria;
-import interfaces.GrupoGestion;
-import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -27,7 +23,7 @@ import javax.ws.rs.core.GenericType;
  *
  * @author nerea
  */
-    public class GrupoRESTClient implements GrupoGestion{
+    public class GrupoRESTClient {
 
     private WebTarget webTarget;
     private Client client;
@@ -72,29 +68,5 @@ import javax.ws.rs.core.GenericType;
         client.close();
     }  
 
-    @Override
-    public void create(Grupo grupo) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void edit(Grupo grupo) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Grupo find(Integer id) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Collection<Grupo> listarGrupos() throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Collection<Grupo> listarGrupoPorNombre(String nombre) throws ClientErrorException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }
