@@ -6,8 +6,6 @@
 package reto2cliente;
 
 import controladores.UISignInController;
-import entidad.Profesor;
-import implementaciones.ProfesorGestionImplementation;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -52,7 +50,7 @@ public class Reto2Cliente extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) { 
+    public static void main(String[] args) {
         launch(args);
     }
 }

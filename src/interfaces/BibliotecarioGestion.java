@@ -6,9 +6,7 @@
 package interfaces;
 
 import entidad.Bibliotecario;
-import entidad.Usuario;
 import java.util.Collection;
-import javax.ws.rs.ClientErrorException;
 
 /**
  * Interfaz lógica que declara los métodos para la gestión de los

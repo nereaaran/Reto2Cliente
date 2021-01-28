@@ -35,7 +35,7 @@ import javafx.stage.WindowEvent;
  * Controlador de la vista UIRestaurarContrasenia que contiene los metodos para
  * definir y controlar su comportamiento.
  *
- * @author Nerea Aranguren
+ * @author Nerea Aranguren y Cristina Milea
  */
 public class UIRestaurarContraseniaController {
 

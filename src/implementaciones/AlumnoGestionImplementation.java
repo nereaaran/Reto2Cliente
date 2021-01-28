@@ -47,7 +47,7 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
     @Override
     public void create(Alumno alumno) {
         alumno.setPassword(cifrarContrasena(alumno.getPassword()));
-        
+
         try {
             LOGGER.info("AlumnoGestionImplementation: Creando alumno");
 
@@ -65,7 +65,7 @@ public class AlumnoGestionImplementation implements AlumnoGestion {
     @Override
     public void edit(Alumno alumno) {
         alumno.setPassword(cifrarContrasena(alumno.getPassword()));
-        
+
         try {
             LOGGER.info("AlumnoGestionImplementation: Editando alumno");
 

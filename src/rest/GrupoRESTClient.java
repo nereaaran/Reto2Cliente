@@ -5,6 +5,7 @@
  */
 package rest;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -23,11 +24,11 @@ import javax.ws.rs.core.GenericType;
  *
  * @author nerea
  */
-    public class GrupoRESTClient {
+public class GrupoRESTClient {
 
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/Reto2Servidor/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("archivos.parametros").getString("RESTFUL_URI");
 
     public GrupoRESTClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
@@ -56,7 +57,7 @@ import javax.ws.rs.core.GenericType;
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
-      
+
     public <T> T listarGrupoPorNombre(GenericType<T> responseType, String nombre) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("nombre/{0}", new Object[]{nombre}));

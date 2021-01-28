@@ -49,7 +49,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public void create(Usuario usuario) {
         usuario.setPassword(cifrarContrasena(usuario.getPassword()));
-        
+
         try {
             LOGGER.info("UsuarioGestionImplementation: Creando usuario");
 
@@ -67,7 +67,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public void edit(Usuario usuario) {
         usuario.setPassword(cifrarContrasena(usuario.getPassword()));
-        
+
         try {
             LOGGER.info("UsuarioGestionImplementation: Editando usuario");
 
@@ -239,6 +239,8 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
      */
     @Override
     public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Usuario usuario) {
+        usuario.setPassword(cifrarContrasena(usuario.getPassword()));
+        
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de recuperación de contraseña");
 
@@ -247,7 +249,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
             LOGGER.severe(e.getMessage());
         }
     }
-    
+
     /**
      * Manda una petición REST para que busque un usuario por email al servidor
      * para enviar el mail de cambio de contraseña.

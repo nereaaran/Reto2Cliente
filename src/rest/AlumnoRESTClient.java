@@ -5,7 +5,7 @@
  */
 package rest;
 
-import entidad.Alumno;
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -37,7 +37,7 @@ public class AlumnoRESTClient {
     /**
      * Coge el URI de un archivo de propiedades.
      */
-    private static final String BASE_URI = "http://localhost:8080/Reto2Servidor/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("archivos.parametros").getString("RESTFUL_URI");
 
     /**
      * Constructor que crea un cliente web RESTful y establece la ruta del

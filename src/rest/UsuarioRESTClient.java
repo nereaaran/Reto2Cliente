@@ -5,6 +5,7 @@
  */
 package rest;
 
+import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -36,7 +37,7 @@ public class UsuarioRESTClient {
     /**
      * Coge el URI de un archivo de propiedades.
      */
-    private static final String BASE_URI = "http://localhost:8080/Reto2Servidor/webresources";
+    private static final String BASE_URI = ResourceBundle.getBundle("archivos.parametros").getString("RESTFUL_URI");
 
     /**
      * Constructor que crea un cliente web RESTful y establece la ruta del
@@ -148,7 +149,7 @@ public class UsuarioRESTClient {
     public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Object requestEntity) throws ClientErrorException {
         webTarget.path("enviarMailRecuperacion").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
-    
+
     /**
      * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
      * servicio web usuario RESTful y lo devuelve como un objeto de tipo

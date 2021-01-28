@@ -5,7 +5,6 @@
  */
 package controladores;
 
-import implementaciones.UsuarioGestionImplementation;
 import static entidad.TipoUsuario.*;
 import entidad.Usuario;
 import excepcion.*;
@@ -242,7 +241,7 @@ public class UISignInController {
 
             for (Usuario u : usuario) {
                 u.getPrivilege();
-                
+
                 switch (u.getTipoUsuario()) {
                     case BIBLIOTECARIO: {
                         //Abre la vista de UILibro
@@ -260,7 +259,7 @@ public class UISignInController {
                     case PROFESOR: {
                         u.setLastAccess(date);
                         usuarioGestion.edit(u);
-                        
+
                         //Abre la vista de UIGrupo
                         LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));

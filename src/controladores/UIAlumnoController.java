@@ -329,7 +329,7 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
-        
+
         cargarDatosEnMenuGrupos();
 
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
@@ -471,8 +471,8 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que habilita o deshabilita los botones Añadir,
-     * Modificar y Eliminar dependiendo si los campos están vacíos o no.
+     * Método que habilita o deshabilita los botones Añadir, Modificar y
+     * Eliminar dependiendo si los campos están vacíos o no.
      */
     private void habilitarBotones() {
         if (camposVacios()) {
@@ -685,7 +685,7 @@ public class UIAlumnoController {
         if (!errorPatrones || !errorDatePicker) {
             try {
                 Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
-                
+
                 //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
                 if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
                     usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
@@ -694,7 +694,7 @@ public class UIAlumnoController {
                 if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
                     usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
                 }
-                
+
                 //Modifica el alumno
                 alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
                 alumnoSeleccionado.setDni(txtDni.getText());

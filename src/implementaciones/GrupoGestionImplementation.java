@@ -18,7 +18,7 @@ import rest.GrupoRESTClient;
  *
  * @author nerea
  */
-public class GrupoGestionImplementation implements GrupoGestion{
+public class GrupoGestionImplementation implements GrupoGestion {
 
     private GrupoRESTClient webClient;
     private static final Logger LOGGER = Logger.getLogger("GrupoGestionImplementation");
@@ -86,7 +86,7 @@ public class GrupoGestionImplementation implements GrupoGestion{
     }
 
     @Override
-    public Collection<Grupo> listarGrupos()throws ClientErrorException{
+    public Collection<Grupo> listarGrupos() throws ClientErrorException {
         Collection<Grupo> grupo = null;
 
         try {

@@ -75,7 +75,7 @@ public class UILibroController {
      * total.
      */
     private static final int MAX_LENGHT_CANTIDAD_TOTAL = 3;
-    /*
+    /**
      * Atributo estático y constante que guarda el patron correcto de titulo.
      */
     public static final Pattern VALID_TITULO_EDITORIAL = Pattern.compile("^[A-Z0-9.:\\s]+$", Pattern.CASE_INSENSITIVE);
