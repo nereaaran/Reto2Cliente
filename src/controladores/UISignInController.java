@@ -5,6 +5,7 @@
  */
 package controladores;
 
+import implementaciones.UsuarioGestionImplementation;
 import static entidad.TipoUsuario.*;
 import entidad.Usuario;
 import excepcion.*;

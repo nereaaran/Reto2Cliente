@@ -5,8 +5,9 @@
  */
 package reto2cliente;
 
-import controladores.UIAlumnoController;
 import controladores.UISignInController;
+import entidad.Profesor;
+import implementaciones.ProfesorGestionImplementation;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javafx.application.Application;
