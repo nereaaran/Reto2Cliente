@@ -6,7 +6,6 @@
 package seguridad;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -15,7 +14,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -82,7 +80,7 @@ public class CifradoAsimetrico {
      */
     private String byteToHexadecimal(byte[] bytes) {
         LOGGER.info("CifradoAsimetrico: Convirtiendo bytes a hexadecimal");
-        
+
         String HEX = "";
         for (int i = 0; i < bytes.length; i++) {
             String h = Integer.toHexString(bytes[i] & 0xFF);
@@ -94,17 +92,17 @@ public class CifradoAsimetrico {
         return HEX.toUpperCase();
     }
 
+    /**
+     * Obtiene la clave publica de un archivo.
+     *
+     * @return La clave publica en array de bytes.
+     */
     public byte[] getPublicFileKey() {
-        byte[] publicKeyBytes = null;
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             LOGGER.info("CifradoAsimetrico: Leyendo archivo");
 
             InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream(PUBLIC_KEY_PATH);
-            //InputStream inputStream = CifradoAsimetrico.class.getResourceAsStream("/archivos/ComicSansAsimetricPublic.key");///////////////////////////////////7
-            /*publicKeyBytes = new byte[inputStream.available()];
-            inputStream.read(publicKeyBytes);*/
-
             byte[] buffer = new byte[1024];
             int len;
             // read bytes from the input stream and store them in buffer
@@ -112,11 +110,9 @@ public class CifradoAsimetrico {
                 // write bytes from the buffer into output stream
                 os.write(buffer, 0, len);
             }
-
         } catch (IOException ex) {
             LOGGER.severe(ex.getMessage());
         }
-        //System.out.println("public" + os);//////////////////////////////////////////////////////////////////////////////////
         return os.toByteArray();
     }
 }
