@@ -22,7 +22,10 @@ public class GrupoGestionImplementation implements GrupoGestion {
 
     private GrupoRESTClient webClient;
     private static final Logger LOGGER = Logger.getLogger("GrupoGestionImplementation");
-
+    /** 
+     * Constructor que sirve para acceder al servicio REST del lado servidor.
+     * 
+     */
     public GrupoGestionImplementation() {
         webClient = new GrupoRESTClient();
     }

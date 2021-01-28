@@ -211,8 +211,7 @@ public class UIGrupoController {
 
         btnBuscar.setDisable(true);
         btnEliminarLibro.setDisable(true);
-        btnGestionarAlumno.setDisable(false);
-        btnConsultarLibros.setDisable(false);
+        btnGestionarAlumno.setOnAction(this::vistaGestionarAlumno);
         btnConsultarLibros.setOnAction(this::vistaVerLibros);
 
         stage.show();
@@ -385,7 +384,7 @@ public class UIGrupoController {
         Optional<ButtonType> result = alert.showAndWait();
         ButtonType button = result.orElse(ButtonType.CANCEL);
         if (button == ButtonType.OK) {
-            grupoGestion.remove(SeleccionadoGrupo.getIdUsuario());
+            grupoGestion.remove(SeleccionadoGrupo.getIdGrupo());
 
             tablaGrupos.getItems().remove(SeleccionadoGrupo);
             tablaGrupos.refresh();

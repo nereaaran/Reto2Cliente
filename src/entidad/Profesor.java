@@ -11,26 +11,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author JonY
+ * @author Jonathan Viñan
  */
 @XmlRootElement(name = "profesor")
 public class Profesor extends Usuario implements Serializable {
 
-    private Integer telefono;
+    /**
+     * Numero de telefono del profesor.
+     */
+    private Integer telefono;  
 
-    public Profesor() {
-        super();
-        this.telefono = null;
-    }
-
+    /**
+     * Obtiene el telefono.
+     *
+     * @return telefono.
+     */
     public Integer getTelefono() {
         return telefono;
     }
 
+    /**
+     * Establece el telefono
+     *
+     * @param telefono que almacenamos
+     */
     public void setTelefono(Integer telefono) {
         this.telefono = telefono;
     }
-
+    /**
+     * Método que compara el código hash de dos objetos.
+     * @return el código hash del objeto.
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -38,6 +49,12 @@ public class Profesor extends Usuario implements Serializable {
         return hash;
     }
 
+    /**
+     * Método que compara si un objeto es igual al objeto "Profesor".
+     *
+     * @param obj cualquier tipo de objeto.
+     * @return un "false" si los objetos noson iguales y un "true" si lo son.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

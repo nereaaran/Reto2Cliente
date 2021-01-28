@@ -51,14 +51,14 @@
             </AnchorPane>
           <AnchorPane fx:id="paneInferiorGrupo" minHeight="0.0" minWidth="0.0" prefHeight="355.0" prefWidth="826.0">
                <children>
-                  <TableView fx:id="tablaLibro" layoutX="2.0" layoutY="30.0" prefHeight="246.0" prefWidth="465.0">
+                  <TableView fx:id="tablaGrupos" layoutX="2.0" layoutY="30.0" prefHeight="246.0" prefWidth="465.0">
                     <columns>
                       <TableColumn fx:id="nombreGrupoCL" prefWidth="106.66665148735046" text="Nombre " />
                         <TableColumn fx:id="descripcionCL" prefWidth="265.3333282470703" text="Descripción" />
                         <TableColumn fx:id="numAlumnosCL" prefWidth="91.3333740234375" text="Nº de alumnos" />
                     </columns>
                   </TableView>
-                  <TableView fx:id="tablaLibro1" layoutX="473.0" layoutY="30.0" prefHeight="246.0" prefWidth="371.0">
+                  <TableView fx:id="tablaLibros" layoutX="473.0" layoutY="30.0" prefHeight="246.0" prefWidth="371.0">
                      <columns>
                         <TableColumn fx:id="tituloCL" prefWidth="178.00003051757812" text="Título " />
                         <TableColumn fx:id="fechaInicioCL" prefWidth="82.6666259765625" text="Fecha inicio" />
