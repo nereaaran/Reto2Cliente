@@ -6,11 +6,18 @@
 package controladores;
 
 import implementaciones.UsuarioGestionImplementation;
+import static entidad.TipoUsuario.*;
+import entidad.Usuario;
+import excepcion.*;
+import factorias.GestionFactoria;
 import interfaces.UsuarioGestion;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,13 +33,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Controlador de la vista UISignIn que contiene los metodos para definir y
  * controlar su comportamiento.
  *
- * @author Nerea Aranguren
+ * @author Nerea Aranguren y Cristina Milea
  */
 public class UISignInController {
 
@@ -51,32 +60,77 @@ public class UISignInController {
      */
     public static final Pattern VALID_PASSWORD = Pattern.compile("^[a-zA-Z0-9]+$");
     /**
-     * Lista de elementos importados de la vista FXML que representan objetos.
+     * Elemento tipo pane importado de la vista FXML.
      */
     @FXML
     private Pane paneSignIn;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Usuario.
+     */
     @FXML
     private Label lblUsuario;
+    /**
+     * Elemento tipo TextField importado del FXML que referencia a Usuario.
+     */
     @FXML
     private TextField txtUsuario;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Contraseña.
+     */
     @FXML
-    private Label lblContraseña;
+    private Label lblContrasenia;
+    /**
+     * Elemento tipo passwordField importado del FXML que referencia a
+     * Contraseña.
+     */
     @FXML
-    private PasswordField txtContraseña;
+    private PasswordField txtContrasenia;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a IniciarSesion.
+     */
     @FXML
     private Button btnIniciarSesion;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Registrate.
+     */
     @FXML
     private Button btnRegistrate;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Bibliotecario.
+     */
+    @FXML
+    private Button btnBibliotecario;
+    /**
+     * Elemento tipo botón importado del FXML que referencia a Profesor.
+     */
+    @FXML
+    private Button btnProfesor;
+    /**
+     * Elemento tipo label importado del FXML que referencia a Título.
+     */
     @FXML
     private Label lblTitulo;
+    /**
+     * Elemento tipo label importado del FXML que referencia a NoTienesCuenta.
+     */
     @FXML
     private Label lblNoTienesCuenta;
+    /**
+     * Elemento tipo label importado del FXML que referencia a ContraseniaError.
+     */
     @FXML
-    private Label lblContraseñaError;
+    private Label lblContraseniaError;
+    /**
+     * Elemento tipo label importado del FXML que referencia a UsuarioError.
+     */
     @FXML
     private Label lblUsuarioError;
+    /**
+     * Elemento tipo hyperlink importado del FXML que referencia a
+     * ContraseniaOlvidada.
+     */
     @FXML
-    private Hyperlink linkContraseñaOlvidada;
+    private Hyperlink linkContraseniaOlvidada;
     /**
      * Variable de tipo stage que se usa para visualizar la ventana
      */
@@ -106,30 +160,131 @@ public class UISignInController {
         stage.setTitle("Sign In");
         stage.setResizable(false);
 
+        stage.onCloseRequestProperty().set(this::cerrarVentana);
+
         txtUsuario.requestFocus();
         btnIniciarSesion.setDisable(true);
 
+        btnBibliotecario.setOnAction(this::handleBotonBibliotecario);
+        btnProfesor.setOnAction(this::handleBotonProfesor);
+
         btnIniciarSesion.setOnAction(this::handleBotonIniciarSesion);
         btnRegistrate.setOnAction(this::handleBotonRegistro);
-        linkContraseñaOlvidada.setOnAction(this::handleBotonContraseñaOlvidada);
+        linkContraseniaOlvidada.setOnAction(this::handleBotonContraseniaOlvidada);
 
         txtUsuario.textProperty().addListener(this::handleTextoCambiado);
-        txtContraseña.textProperty().addListener(this::handleTextoCambiado);
+        txtContrasenia.textProperty().addListener(this::handleTextoCambiado);
 
         stage.show();
     }
 
+    /**
+     * Método que abre la venta UILibro.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonBibliotecario(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista UILibro");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+            Parent root = (Parent) loader.load();
+            UILibroController controller = ((UILibroController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Método que abre la venta UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
+    private void handleBotonProfesor(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista UIGrupo");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+            Parent root = (Parent) loader.load();
+            UIGrupoController controller = ((UIGrupoController) loader.getController());
+            controller.setStage(stage);
+            controller.initStage(root);
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    /**
+     * Método que comprueba los errores posibles y si no hay ninguno carga y
+     * abre la venta UIGrupo.
+     *
+     * @param event El evento de acción.
+     */
     private void handleBotonIniciarSesion(ActionEvent event) {
         LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
-        
-        
-        
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIMiPerfil.fxml"));
-            Parent root = (Parent) loader.load();
-            UIMiPerfilController controller = ((UIMiPerfilController) loader.getController());
-            controller.setStage();
-            controller.initStage(root);
+            UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
+
+            //Comprueba si existe el login
+            LOGGER.info("SignIn Controlador: Comprobando si existe el login");
+
+            Collection<Usuario> usuario = usuarioGestion.buscarUsuarioPorLoginSignIn(txtUsuario.getText());
+
+            //Comprueba si el login y la contraseña están bien
+            LOGGER.info("SignIn Controlador: Comprobando login y contraseña");
+
+            usuarioGestion.buscarUsuarioPorLoginYContrasenia(txtUsuario.getText(), txtContrasenia.getText());
+
+            Date date = new Date(System.currentTimeMillis());
+
+            for (Usuario u : usuario) {
+                u.getPrivilege();
+                
+                switch (u.getTipoUsuario()) {
+                    case BIBLIOTECARIO: {
+                        //Abre la vista de UILibro
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UILibroController controller = ((UILibroController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
+
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        break;
+                    }
+                    case PROFESOR: {
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        
+                        //Abre la vista de UIGrupo
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
+
+                        break;
+                    }
+                    default:
+                        lblContraseniaError.setText("No estás autorizado para realizar esta acción");
+                        lblContraseniaError.setTextFill(Color.web("#FF0000"));
+                        break;
+                }
+            }
+        } catch (LoginNoExisteException lne) {
+            LOGGER.severe(lne.getMessage());
+            lblUsuarioError.setText("Usuario no encontrado");
+            lblUsuarioError.setTextFill(Color.web("#FF0000"));
+        } catch (UsuarioNoExisteException une) {
+            LOGGER.severe(une.getMessage());
+            lblContraseniaError.setText("Contraseña incorrecta");
+            lblContraseniaError.setTextFill(Color.web("#FF0000"));
         } catch (IOException e) {
             LOGGER.severe(e.getMessage());
         }
@@ -151,7 +306,7 @@ public class UISignInController {
         // Guarda el textField
         TextField changedTextField = (TextField) textProperty.getBean();
 
-        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContraseña.getText().isEmpty()) {
+        if (!textFieldOver50(changedTextField) && !txtUsuario.getText().isEmpty() && !txtContrasenia.getText().isEmpty()) {
             btnIniciarSesion.setDisable(false);
         } else {
             btnIniciarSesion.setDisable(true);
@@ -181,8 +336,8 @@ public class UISignInController {
      *
      * @param event El evento de acción.
      */
-    private void handleBotonContraseñaOlvidada(ActionEvent event) {
-        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contraseña");
+    private void handleBotonContraseniaOlvidada(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Iniciando vista Restaurar Contrasenia");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIRestaurarContrasenia.fxml"));
@@ -214,25 +369,28 @@ public class UISignInController {
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Ventana de alerta que sale para confirmar o negar el cambio de pantalla.
+     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
+     * confirmar si se quiere cerrar la aplicación.
      *
-     * @return Devuelve el resultado de la elección.
+     * @param event El evento de acción.
      */
-    private boolean mostrarAlertConfirmation() {
-        boolean confirm = false;
-
+    private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Salir");
         alert.setHeaderText(null);
-        alert.setTitle("Sign In");
-        alert.setContentText("Seguro que quieres cerrar la ventana?");
-        Optional<ButtonType> respuesta = alert.showAndWait();
+        alert.setContentText("¿Seguro que quieres cerrar la ventana?");
 
-        if (respuesta.get() == ButtonType.OK) {
-            confirm = true;
+        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get().equals(ButtonType.OK)) {
+            stage.close();
+            Platform.exit();
+        } else {
+            event.consume();
+            alert.close();
         }
-
-        return confirm;
     }
 }

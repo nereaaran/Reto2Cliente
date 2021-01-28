@@ -48,7 +48,7 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
     @Override
     public void create(Profesor profesor) {
         profesor.setPassword(cifrarContrasena(profesor.getPassword()));
-        
+
         try {
             LOGGER.info("ProfesorGestionImplementation: Creando profesor");
 
@@ -66,7 +66,7 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
     @Override
     public void edit(Profesor profesor) {
         profesor.setPassword(cifrarContrasena(profesor.getPassword()));
-        
+
         try {
             LOGGER.info("ProfesorGestionImplementation: Editando profesor");
 
@@ -145,5 +145,4 @@ public class ProfesorGestionImplementation implements ProfesorGestion {
         CifradoAsimetrico cifrar = new CifradoAsimetrico();
         return cifrar.cifrarConClavePublica(contrasena);
     }
-
 }

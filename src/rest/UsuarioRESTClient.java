@@ -141,6 +141,32 @@ public class UsuarioRESTClient {
      * servicio web usuario RESTful y lo devuelve como un objeto de tipo
      * genérico.
      *
+     * @param requestEntity Objeto con los datos del usuario.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Object requestEntity) throws ClientErrorException {
+        webTarget.path("enviarMailRecuperacion").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+    
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param email el email del usuario.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public void buscarEmailParaEnviarMailCambiarContrasenia(String email) throws ClientErrorException {
+        webTarget.path("enviarMailCambio").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(email, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
      * @param <T> Clase de tipo generico.
      * @param responseType La clase objeto de la instancia de retorno.
      * @param login El login de la instancia del lado servidor.
@@ -151,7 +177,7 @@ public class UsuarioRESTClient {
      */
     public <T> T buscarUsuarioPorLoginYContrasenia(GenericType<T> responseType, String login, String contrasenia) throws ClientErrorException {
         WebTarget resource = webTarget;
-        resource = resource.path(java.text.MessageFormat.format("login/{0}", new Object[]{login}));
+        resource = resource.path(java.text.MessageFormat.format("loginYPassword/{0}/{1}", new Object[]{login, contrasenia}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
 

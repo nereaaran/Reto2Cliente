@@ -20,12 +20,12 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <Label fx:id="lblContraseña" layoutX="141.0" layoutY="175.0" prefHeight="27.0" prefWidth="309.0" text="Contraseña">
+      <Label fx:id="lblContrasenia" layoutX="141.0" layoutY="175.0" prefHeight="27.0" prefWidth="309.0" text="Contraseña">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtContraseña" layoutX="141.0" layoutY="202.0" prefHeight="25.0" prefWidth="309.0" promptText="Introduce la contraseña">
+      <PasswordField fx:id="txtContrasenia" layoutX="141.0" layoutY="202.0" prefHeight="25.0" prefWidth="309.0" promptText="Introduce la contraseña">
          <font>
             <Font size="14.0" />
          </font>
@@ -46,8 +46,10 @@
          </font>
       </Label>
       <Label fx:id="lblNoTienesCuenta" layoutX="374.0" layoutY="366.0" prefHeight="17.0" prefWidth="131.0" text="¿No tienes cuenta?" />
-      <Label fx:id="lblContraseñaError" layoutX="141.0" layoutY="238.0" prefHeight="17.0" prefWidth="309.0" />
+      <Label fx:id="lblContraseniaError" layoutX="141.0" layoutY="238.0" prefHeight="17.0" prefWidth="309.0" />
       <Label fx:id="lblUsuarioError" layoutX="141.0" layoutY="151.0" prefHeight="17.0" prefWidth="309.0" />
-      <Hyperlink fx:id="linkContraseñaOlvidada" layoutX="141.0" layoutY="255.0" text="¿Has olvidado la contraseña?" underline="true" />
+      <Hyperlink fx:id="linkContraseniaOlvidada" layoutX="141.0" layoutY="255.0" text="¿Has olvidado la contraseña?" underline="true" />
+      <Button fx:id="btnBibliotecario" layoutX="35.0" layoutY="287.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="120.0" text="Botón para entrar&#10;como bibliotecario" />
+      <Button fx:id="btnProfesor" layoutX="434.0" layoutY="287.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="120.0" text="Botón para entrar&#10;como profesor" />
    </children>
 </Pane>

@@ -444,12 +444,12 @@ public class UISignUpController {
                 //Comprueba si existe el email
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el email");
 
-                usuarioGestion.buscarUsuarioPorEmail(txtEmail.getText());
+                usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
 
                 //Comprueba si existe el login
                 LOGGER.info("Sign Up Controlador: Comprobando si existe el login");
 
-                usuarioGestion.buscarUsuarioPorLogin(txtUsuario.getText());
+                usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
 
                 //Se crea el profesor
                 LOGGER.info("Sign Up Controlador: Creando profesor");
@@ -481,12 +481,12 @@ public class UISignUpController {
                 controller.initStage(root);
             } catch (EmailExisteException ee) {
                 LOGGER.severe(ee.getMessage());
-                lblNumeroTelefonoError.setText("El email ya existe");
-                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+                lblEmailError.setText("El email ya existe");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
             } catch (LoginExisteException le) {
                 LOGGER.severe(le.getMessage());
-                lblNumeroTelefonoError.setText("El login ya existe");
-                lblNumeroTelefonoError.setTextFill(Color.web("#FF0000"));
+                lblUsuarioError.setText("El login ya existe");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
             } catch (IOException ie) {
                 LOGGER.severe(ie.getMessage());
             }

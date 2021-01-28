@@ -6,15 +6,21 @@
 package controladores;
 
 import entidad.*;
+import static entidad.TipoUsuario.ALUMNO;
+import static entidad.UserPrivilege.USER;
+import static entidad.UserStatus.ENABLED;
+import excepcion.*;
 import factorias.GestionFactoria;
 import interfaces.*;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,11 +32,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -172,16 +177,6 @@ public class UIAlumnoController {
     @FXML
     private MenuButton menuGrupos;
     /**
-     * Elemento tipo menuitem importado de la vista FXML.
-     */
-    @FXML
-    private MenuItem lbNombreGrupo;
-    /**
-     * Elemento tipo checkbox importado de la vista FXML.
-     */
-    @FXML
-    private CheckBox cbxNomberGrupo;
-    /**
      * Elemento tipo botón importado de la vista FXML.
      */
     @FXML
@@ -278,9 +273,32 @@ public class UIAlumnoController {
     private Label lblAlumnosAsignados;
 
     /**
-     * Entidad Usuario del lado cliente.
+     * Entidad Alumno del lado cliente.
      */
     private ObservableList<Alumno> alumnos;
+
+    /**
+     * Entidad Grupo del lado cliente.
+     */
+    private ObservableList<Grupo> grupos;
+
+    /**
+     * Variable que hace una llamada al método que gestiona los usuarios de la
+     * factoría.
+     */
+    UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
+
+    /**
+     * Variable que hace una llamada al método que gestiona los alumnos de la
+     * factoría.
+     */
+    AlumnoGestion alumnoGestion = GestionFactoria.getAlumnoGestion();
+
+    /**
+     * Variable que hace una llamada al método que gestiona los grupos de la
+     * factoría.
+     */
+    GrupoGestion grupoGestion = GestionFactoria.getGrupoGestion();
 
     /**
      * Variable de tipo stage que se usa para visualizar la ventana.
@@ -290,7 +308,7 @@ public class UIAlumnoController {
     /**
      * Método que establece el escenario como escenario principal.
      *
-     * @param primaryStage El escenario de Sign Up.
+     * @param primaryStage El escenario de UIAlumno.
      */
     public void setStage(Stage primaryStage) {
         LOGGER.info("Alumno Controlador: Estableciendo stage");
@@ -311,19 +329,24 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
+        
+        cargarDatosEnMenuGrupos();
+
+        grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
+        tablaGrupos.setItems(grupos);
 
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         numeroAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
 
-        //Falta lo de jony
         dniCL.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreCompletoCL.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         fechaNacimientoCL.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
         emailCL.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        AlumnoGestion usuarioGestion = GestionFactoria.getAlumnoGestion();
-        alumnos = FXCollections.observableArrayList(usuarioGestion.buscarTodosLosAlumnos());
+        alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
         tablaAlumnos.setItems(alumnos);
+
+        tablaAlumnos.getSelectionModel().selectedItemProperty().addListener(this::seleccionTablaAlumnos);
 
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
@@ -352,6 +375,48 @@ public class UIAlumnoController {
         stage.show();
 
         txtNombreCompleto.requestFocus();
+    }
+
+    /**
+     * Método que coloca el los campos de texto Nombre Completo, Dni, Usuario,
+     * Email y Fecha de nacimiento los valores de la línes seleccionada de la
+     * tabla.
+     *
+     * @param observable El valor que se observa.
+     * @param oldValue El valor antiguo del observable.
+     * @param newValue El valor nuevo del observable.
+     */
+    private void seleccionTablaAlumnos(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null) {
+            Alumno alumnoSeleccionado = (Alumno) newValue;
+            txtNombreCompleto.setText(alumnoSeleccionado.getFullName());
+            txtDni.setText(alumnoSeleccionado.getDni());
+            txtUsuario.setText(alumnoSeleccionado.getLogin());
+            txtEmail.setText(alumnoSeleccionado.getEmail());
+            //datePickerFechaNacimiento.setValue(alumnoSeleccionado.getFechaNacimiento());
+
+            btnAnadir.setDisable(true);
+        } else {
+            txtNombreCompleto.clear();
+            txtDni.clear();
+            txtUsuario.clear();
+            txtEmail.clear();
+            datePickerFechaNacimiento.getEditor().clear();
+
+            btnAnadir.setDisable(false);
+        }
+    }
+
+    /**
+     * Método que carga en el menú de grupos todos los grupos que existen.
+     */
+    private void cargarDatosEnMenuGrupos() {
+        Collection<Grupo> grupo = grupoGestion.listarGrupos();
+
+        for (Grupo g : grupo) {
+            CheckMenuItem checkMenuItem = new CheckMenuItem(g.getNombre());
+            menuGrupos.getItems().add(checkMenuItem);
+        }
     }
 
     /**
@@ -406,8 +471,8 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que habilita y deshabilita o habilita los botones Añadir,
-     * Modificar y Eliminar.
+     * Método que habilita o deshabilita los botones Añadir,
+     * Modificar y Eliminar dependiendo si los campos están vacíos o no.
      */
     private void habilitarBotones() {
         if (camposVacios()) {
@@ -465,6 +530,15 @@ public class UIAlumnoController {
         if (txtBuscarAlumno.getText().length() > MAX_LENGHT) {
             String buscar = txtBuscarAlumno.getText().substring(0, MAX_LENGHT);
             txtBuscarAlumno.setText(buscar);
+        }
+
+        StringProperty textProperty = (StringProperty) observable;
+        TextField changedTextField = (TextField) textProperty.getBean();
+        String changedTextFieldName = changedTextField.getId();
+
+        if (changedTextFieldName.equals("txtBuscarAlumno") && newValue.isEmpty()) {
+            alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
+            tablaAlumnos.setItems(alumnos);
         }
 
         habilitarBotones();
@@ -552,9 +626,50 @@ public class UIAlumnoController {
         boolean errorDatePicker = datePickerVacio();
 
         if (!errorPatrones || !errorDatePicker) {
-            LOGGER.info("Alumno Controlador: Añadiendo alumno a la base de datos");
+            try {
+                //Comprueba si existe el login
+                LOGGER.info("Alumno Controlador: Comprobando si existe el login");
 
-            //CREATE
+                usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
+
+                //Comprueba si existe el email
+                LOGGER.info("Alumno Controlador: Comprobando si existe el email");
+
+                usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
+
+                //Se crea el alumno
+                LOGGER.info("Alumno Controlador: Creando alumno");
+
+                Date date = new Date(System.currentTimeMillis());
+
+                Alumno nuevoAlumno = new Alumno();
+                nuevoAlumno.setFullName(txtNombreCompleto.getText());
+                nuevoAlumno.setDni(txtDni.getText());
+                nuevoAlumno.setLogin(txtUsuario.getText());
+                nuevoAlumno.setEmail(txtEmail.getText());
+                nuevoAlumno.setStatus(ENABLED);
+                nuevoAlumno.setPrivilege(USER);
+                nuevoAlumno.setTipoUsuario(ALUMNO);
+                nuevoAlumno.setPassword("abcd*1234");
+                nuevoAlumno.setLastAccess(date);
+                nuevoAlumno.setLastPasswordChange(date);
+                nuevoAlumno.setFechaNacimiento(datePickerFechaNacimiento.getValue().toString());
+
+                alumnoGestion.create(nuevoAlumno);
+
+                tablaAlumnos.getItems().add(nuevoAlumno);
+                tablaAlumnos.refresh();
+
+                limpiarCampos();
+            } catch (LoginExisteException le) {
+                LOGGER.severe(le.getMessage());
+                lblUsuarioError.setText("El login ya existe");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+            } catch (EmailExisteException ee) {
+                LOGGER.severe(ee.getMessage());
+                lblEmailError.setText("El email ya existe");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
+            }
         }
     }
 
@@ -568,7 +683,38 @@ public class UIAlumnoController {
         boolean errorDatePicker = datePickerVacio();
 
         if (!errorPatrones || !errorDatePicker) {
-            lblBuscarAlumnoError.setText("OK"); //Quitar mas tarde
+            try {
+                Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
+                
+                //Comprueba si se ha modificado el login para comprobar si ya existe en la base de datos o no.
+                if (!alumnoSeleccionado.getLogin().equals(txtUsuario.getText())) {
+                    usuarioGestion.buscarUsuarioPorLoginCrear(txtUsuario.getText());
+                }
+                //Comprueba si se ha modificado el email para comprobar si ya existe en la base de datos o no.
+                if (!alumnoSeleccionado.getEmail().equals(txtEmail.getText())) {
+                    usuarioGestion.buscarUsuarioPorEmailCrear(txtEmail.getText());
+                }
+                
+                //Modifica el alumno
+                alumnoSeleccionado.setFullName(txtNombreCompleto.getText());
+                alumnoSeleccionado.setDni(txtDni.getText());
+                alumnoSeleccionado.setLogin(txtUsuario.getText());
+                alumnoSeleccionado.setEmail(txtEmail.getText());
+
+                alumnoGestion.edit(alumnoSeleccionado);
+
+                tablaAlumnos.refresh();
+
+                limpiarCampos();
+            } catch (LoginExisteException le) {
+                LOGGER.severe(le.getMessage());
+                lblUsuarioError.setText("El login ya existe");
+                lblUsuarioError.setTextFill(Color.web("#FF0000"));
+            } catch (EmailExisteException ee) {
+                LOGGER.severe(ee.getMessage());
+                lblEmailError.setText("El email ya existe");
+                lblEmailError.setTextFill(Color.web("#FF0000"));
+            }
         }
     }
 
@@ -578,7 +724,6 @@ public class UIAlumnoController {
      * @param event El evento de acción.
      */
     private void botonEliminarPulsado(ActionEvent event) {
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Eliminar");
         alert.setHeaderText(null);
@@ -589,7 +734,13 @@ public class UIAlumnoController {
         ButtonType button = result.orElse(ButtonType.CANCEL);
 
         if (button == ButtonType.OK) {
-            //Eliminar alumno
+            Alumno alumnoSeleccionado = ((Alumno) tablaAlumnos.getSelectionModel().getSelectedItem());
+
+            alumnoGestion.remove(alumnoSeleccionado);
+
+            tablaAlumnos.getItems().remove(alumnoSeleccionado);
+            tablaAlumnos.refresh();
+
             limpiarCampos();
         }
     }
@@ -609,6 +760,8 @@ public class UIAlumnoController {
      * @param event El evento de acción.
      */
     private void botonBuscarPulsado(ActionEvent event) {
+        alumnos = FXCollections.observableArrayList(alumnoGestion.buscarAlumnoPorNombre(txtBuscarAlumno.getText()));
+        tablaAlumnos.setItems(alumnos);
     }
 
     /**
@@ -648,6 +801,9 @@ public class UIAlumnoController {
         lblFechaNacimientoError.setText("");
         lblBuscarAlumnoError.setText("");
 
+        tablaAlumnos.getSelectionModel().clearSelection();
+
+        btnAnadir.setDisable(true);
         btnLimpiar.setDisable(true);
 
         txtNombreCompleto.requestFocus();

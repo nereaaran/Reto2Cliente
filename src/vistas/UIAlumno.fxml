@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -43,20 +41,7 @@
                   <Label fx:id="lblFechaNacimiento" layoutX="363.0" layoutY="194.0" text="Fecha de nacimiento" />
                   <Separator layoutX="670.0" layoutY="87.0" orientation="VERTICAL" prefHeight="200.0" />
                   <DatePicker fx:id="datePickerFechaNacimiento" layoutX="491.0" layoutY="190.0" prefHeight="25.0" prefWidth="138.0" />
-                  <MenuButton fx:id="menuGrupos" layoutX="76.0" layoutY="190.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="211.0" text="Grupos">
-                     <items>
-                        <MenuItem fx:id="lbNombreGrupo" mnemonicParsing="false">
-                           <graphic>
-                              <CheckBox fx:id="cbxNomberGrupo" mnemonicParsing="false" />
-                           </graphic>
-                        </MenuItem>
-                        <MenuItem mnemonicParsing="false">
-                           <graphic>
-                              <CheckBox mnemonicParsing="false" />
-                           </graphic>
-                        </MenuItem>
-                     </items>
-                  </MenuButton>
+                  <MenuButton fx:id="menuGrupos" layoutX="76.0" layoutY="190.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="211.0" text="Grupos" />
                   <Button fx:id="btnVolver" layoutX="705.0" layoutY="245.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Volver" />
                   <Button fx:id="btnBuscar" layoutX="287.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Buscar" />
                   <Label fx:id="lblNombreCompletoError" layoutX="139.0" layoutY="118.0" prefHeight="18.0" prefWidth="253.0" />

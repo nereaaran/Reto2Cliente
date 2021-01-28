@@ -32,9 +32,9 @@ public interface AlumnoGestion {
     /**
      * Método que elimina un alumno existente.
      *
-     * @param id El id del alumno que se va a eliminar.
+     * @param alumno El alumno que se va a eliminar.
      */
-    public void remove(Integer id);
+    public void remove(Alumno alumno);
 
     /**
      * Método que obtiene información de un alumno existente por id.
