@@ -114,23 +114,24 @@ public class UIRestaurarContraseniaController {
      * @param event El evento de acción.
      */
     private void handleBotonRestaurarContrasenia(ActionEvent event) {
-        //try {
+        try {
             LOGGER.info("RestaurarContrasenia Controlador: Restaurando contraseña");
 
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
-            Usuario usuario=new Usuario();
-            usuario.setEmail(txtEmail.getText());
-            //usuarioGestion.buscarUsuarioPorEmailContra(txtEmail.getText());
-            usuarioGestion.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
+            Collection<Usuario> usuarioCol = usuarioGestion.buscarUsuarioPorEmailContrasenia(txtEmail.getText());
 
-            lblContraseniaRestaurada.setText("Contrasenia restaurada. Revisa tu email");
+            for (Usuario u : usuarioCol) {
+                usuarioGestion.buscarUsuarioParaEnviarMailRecuperarContrasenia(u);
+            }
+
+            lblContraseniaRestaurada.setText("Contraseña restaurada. Revisa tu email");
             lblContraseniaRestaurada.setTextFill(Color.web("#008000"));
-        /*} catch (EmailNoExisteException ene) {
+        } catch (EmailNoExisteException ene) {
             LOGGER.severe(ene.getMessage());
             lblEmailError.setText("Email no encontrado");
             lblEmailError.setTextFill(Color.web("#FF0000"));
-        }*/
+        }
     }
 
     /**

@@ -15,6 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import java.util.Optional;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,7 +32,7 @@ import javafx.stage.WindowEvent;
 /**
  * Controlador FXML para la vista de la barra de menu.
  *
- * @author Kristina Milea and Nerea Aranguren
+ * @author Cristina Milea and Nerea Aranguren
  */
 public class UIMenuBarController {
 
@@ -144,5 +149,4 @@ public class UIMenuBarController {
             return false;
         }
     }
-
 }

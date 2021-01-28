@@ -308,7 +308,7 @@ public class UIAlumnoController {
     /**
      * Método que establece el escenario como escenario principal.
      *
-     * @param primaryStage El escenario de Sign Up.
+     * @param primaryStage El escenario de UIAlumno.
      */
     public void setStage(Stage primaryStage) {
         LOGGER.info("Alumno Controlador: Estableciendo stage");
@@ -329,7 +329,7 @@ public class UIAlumnoController {
 
         stage.setTitle("Gestion de alumnos");
         stage.setResizable(false);
-
+        
         cargarDatosEnMenuGrupos();
 
         grupos = FXCollections.observableArrayList(grupoGestion.listarGrupos());
@@ -471,8 +471,8 @@ public class UIAlumnoController {
     }
 
     /**
-     * Método que habilita y deshabilita o habilita los botones Añadir,
-     * Modificar y Eliminar.
+     * Método que habilita o deshabilita los botones Añadir,
+     * Modificar y Eliminar dependiendo si los campos están vacíos o no.
      */
     private void habilitarBotones() {
         if (camposVacios()) {

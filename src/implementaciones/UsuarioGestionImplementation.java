@@ -98,7 +98,7 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
     @Override
     public Usuario find(Integer id) {
         Usuario usuario = null;
-        
+
         try {
             LOGGER.info("UsuarioGestionImplementation: Buscando usuario por id");
 
@@ -196,18 +196,18 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
 
         return usuario;
     }
-    
+
     /**
      * Manda una petición REST para que busque un usuario por email al servidor
      * y busca el usuario.
      *
      * @param email el email del usuario por el que se buscará.
      * @return la colección de usuarios que encuentra.
-     * @throws excepcion.EmailNoExisteException si el email no existe en la base de
-     * datos.
+     * @throws excepcion.EmailNoExisteException si el email no existe en la base
+     * de datos.
      */
     @Override
-    public Collection<Usuario> buscarUsuarioPorEmailContra(String email) throws EmailNoExisteException {
+    public Collection<Usuario> buscarUsuarioPorEmailContrasenia(String email) throws EmailNoExisteException {
         Collection<Usuario> usuario = null;
 
         try {
@@ -225,21 +225,36 @@ public class UsuarioGestionImplementation implements UsuarioGestion {
 
         return usuario;
     }
-    
+
+    /**
+     * Manda una petición REST para que busque un usuario por email al servidor
+     * para enviar el mail de recuperación de contraseña.
+     *
+     * @param usuario el usuario que se buscará.
+     */
+    @Override
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Usuario usuario) {
+        try {
+            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de recuperación de contraseña");
+
+            webClient.buscarUsuarioParaEnviarMailRecuperarContrasenia(usuario);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
     
     /**
      * Manda una petición REST para que busque un usuario por email al servidor
-     * y busca el usuario.
+     * para enviar el mail de cambio de contraseña.
      *
-     * @param usuario el usuario que se buscará.
-     * @return la colección de usuarios que encuentra.
+     * @param email el email que se buscará.
      */
     @Override
-    public void buscarEmailParaEnviarMailContraseniaOlvidada(Usuario usuario) {
+    public void buscarEmailParaEnviarMailCambiarContrasenia(String email) {
         try {
-            LOGGER.info("UsuarioGestionImplementation: Buscando usuario por email para enviar mail de contraseña olvidada");
+            LOGGER.info("UsuarioGestionImplementation: Buscando email para enviar mail de cambio de contraseña");
 
-            webClient.buscarEmailParaEnviarMailContraseniaOlvidada(usuario);
+            webClient.buscarEmailParaEnviarMailCambiarContrasenia(email);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
         }

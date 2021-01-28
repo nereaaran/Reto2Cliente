@@ -55,12 +55,12 @@ public class Usuario implements Serializable {
     /**
      * Fecha del último acceso del usuario.
      */
-    private Date lastAccess;
+    private String lastAccess;
     /**
      * Fecha de la última vez en la que se ha modificado la contraseña del
      * usuario.
      */
-    private Date lastPasswordChange;
+    private String lastPasswordChange;
 
     /**
      * Constructor vacío.
@@ -227,7 +227,7 @@ public class Usuario implements Serializable {
      *
      * @return el último acceso que se va a mostrar.
      */
-    public Date getLastAccess() {
+    public String getLastAccess() {
         return lastAccess;
     }
 
@@ -236,7 +236,7 @@ public class Usuario implements Serializable {
      *
      * @param lastAccess el último acceso que se va a guardar.
      */
-    public void setLastAccess(Date lastAccess) {
+    public void setLastAccess(String lastAccess) {
         this.lastAccess = lastAccess;
     }
 
@@ -245,7 +245,7 @@ public class Usuario implements Serializable {
      *
      * @return la fecha del último cambio de contraseña que se va a mostrar.
      */
-    public Date getLastPasswordChange() {
+    public String getLastPasswordChange() {
         return lastPasswordChange;
     }
 
@@ -255,7 +255,7 @@ public class Usuario implements Serializable {
      * @param lastPasswordChange la fecha del último cambio de contraseña que se
      * va a guardar.
      */
-    public void setLastPasswordChange(Date lastPasswordChange) {
+    public void setLastPasswordChange(String lastPasswordChange) {
         this.lastPasswordChange = lastPasswordChange;
     }
 

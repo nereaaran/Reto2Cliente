@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
@@ -223,10 +222,9 @@ public class UISignInController {
      * @param event El evento de acción.
      */
     private void handleBotonIniciarSesion(ActionEvent event) {
+        LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
+
         try {
-            LOGGER.info("SignIn Controlador: Pulsado boton Iniciar sesion");
-            /*
-            try {
             UsuarioGestion usuarioGestion = GestionFactoria.getUsuarioGestion();
 
             //Comprueba si existe el login
@@ -242,61 +240,52 @@ public class UISignInController {
             Date date = new Date(System.currentTimeMillis());
 
             for (Usuario u : usuario) {
-            u.getPrivilege();
-            
-            switch (u.getTipoUsuario()) {
-            case BIBLIOTECARIO: {
-            //Abre la vista de UILibro
-            LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
-            Parent root = (Parent) loader.load();
-            UILibroController controller = ((UILibroController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
-            
-            u.setLastAccess(date);
-            usuarioGestion.edit(u);
-            break;
+                u.getPrivilege();
+                
+                switch (u.getTipoUsuario()) {
+                    case BIBLIOTECARIO: {
+                        //Abre la vista de UILibro
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UILibroController controller = ((UILibroController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
+
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        break;
+                    }
+                    case PROFESOR: {
+                        u.setLastAccess(date);
+                        usuarioGestion.edit(u);
+                        
+                        //Abre la vista de UIGrupo
+                        LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
+                        Parent root = (Parent) loader.load();
+                        UIGrupoController controller = ((UIGrupoController) loader.getController());
+                        controller.setStage(stage);
+                        controller.initStage(root);
+
+                        break;
+                    }
+                    default:
+                        lblContraseniaError.setText("No estás autorizado para realizar esta acción");
+                        lblContraseniaError.setTextFill(Color.web("#FF0000"));
+                        break;
+                }
             }
-            case PROFESOR: {
-            //Abre la vista de UIGrupo
-            LOGGER.info("SignIn Controlador: Abriendo la vista UIGrupo");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UIGrupo.fxml"));
-            Parent root = (Parent) loader.load();
-            UIGrupoController controller = ((UIGrupoController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
-            
-            u.setLastAccess(date);
-            usuarioGestion.edit(u);
-            break;
-            }
-            default:
-            lblContraseniaError.setText("No estás autorizado para realizar esta acción");
-            lblContraseniaError.setTextFill(Color.web("#FF0000"));
-            break;
-            }
-            }
-            } catch (LoginNoExisteException lne) {
+        } catch (LoginNoExisteException lne) {
             LOGGER.severe(lne.getMessage());
             lblUsuarioError.setText("Usuario no encontrado");
             lblUsuarioError.setTextFill(Color.web("#FF0000"));
-            } catch (UsuarioNoExisteException une) {
+        } catch (UsuarioNoExisteException une) {
             LOGGER.severe(une.getMessage());
             lblContraseniaError.setText("Contraseña incorrecta");
             lblContraseniaError.setTextFill(Color.web("#FF0000"));
-            } catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.severe(e.getMessage());
-            }*/
-            
-            LOGGER.info("SignIn Controlador: Abriendo la vista UILibro");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistas/UILibro.fxml"));
-            Parent root = (Parent) loader.load();
-            UILibroController controller = ((UILibroController) loader.getController());
-            controller.setStage(stage);
-            controller.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(UISignInController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

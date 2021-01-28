@@ -5,8 +5,6 @@
  */
 package rest;
 
-import entidad.Usuario;
-import java.util.Collection;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -143,15 +141,25 @@ public class UsuarioRESTClient {
      * servicio web usuario RESTful y lo devuelve como un objeto de tipo
      * genérico.
      *
-     * @param <T> Clase de tipo generico.
-     * @param responseType La clase objeto de la instancia de retorno.
-     * @param usuario la entidad Usuario.
-     * @return Coleccion de objetos con los datos.
+     * @param requestEntity Objeto con los datos del usuario.
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void buscarEmailParaEnviarMailContraseniaOlvidada(Object requestEntity) throws ClientErrorException {
-        webTarget.path("enviarMail").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    public void buscarUsuarioParaEnviarMailRecuperarContrasenia(Object requestEntity) throws ClientErrorException {
+        webTarget.path("enviarMailRecuperacion").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
+    }
+    
+    /**
+     * Obtiene una lista de reperesentaciónes XML de la entidad Usuario del
+     * servicio web usuario RESTful y lo devuelve como un objeto de tipo
+     * genérico.
+     *
+     * @param email el email del usuario.
+     * @throws ClientErrorException Si hay un error durante el proceso. El error
+     * va envuelto en una respuesta de error de HTTP.
+     */
+    public void buscarEmailParaEnviarMailCambiarContrasenia(String email) throws ClientErrorException {
+        webTarget.path("enviarMailCambio").request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(email, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
     /**
