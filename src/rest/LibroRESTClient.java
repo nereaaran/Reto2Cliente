@@ -7,6 +7,7 @@ package rest;
 
 import java.util.ResourceBundle;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -52,7 +53,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarTodosLosLibros(GenericType<T> responseType) throws ClientErrorException {
+    public <T> T buscarTodosLosLibros(GenericType<T> responseType) throws ClientErrorException, InternalServerErrorException {
         WebTarget resource = webTarget;
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
     }
@@ -68,7 +69,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarLibrosPorTitulo(GenericType<T> responseType, String titulo) throws ClientErrorException {
+    public <T> T buscarLibrosPorTitulo(GenericType<T> responseType, String titulo) throws ClientErrorException, InternalServerErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("titulo/{0}", new Object[]{titulo}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -85,7 +86,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T buscarLibrosPorAutor(GenericType<T> responseType, String autor) throws ClientErrorException {
+    public <T> T buscarLibrosPorAutor(GenericType<T> responseType, String autor) throws ClientErrorException, InternalServerErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("autor/{0}", new Object[]{autor}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -99,7 +100,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void create(Object requestEntity) throws ClientErrorException {
+    public void create(Object requestEntity) throws ClientErrorException, InternalServerErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).post(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
@@ -114,7 +115,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public <T> T find(Class<T> responseType, Integer id) throws ClientErrorException {
+    public <T> T find(Class<T> responseType, Integer id) throws ClientErrorException, InternalServerErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}", new Object[]{id}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_XML).get(responseType);
@@ -128,7 +129,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void edit(Object requestEntity) throws ClientErrorException {
+    public void edit(Object requestEntity) throws ClientErrorException, InternalServerErrorException {
         webTarget.request(javax.ws.rs.core.MediaType.APPLICATION_XML).put(javax.ws.rs.client.Entity.entity(requestEntity, javax.ws.rs.core.MediaType.APPLICATION_XML));
     }
 
@@ -140,7 +141,7 @@ public class LibroRESTClient {
      * @throws ClientErrorException Si hay un error durante el proceso. El error
      * va envuelto en una respuesta de error de HTTP.
      */
-    public void remove(Integer id) throws ClientErrorException {
+    public void remove(Integer id) throws ClientErrorException, InternalServerErrorException {
         webTarget.path(java.text.MessageFormat.format("{0}", new Object[]{id})).request().delete();
     }
 

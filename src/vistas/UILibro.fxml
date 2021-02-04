@@ -31,15 +31,15 @@
                   <Label fx:id="lblGenero" layoutX="34.0" layoutY="145.0" prefHeight="17.0" prefWidth="44.0" text="Género" />
                   <Label fx:id="lblCantidadTotal" layoutX="387.0" layoutY="143.0" text="Cantidad Total" />
                   <Label fx:id="lblDescargable" layoutX="34.0" layoutY="192.0" text="Descargable" />
-                  <TextField fx:id="txtIsbn" layoutX="552.0" layoutY="141.0" prefHeight="25.0" prefWidth="112.0" />
                   <TextField fx:id="txtTitulo" layoutX="78.0" layoutY="93.0" prefHeight="25.0" prefWidth="261.0" />
                   <TextField fx:id="txtAutor" layoutX="404.0" layoutY="93.0" prefHeight="25.0" prefWidth="261.0" />
-                  <TextField fx:id="txtEditorial" layoutX="243.0" layoutY="140.0" prefHeight="25.0" prefWidth="125.0" />
                   <TextField fx:id="txtGenero" layoutX="78.0" layoutY="141.0" prefHeight="25.0" prefWidth="97.0" />
+                  <TextField fx:id="txtEditorial" layoutX="243.0" layoutY="140.0" prefHeight="25.0" prefWidth="125.0" />
                   <TextField fx:id="txtCantidadTotal" layoutX="472.0" layoutY="140.0" prefHeight="25.0" prefWidth="30.0" />
+                  <TextField fx:id="txtIsbn" layoutX="552.0" layoutY="141.0" prefHeight="25.0" prefWidth="112.0" />
+                  <CheckBox fx:id="cbxDescargable" layoutX="111.0" layoutY="192.0" mnemonicParsing="false" />
                   <TextField fx:id="txtLinkDescarga" layoutX="285.0" layoutY="188.0" prefHeight="25.0" prefWidth="379.0" />
                   <Label fx:id="lblLinkDescarga" layoutX="156.0" layoutY="192.0" text="Link de descarga" />
-                  <CheckBox fx:id="cbxDescargable" layoutX="111.0" layoutY="192.0" mnemonicParsing="false" />
                   <Label fx:id="lblGestionLibros" layoutX="47.0" layoutY="34.0" text="GESTIÓN DE LIBROS">
                      <font>
                         <Font size="20.0" />

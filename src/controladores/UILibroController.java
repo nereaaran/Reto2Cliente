@@ -592,7 +592,12 @@ public class UILibroController {
         String changedTextFieldName = changedTextField.getId();
 
         textFieldOverMaxLength(changedTextField, changedTextFieldName);
-
+        
+        if (changedTextFieldName.equals("txtBuscarLibro") && newValue.isEmpty()) {
+            librosObservableList = FXCollections.observableArrayList(libroGestion.buscarTodosLosLibros());
+            tablaLibro.setItems(librosObservableList);
+        }
+        
         habilitarBotones();
     }
 

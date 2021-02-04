@@ -10,6 +10,7 @@ import interfaces.LibroGestion;
 import java.util.Collection;
 import java.util.logging.Logger;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.GenericType;
 import rest.LibroRESTClient;
 
@@ -53,6 +54,8 @@ public class LibroGestionImplementation implements LibroGestion {
             webClient.create(libro);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
     }
 
@@ -70,6 +73,8 @@ public class LibroGestionImplementation implements LibroGestion {
             this.webClient.edit(libro);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
     }
 
@@ -87,6 +92,8 @@ public class LibroGestionImplementation implements LibroGestion {
             this.webClient.remove(libro.getIdLibro());
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
     }
 
@@ -106,6 +113,8 @@ public class LibroGestionImplementation implements LibroGestion {
             libro = this.webClient.find(Libro.class, id);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
         return libro;
     }
@@ -127,6 +136,8 @@ public class LibroGestionImplementation implements LibroGestion {
             });
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
         return libros;
     }
@@ -148,6 +159,8 @@ public class LibroGestionImplementation implements LibroGestion {
             }, titulo);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
         return libros;
     }
@@ -169,6 +182,8 @@ public class LibroGestionImplementation implements LibroGestion {
             }, autor);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        } catch (InternalServerErrorException ise){
+            LOGGER.severe(ise.getMessage());
         }
         return libros;
     }
