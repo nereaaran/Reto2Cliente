@@ -13,6 +13,7 @@ import excepcion.*;
 import factorias.GestionFactoria;
 import interfaces.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
@@ -640,7 +641,7 @@ public class UIAlumnoController {
                 //Se crea el alumno
                 LOGGER.info("Alumno Controlador: Creando alumno");
 
-                Date date = new Date(System.currentTimeMillis());
+                Date hoy = new Date(System.currentTimeMillis());
 
                 Alumno nuevoAlumno = new Alumno();
                 nuevoAlumno.setFullName(txtNombreCompleto.getText());
@@ -651,16 +652,29 @@ public class UIAlumnoController {
                 nuevoAlumno.setPrivilege(USER);
                 nuevoAlumno.setTipoUsuario(ALUMNO);
                 nuevoAlumno.setPassword("abcd*1234");
-                nuevoAlumno.setLastAccess(date);
-                nuevoAlumno.setLastPasswordChange(date);
-                nuevoAlumno.setFechaNacimiento(datePickerFechaNacimiento.getValue().toString());
+                nuevoAlumno.setLastAccess(hoy);
+                nuevoAlumno.setLastPasswordChange(hoy);
 
-                alumnoGestion.create(nuevoAlumno);
+                String fecha = datePickerFechaNacimiento.getValue().toString();
 
-                tablaAlumnos.getItems().add(nuevoAlumno);
-                tablaAlumnos.refresh();
+                LocalDate limite = LocalDate.now().minusYears(5);
 
-                limpiarCampos();
+                if (fecha.compareTo(limite.toString()) > 0) {
+                    lblFechaNacimientoError.setText("La fecha de nacimiento tiene que ser anterior a 5 años");
+                    lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
+                } else {
+                    lblFechaNacimientoError.setText("");
+                    nuevoAlumno.setFechaNacimiento(datePickerFechaNacimiento.getValue().toString());
+
+                    alumnoGestion.create(nuevoAlumno);
+
+                    alumnos = FXCollections.observableArrayList(alumnoGestion.buscarTodosLosAlumnos());
+                    tablaAlumnos.setItems(alumnos);
+
+                    tablaAlumnos.refresh();
+
+                    limpiarCampos();
+                }
             } catch (LoginExisteException le) {
                 LOGGER.severe(le.getMessage());
                 lblUsuarioError.setText("El login ya existe");
@@ -702,11 +716,23 @@ public class UIAlumnoController {
                     alumnoSeleccionado.setLogin(txtUsuario.getText());
                     alumnoSeleccionado.setEmail(txtEmail.getText());
 
+                    /*String fecha = datePickerFechaNacimiento.getValue().toString();
+
+                    LocalDate limite = LocalDate.now().minusYears(5);
+
+                    if (fecha.compareTo(limite.toString()) > 0) {
+                        lblFechaNacimientoError.setText("La fecha de nacimiento tiene que ser anterior a 5 años");
+                        lblFechaNacimientoError.setTextFill(Color.web("#FF0000"));
+                        alumnoSeleccionado.setFechaNacimiento(datePickerFechaNacimiento.getValue().toString());
+                    } else {*/
+                    lblFechaNacimientoError.setText("");
+
                     alumnoGestion.edit(alumnoSeleccionado);
 
                     tablaAlumnos.refresh();
 
                     limpiarCampos();
+                    //}
                 } else {
                     lblBuscarAlumnoError.setText("No se ha podido modificar ningún alumno");
                     lblBuscarAlumnoError.setTextFill(Color.web("#FF0000"));
