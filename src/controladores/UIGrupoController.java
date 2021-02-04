@@ -5,11 +5,11 @@
  */
 package controladores;
 
-import entidad.Grupo;
-import entidad.GrupoLibro;
+import entidad.*;
 import factorias.GestionFactoria;
 import interfaces.GrupoGestion;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -64,56 +64,58 @@ public class UIGrupoController {
     /**
      * Atributo estático y constante que guarda un patron alfanumerico.
      */
-    public static final Pattern VALIDAR_ALFANUMERICO = Pattern.compile("^[A-Z0-9]+$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALIDAR_ALFANUMERICO = Pattern.compile("^[A-Z0-9.:\\s]+$", Pattern.CASE_INSENSITIVE);
+    /**
+     * Atributo estático y constante que guarda el patron correcto del nombre.
+     */
+    public static final Pattern VALID_DESCRIPCION = Pattern.compile("^[A-Z\\s]+$", Pattern.CASE_INSENSITIVE);
+
     /**
      * Atributo estático y constante que guarda un patron numerico.
      */
     public static final Pattern VALIDAR_ES_NUMERO = Pattern.compile("^[0-9]", Pattern.CASE_INSENSITIVE);
 
+    //PANEL DE LA VISTA
     @FXML
     private AnchorPane paneGeneralGrupo;
     @FXML
     private AnchorPane paneSuperiorGrupo;
     @FXML
-    private Button btnModificar;
-    @FXML
-    private Button btnEliminar;
-    @FXML
-    private Button btnLimpiar;
-    @FXML
-    private Label lblNombreGrupo;
+    private AnchorPane paneInferiorGrupo;
+
+    //LABEL DE INFORMACION 
     @FXML
     private Label lblDescripcion;
     @FXML
-    private TextField txtNombreGrupo;
-    @FXML
-    private TextField txtDescripcion;
-    @FXML
     private Label lblGestionGrupos;
     @FXML
-    private TextField txtBuscarGrupo;
+    private Label lblListaGrupos;
     @FXML
-    private Button btnAnadir;
-    @FXML
-    private Button btnGestionarAlumno;
-    @FXML
-    private Button btnBuscar;
-    @FXML
-    private Button btnConsultarLibros;
-    @FXML
-    private MenuBar munuBar;
-    @FXML
-    private MenuItem mnMiPerfil;
-    @FXML
-    private MenuItem mnCerrarSesion;
+    private Label lblLibrosAsignados;
     @FXML
     private Label lblNombreGrupoError;
     @FXML
     private Label lblBuscarGrupoError;
     @FXML
     private Label lblDescripcionError;
+
+    //CAMPOS DE TEXTO
     @FXML
-    private AnchorPane paneInferiorGrupo;
+    private TextField txtNombreGrupo;
+    @FXML
+    private TextField txtDescripcion;
+    @FXML
+    private TextField txtBuscarGrupo;
+
+    //BARRA DE MENU
+    @FXML
+    private MenuBar munuBar;
+    @FXML
+    private MenuItem mnMiPerfil;
+    @FXML
+    private MenuItem mnCerrarSesion;
+
+    //TABLA GRUPO Y SUS COLUMNAS
     @FXML
     private TableView<Grupo> tablaGrupos;
     @FXML
@@ -122,6 +124,8 @@ public class UIGrupoController {
     private TableColumn<Grupo, String> descripcionCL;
     @FXML
     private TableColumn<Grupo, Integer> numAlumnosCL;
+
+    //TABLA GRUPO_LIBRO Y SUS COLUMNAS    
     @FXML
     private TableView<GrupoLibro> tablaGrupoLibro;
     @FXML
@@ -130,22 +134,39 @@ public class UIGrupoController {
     private TableColumn<GrupoLibro, Date> fechaInicioCL;
     @FXML
     private TableColumn<GrupoLibro, Date> fechaFinCL;
+
+    //BOTONE 
     @FXML
-    private Label lblListaGrupos;
+    private Button btnAnadir;
     @FXML
-    private Label lblLibrosAsignados;
+    private Button btnModificar;
+    @FXML
+    private Button btnEliminar;
+    @FXML
+    private Button btnLimpiar;
+    @FXML
+    private Button btnGestionarAlumno;
+    @FXML
+    private Button btnBuscar;
+    @FXML
+    private Button btnConsultarLibros;
     @FXML
     private Button btnAnadirLibro;
     @FXML
     private Button btnEliminarLibro;
+
+    // FECHAS 
     @FXML
     private DatePicker dpFechaInicio;
     @FXML
     private DatePicker dpFechaFin;
 
+
+    //GESTION GRUPO
     GrupoGestion grupoGestion;
     ObservableList<Grupo> GrupoObservableList;
-    ObservableList<GrupoLibro> GrupoLibroObservableList;
+
+    private int posicionTablaGrupo;
 
     private static final Logger LOGGER = Logger.getLogger(UIGrupoController.class.getName());
 
@@ -178,79 +199,116 @@ public class UIGrupoController {
         stage.setResizable(false);
         stage.onCloseRequestProperty().set(this::cerrarVentana);
 
+        //INICIANDO BOTONES
+        iniciandoBotones();
+
         //Iniciando las columnas de la tabla Grupo
         nombreGrupoCL.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         descripcionCL.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         numAlumnosCL.setCellValueFactory(new PropertyValueFactory<>("numAlumno"));
+        //Iniciando las columnas de la tabla Grupo      
 
-        tituloCL.setCellValueFactory(new PropertyValueFactory<>("libro"));
-        fechaInicioCL.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
-        fechaFinCL.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
-        RellenarTabla();
+        RellenarTablaGrupo();
+        tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::seleccionFilaTablaGrupo);
 
         //Propiedades de cambio de texto
         txtNombreGrupo.textProperty().addListener(this::comprobarLongitud);
         txtDescripcion.textProperty().addListener(this::comprobarLongitud);
-
-        //Propiedades al iniar los botones
-        txtNombreGrupo.requestFocus();
-        btnAnadir.setDisable(false);
-        btnModificar.setDisable(true);
-        btnEliminar.setDisable(true);
-        btnLimpiar.setDisable(true);
-        btnBuscar.setDisable(true);
-        btnGestionarAlumno.setDisable(true);
-        btnEliminarLibro.setDisable(true);
-        btnGestionarAlumno.setDisable(false);
-        btnConsultarLibros.setDisable(false);
+        txtBuscarGrupo.textProperty().addListener(this::comprobarLongitud);
 
         //Acciones de los botnes
         btnAnadir.setOnAction(this::btnAnadirGrupos);
-        btnModificar.setOnAction(this::modificarGrupo);
-        //btnEliminar.setOnAction(this::eliminarGrupo);
+        btnModificar.setOnAction(this::btnModificarGrupo);
+        btnEliminar.setOnAction(this::btnEliminarGrupo);
         btnLimpiar.setOnAction(this::limpiarCamposTexto);
+        btnBuscar.setOnAction(this::buscarGrupo);
 
-        btnBuscar.setDisable(true);
-        btnEliminarLibro.setDisable(true);
         btnGestionarAlumno.setOnAction(this::vistaGestionarAlumno);
         btnConsultarLibros.setOnAction(this::vistaVerLibros);
-
         stage.show();
-    }
-
-    /**
-     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
-     * con la informacion del grupo y se desactiva el boton "btnAñadir".
-     *
-     * @param observable El objeto siendo observado.
-     * @param oldValue El valor viejo de la propiedad.
-     * @param newValue El valor nuevo de la propiedad.
-     */
-    private void tablaGrupoSeleccionado(ObservableValue observable, Object oldValue, Object newValue) {
-        if (newValue != null) {
-            Grupo grupo = (Grupo) newValue;
-            txtNombreGrupo.setText(grupo.getNombre());
-            txtDescripcion.setText(grupo.getDescripcion());
-            btnAnadir.setDisable(true);
-        } else {
-            txtNombreGrupo.setText("");
-            txtDescripcion.setText("");
-            btnAnadir.setDisable(false);
-        }
     }
 
     /**
      * Metodo que rellena en la tabla de datos del los grupos
      */
-    private void RellenarTabla() {
+    private void RellenarTablaGrupo() {
         try {
             grupoGestion = GestionFactoria.getGrupoGestion();
             GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupos());
             tablaGrupos.setItems(GrupoObservableList);
             tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
+        } catch (ClientErrorException e) {
+            LOGGER.severe(e.getMessage());
+        }
+    }
+
+    private void RellenarTablaGrupoBusqueda(String buscar) {
+        try {
+            grupoGestion = GestionFactoria.getGrupoGestion();
+            GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupoPorNombre(buscar));
+            tablaGrupos.setItems(GrupoObservableList);
+            tablaGrupos.getSelectionModel().selectedItemProperty().addListener(this::tablaGrupoSeleccionado);
             tablaGrupos.refresh();
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());
+        }
+    }
+
+    private void seleccionFilaTablaGrupo(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null) {
+            Grupo grupoFila = (Grupo) newValue;
+            txtNombreGrupo.setText(grupoFila.getNombre());
+            txtDescripcion.setText(grupoFila.getDescripcion());
+            btnAnadir.setDisable(true);
+        } else {
+            txtNombreGrupo.clear();
+            txtDescripcion.clear();
+            btnAnadir.setDisable(false);
+        }
+    }
+
+    private void btnEliminarGrupo(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        alert.setTitle("Eliminar grupo");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Seguro que quieres eliminar este grupo?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        ButtonType btn = result.orElse(ButtonType.CANCEL);
+
+        if (btn == ButtonType.OK) {
+            Grupo grupoSelect = ((Grupo) tablaGrupos.getSelectionModel().getSelectedItem());
+            try {
+                grupoGestion.remove(grupoSelect.getIdGrupo());
+                tablaGrupos.getItems().remove(grupoSelect);
+                tablaGrupos.refresh();
+            } catch (Exception e) {
+                LOGGER.info("FALLO CON LA BASE DE DATOS");
+            }
+            limpiarCampos();
+            habilitarBotones();
+        }
+    }
+
+    /**
+     * Al pulsarser el boton mofidicar, antes se comprobara que el si ya existe
+     * el nuevo grupo en la base de datos si no lo esta se modificara el grupo
+     * selecionado.
+     *
+     * @param event Evento de accion sobre el boton modificar
+     */
+    private void btnModificarGrupo(ActionEvent event) {
+        boolean correcto = comprobarCampos();
+        if (!correcto) {
+            Grupo grupoFilaSeleccionado = ((Grupo) tablaGrupos.getSelectionModel().getSelectedItem());
+            if (grupoFilaSeleccionado != null) {
+                grupoFilaSeleccionado.setNombre(txtNombreGrupo.getText());
+                grupoFilaSeleccionado.setDescripcion(txtDescripcion.getText());
+
+                grupoGestion.edit(grupoFilaSeleccionado);
+                tablaGrupos.refresh();
+            }
         }
     }
 
@@ -261,71 +319,58 @@ public class UIGrupoController {
      * @param event El evento de acción.
      */
     private void btnAnadirGrupos(ActionEvent event) {
-        LOGGER.info("Alumno Controlador: Comprobando errores");
+        if (comprobarTexto()) {
+            Grupo grupo = new Grupo();
+            grupo.setNombre(txtNombreGrupo.getText());
+            grupo.setDescripcion(txtDescripcion.getText());
+            grupo.setNumAlumno(0);
+            
+            grupoGestion.create(grupo);
+            tablaGrupos.getItems().add(grupo);
+            /*
+            if (comprobarGrupoExiste(grupo.getNombre())) {
+                lblNombreGrupoError.setText("Este grupo ya existe ");
+                lblNombreGrupoError.setTextFill(Color.web("#008000"));
+            } else {
+                grupoGestion.create(grupo);
+                tablaGrupos.getItems().add(grupo);
+            }*/
+            limpiarCampos();
+        }
 
-        boolean errorCampos = comprobarCampos();
+    }
 
-        if (!errorCampos) {
-            try {
-                //Comprueba si existe el login
-                LOGGER.info("Alumno Controlador: Comprobando si existe el login");
+    private void buscarGrupo(ActionEvent event) {
+        
+            LOGGER.info("Reto2Cliente: Buscar grupo");
 
-                grupoGestion.listarGrupoPorNombre(txtNombreGrupo.getText());
+                String grupo = txtBuscarGrupo.getText();
+                grupoGestion = GestionFactoria.getGrupoGestion();
+                GrupoObservableList = FXCollections.observableArrayList(grupoGestion.listarGrupoPorNombre(grupo));
+                
+                tablaGrupos.setItems(GrupoObservableList);
+ 
+    }
 
-                //Se crea el grupo
-                LOGGER.info("Alumno Controlador: Creando alumno");
+    private boolean comprobarCamposBusqueda() {
+        boolean error = false;
 
-                Grupo grupoNew = new Grupo();
-                grupoNew.setNombre(txtNombreGrupo.getText());
-                grupoNew.setDescripcion(txtDescripcion.getText());
-                grupoNew.setProfesor(null);
-                grupoNew.setAlumnos(null);
-                grupoNew.setGrupoLibros(null);
-
-                grupoGestion.create(grupoNew);
-
-                tablaGrupos.getItems().add(grupoNew);
-                RellenarTabla();
-
-                //limpiarCamposTexto();
-            } catch (Exception le) {
-                LOGGER.severe(le.getMessage());
-                lblNombreGrupoError.setText("El login ya existe");
-                lblNombreGrupoError.setTextFill(Color.web("#FF0000"));
+        if (txtBuscarGrupo.getText().isEmpty()) {
+            lblBuscarGrupoError.setText("");
+        } else {
+            btnBuscar.setDisable(true);
+            Matcher matcher = VALIDAR_ALFANUMERICO.matcher(txtBuscarGrupo.getText());
+            if (!matcher.find()) {
+                lblBuscarGrupoError.setText("El nombre sólo debe contener alfanumericos");
+                lblBuscarGrupoError.setTextFill(Color.web("#FF0000"));
+                error = true;
+            } else {
+                lblBuscarGrupoError.setText("");
             }
         }
+        return error;
     }
 
-    /**
-     * Metodo para modificar los datas de un grupo existe
-     */
-    private void modificarGrupo(ActionEvent event) {
-
-    }
-
-    /**
-     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
-     * con la informacion del grupo ".
-     *
-     * @param observable El objeto siendo observado.
-     * @param oldValue El valor viejo de la propiedad.
-     * @param newValue El valor nuevo de la propiedad.
-     */
-    private void seleccionDatoTabla(ObservableValue observable, Object oldValue, Object newValue) {
-        if (newValue != null) {
-            Grupo grupo = (Grupo) newValue;
-            txtNombreGrupo.setText(grupo.getNombre());
-            txtDescripcion.setText(grupo.getDescripcion());
-            btnAnadir.setDisable(true);
-        }
-    }
-
-    /**
-     * Cuadro de diálogo que se abre al pulsar la x de la pantalla para
-     * confirmar si se quiere cerrar la aplicación.
-     *
-     * @param event El evento de acción.
-     */
     private void cerrarVentana(WindowEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
@@ -400,7 +445,6 @@ public class UIGrupoController {
             if (!matcher.find()) {
                 lblNombreGrupoError.setText("El nombre sólo debe contener alfanumericos");
                 lblNombreGrupoError.setTextFill(Color.web("#FF0000"));
-
                 error = true;
             } else {
                 lblNombreGrupoError.setText("");
@@ -410,9 +454,9 @@ public class UIGrupoController {
         if (txtDescripcion.getText().isEmpty()) {
             lblDescripcionError.setText("");
         } else {
-            Matcher matcher = VALIDAR_ALFANUMERICO.matcher(txtDescripcion.getText());
+            Matcher matcher = VALID_DESCRIPCION.matcher(txtDescripcion.getText());
             if (!matcher.find()) {
-                lblDescripcionError.setText("Descripcion debe contener alfanumericos");
+                lblDescripcionError.setText("Descripcion debe contener letras");
                 lblDescripcionError.setTextFill(Color.web("#FF0000"));
 
                 error = true;
@@ -420,9 +464,7 @@ public class UIGrupoController {
                 lblDescripcionError.setText("");
             }
         }
-
         return error;
-
     }
 
     /**
@@ -506,10 +548,14 @@ public class UIGrupoController {
             btnEliminar.setDisable(false);
         }
 
-        if (camposNoVacios()) {
-            btnLimpiar.setDisable(false);
+        if (camposVacios()) {
+            btnAnadir.setDisable(true);
+            btnModificar.setDisable(true);
+            btnEliminar.setDisable(true);
         } else {
-            btnLimpiar.setDisable(true);
+            btnAnadir.setDisable(false);
+            btnModificar.setDisable(false);
+            btnEliminar.setDisable(false);
         }
 
         if (txtBuscarGrupo.getText().isEmpty()) {
@@ -517,6 +563,7 @@ public class UIGrupoController {
             btnBuscar.setDisable(true);
         } else {
             btnBuscar.setDisable(false);
+            btnLimpiar.setDisable(false);
         }
     }
 
@@ -557,6 +604,88 @@ public class UIGrupoController {
     private void limpiarCampos() {
         txtNombreGrupo.setText("");
         txtDescripcion.setText("");
+    }
+
+    /**
+     * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
+     * con la informacion del grupo y se desactiva el boton "btnAñadir".
+     *
+     * @param observable El objeto siendo observado.
+     * @param oldValue El valor viejo de la propiedad.
+     * @param newValue El valor nuevo de la propiedad.
+     */
+    private void tablaGrupoSeleccionado(ObservableValue observable, Object oldValue, Object newValue) {
+        if (newValue != null) {
+            Grupo grupo = (Grupo) newValue;
+            txtNombreGrupo.setText(grupo.getNombre());
+            txtDescripcion.setText(grupo.getDescripcion());
+            btnAnadir.setDisable(true);
+        } else {
+            txtNombreGrupo.setText("");
+            txtDescripcion.setText("");
+            btnAnadir.setDisable(false);
+
+        }
+    }
+
+    /**
+     * Los algunos bonoes estan habilitados y otros no
+     */
+    private void iniciandoBotones() {
+        txtNombreGrupo.requestFocus();
+        btnAnadir.setDisable(false);
+        btnModificar.setDisable(true);
+        btnEliminar.setDisable(true);
+        btnLimpiar.setDisable(true);
+        btnBuscar.setDisable(true);
+        btnGestionarAlumno.setDisable(true);
+        btnGestionarAlumno.setDisable(false);
+        btnConsultarLibros.setDisable(false);
+    }
+
+    /**
+     * Se comprueba el texto es alfanumerico
+     *
+     * @return Se retorna si son validos el texto escrito
+     */
+    private boolean comprobarTexto() {
+        boolean texto = true;
+        Matcher matcher = null;
+
+        matcher = VALIDAR_ALFANUMERICO.matcher(txtNombreGrupo.getText());
+        if (!matcher.find()) {
+            lblNombreGrupoError.setText("Solo caratectes ALFANUMERICOS");
+            lblNombreGrupoError.setTextFill(Color.web("#FF0000"));
+            texto = false;
+        } else {
+            lblNombreGrupoError.setText("");
+        }
+        matcher = VALID_DESCRIPCION.matcher(txtDescripcion.getText());
+        if (!matcher.find()) {
+            lblDescripcionError.setText("Solo caratectes LETRAS");
+            lblDescripcionError.setTextFill(Color.web("#FF0000"));
+            texto = false;
+        } else {
+            lblDescripcionError.setText("");
+        }
+        return texto;
+    }
+
+    /**
+     * Metodo para evitar repetir mismos grupos
+     */
+    private boolean comprobarGrupoExiste(String nombreGrupo) {
+        boolean grupoExite = false;
+        Collection<Grupo> grupos;
+        grupos = grupoGestion.listarGrupoPorNombre(nombreGrupo);
+        if (grupos.size() > 0) {
+            for (Grupo g : grupos) {
+                if (g.getNombre().equals(nombreGrupo)) {
+                    grupoExite = true;
+                }
+            }
+        }
+        return grupoExite;
     }
 
 }

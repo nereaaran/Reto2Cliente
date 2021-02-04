@@ -99,4 +99,18 @@ public class GestionFactoria {
 
         return bibliotecarioGestion;
     }
+    
+    
+    /**
+     * Método que crea una nueva implementación para la gestión de grupolibro.
+     *
+     * @return la implementación.
+     */
+    public static GrupoLibroGestion getGrupoLibroGestion() {
+        LOGGER.info("GestionFactoria: Creando la implementacion de Grupo");
+
+        GrupoLibroGestion grupoLibroGestion = new GrupoLibroGestionImplementation();
+
+        return grupoLibroGestion;
+    }
 }

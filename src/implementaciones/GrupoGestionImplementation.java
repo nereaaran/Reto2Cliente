@@ -47,7 +47,6 @@ public class GrupoGestionImplementation implements GrupoGestion {
     public void edit(Grupo grupo) throws ClientErrorException {
         try {
             LOGGER.info("GrupoGestionImplementation: Editando grupo");
-
             this.webClient.edit(grupo);
         } catch (ClientErrorException e) {
             LOGGER.severe(e.getMessage());

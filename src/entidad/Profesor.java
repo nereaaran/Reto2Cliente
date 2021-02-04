@@ -6,7 +6,9 @@
 package entidad;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -22,6 +24,18 @@ public class Profesor extends Usuario implements Serializable {
      */
     private Integer telefono;
 
+    private Collection<Grupo> grupos;
+
+   // @XmlElement(name="")
+    public Collection<Grupo> getGrupos() {
+        return grupos;
+    }
+
+    public void setGrupos(Collection<Grupo> grupos) {
+        this.grupos = grupos;
+    }
+    
+   
     /**
      * Obtiene el telefono.
      *

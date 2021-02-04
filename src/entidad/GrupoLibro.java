@@ -15,15 +15,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jonathan Viñan
  */
 @XmlRootElement(name = "grupo_libro")
-public class GrupoLibro implements Serializable{
-    
-    private static final long serialVersionUID = 1L;
+public class GrupoLibro implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    /**
+     * Id f de la clase GrupoLibro.
+     */
+    private GrupoLibroId idGrupoLibro;
     /**
      * El libro perteneciente a la relacion de grupoLibro.
      */
     private Libro libro;
-    
+
     /**
      * Fecha en la que se asigna el libro.
      */
@@ -33,11 +36,28 @@ public class GrupoLibro implements Serializable{
      * Fecha maxima asignada para el libro.
      */
     private Date fechaFin;
-    
 
-    
+    /**
+     * Estable el GrupoLibro
+     *
+     * @return el grupoLibro
+     */
+    public GrupoLibroId getIdGrupoLibro() {
+        return idGrupoLibro;
+    }
+
+    /**
+     * Obtine el GrupoLibro
+     *
+     * @param grupoLibro el grupoLibro.
+     */
+    public void setIdGrupoLibro(GrupoLibroId idGrupoLibro) {
+        this.idGrupoLibro = idGrupoLibro;
+    }
+
     /**
      * Estable el Libro
+     *
      * @return el libro
      */
     public Libro getLibro() {
@@ -46,6 +66,7 @@ public class GrupoLibro implements Serializable{
 
     /**
      * Obtine el libro
+     *
      * @param libro el libro.
      */
     public void setLibro(Libro libro) {
@@ -54,6 +75,7 @@ public class GrupoLibro implements Serializable{
 
     /**
      * Establece la fecha de inicio
+     *
      * @return la fecha inicio
      */
     public Date getFechaInicio() {
@@ -62,28 +84,34 @@ public class GrupoLibro implements Serializable{
 
     /**
      * Obtiene la fecha inicio
+     *
      * @param fechaInicio la fecha de inicio.
      */
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
+
     /**
      * Establece la fecha final
+     *
      * @return la fecha final
      */
     public Date getFechaFin() {
         return fechaFin;
     }
+
     /**
      * Obtiene la fecha final
+     *
      * @param fechaFin la fecha de fin.
      */
     public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
-    
+
     /**
      * Metodo que compara el codigo hash de dos objetos
+     *
      * @return un codigo hash del objeto
      */
     @Override
@@ -95,14 +123,13 @@ public class GrupoLibro implements Serializable{
         return hash;
     }
 
-    
-    
     /**
      * Metodo que comprara si un objeto es igual al objeto GrupoLibro
+     *
      * @param obj cualquier tipo de objeto
      * @return un 'false' si los objetos no son iguales y un 'true' si lo sons
      */
-   @Override
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;

@@ -5,30 +5,27 @@
  */
 package interfaces;
 
-import entidad.Grupo;
+import entidad.GrupoLibro;
 import java.util.Collection;
-import javax.ws.rs.ClientErrorException;
 
 /**
- * Interfaz lógica que declara los métodos para la gestión de los grupos.
  *
- * @author Nerea Aranguren
+ * @author JonY
  */
-public interface GrupoGestion {
-
+public interface GrupoLibroGestion {
     /**
      * Método que añade un nuevo grupo creado.
      *
      * @param grupo Objeto grupo que se va a añadir.
      */
-    public void create(Grupo grupo)  ;
+    public void create(GrupoLibro grupo)  ;
 
     /**
      * Método que actualiza la información de un grupo existente.
      *
      * @param grupo Objeto grupo que se va a actualizar.
      */
-    public void edit(Grupo grupo)  ;
+    public void edit(GrupoLibro grupo)  ;
 
     /**
      * Método que elimina un grupo existente.
@@ -43,22 +40,7 @@ public interface GrupoGestion {
      * @param id El id del grupo del que se quiere obtener la información.
      * @return Objeto grupo con la información del grupo buscado.
      */
-    public Grupo find(Integer id)  ;
+    public GrupoLibro find(Integer id)  ;
 
-    /**
-     * Método que obtiene información de un grupo existente por el nombre.
-     *
-     * @param nombre El nombre del grupo del que se quiere obtener la
-     * información.
-     * @return Objeto grupo con la información del grupo buscado.
-     */
-    public Collection<Grupo> listarGrupoPorNombre(String nombre)  ;
-
-    /**
-     * Método que obtiene todos los grupos existentes.
-     *
-     * @return Colección de todos los grupos.
-     */
-    public Collection<Grupo> listarGrupos();
 
 }
