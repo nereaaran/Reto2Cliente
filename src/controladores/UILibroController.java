@@ -40,6 +40,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperCompileManager;
+
 /**
  * Controlador de la vista UILibro que contiene los metodos para definir y
  * controlar su comportamiento.
@@ -185,6 +192,8 @@ public class UILibroController {
     private TableColumn<Libro, Boolean> descargableCL;
     @FXML
     private TableColumn<Libro, String> linkdescargaCL;
+    @FXML
+    private Button btnReport;
 
     /**
      * Lista observable de Libro para la tabla.
@@ -253,6 +262,9 @@ public class UILibroController {
         btnEliminar.setOnAction(this::handleBtnEliminar);
         btnBuscar.setOnAction(this::handleBtnBuscar);
         mnCerrarSesion.setOnAction(this::handleCerrarSesion);
+        
+        //Implementacion del report
+        btnReport.setOnAction(this::handleBtnReport);
 
         tituloCL.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         autorCL.setCellValueFactory(new PropertyValueFactory<>("autor"));
@@ -271,6 +283,12 @@ public class UILibroController {
 
         stage.show();
     }
+    
+    
+    private void handleBtnReport(ActionEvent event){
+        JasperReport report = UILibroController.class.getResourceAsStream(JasperCompileManager.compileReport(""));
+    }
+    
 
     /**
      * Cuando se selecciona una fila de la tabla se rellenan los campos de texto
